@@ -67,15 +67,25 @@ them in the admin whenever you like; they are never re-created.
 | `ADMIN_PASSWORD` | *(empty)* | Admin password (≥ 12 characters recommended). Empty + no hash → a password is generated once. |
 | `ADMIN_PASSWORD_HASH` | *(empty)* | Alternative to the plain password: a `password_hash()` bcrypt/argon2 hash. Write every `$` as `$$` in `.env`. |
 | `APP_SECRET` | *(generated)* | Symfony secret. It is generated into the data volume if empty. |
+| `FPM_MAX_CHILDREN` | `8` | Max PHP worker processes (started on demand). Use 2–3 on a 512 MB server. |
+| `EUSKALDUO_API_MEM_LIMIT` / `EUSKALDUO_WEB_MEM_LIMIT` | `512m` / `128m` | Container memory caps, so the app cannot starve other services on a shared host. |
 | `SEED_SAMPLE_CONTENT` | `true` | Load the sample sets into an empty database on first start. |
 
 To change the admin password later, set `ADMIN_PASSWORD` (it takes precedence
 over the generated one) and run `docker compose up -d`.
 
-**Existing Traefik setup:** see `compose.traefik.example.yaml`, an optional
-overlay that removes the host port and adds router labels:
-`docker compose -f compose.yaml -f compose.traefik.example.yaml up -d --build`.
+**Existing Traefik setup:** `compose.traefik.example.yaml` is an optional
+overlay. It removes the host port and adds router labels. Set `EUSKALDUO_HOST`,
+`TRAEFIK_NETWORK` (the Docker network Traefik watches), `TRAEFIK_ENTRYPOINT`
+and `TRAEFIK_CERTRESOLVER` in `.env`, then run
+`docker compose -f compose.yaml -f compose.traefik.example.yaml up -d`.
 The base setup does not need it.
+
+**Small shared servers:** build the images on another machine rather than on
+the server (the frontend build needs several hundred MB of RAM). Copy them over
+with `docker save euskalduo-api euskalduo-web | gzip | ssh server 'gunzip | docker load'`,
+then start with `docker compose ... up -d --no-build`. At idle the app uses
+about 25 MB of RAM.
 
 ## Import format
 

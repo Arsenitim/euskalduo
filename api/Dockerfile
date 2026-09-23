@@ -12,7 +12,7 @@ COPY api/docker/php.ini /usr/local/etc/php/conf.d/zz-euskalduo.ini
 COPY api/docker/fpm.conf /usr/local/etc/php-fpm.d/zz-euskalduo.conf
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
-ENV APP_ENV=prod APP_DEBUG=0 DATA_DIR=/data UPLOAD_DIR=/uploads SAMPLE_DIR=/app/samples
+ENV APP_ENV=prod APP_DEBUG=0 DATA_DIR=/data UPLOAD_DIR=/uploads SAMPLE_DIR=/app/samples FPM_MAX_CHILDREN=8
 RUN mkdir -p /data /uploads && chown www-data:www-data /data /uploads
 
 FROM base AS dev

@@ -16,6 +16,8 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
       SEED_SAMPLE_CONTENT: ${SEED_SAMPLE_CONTENT:-true}
+      FPM_MAX_CHILDREN: ${FPM_MAX_CHILDREN:-8}
+    mem_limit: ${EUSKALDUO_API_MEM_LIMIT:-512m}
     volumes:
       - content:/data
       - uploads:/uploads
@@ -28,6 +30,7 @@ services:
     restart: unless-stopped
     depends_on:
       - api
+    mem_limit: ${EUSKALDUO_WEB_MEM_LIMIT:-128m}
     ports:
       - "${EUSKALDUO_BIND:-127.0.0.1}:${EUSKALDUO_PORT:-8765}:8080"
       - "${EUSKALDUO_BIND6:-[::1]}:${EUSKALDUO_PORT:-8765}:8080"
