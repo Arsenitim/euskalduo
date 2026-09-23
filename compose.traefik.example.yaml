@@ -1,0 +1,18 @@
+# Optional overlay for an existing Traefik setup. Not used by default.
+#   docker compose -f compose.yaml -f compose.traefik.example.yaml up -d --build
+# Adjust the router rule, entrypoint, certresolver and network to your setup.
+services:
+  web:
+    ports: !reset []
+    networks: [default, traefik]
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: traefik
+      traefik.http.routers.euskalduo.rule: Host(`euskalduo.example.org`)
+      traefik.http.routers.euskalduo.entrypoints: websecure
+      traefik.http.routers.euskalduo.tls.certresolver: letsencrypt
+      traefik.http.services.euskalduo.loadbalancer.server.port: "8080"
+
+networks:
+  traefik:
+    external: true

@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "title": "HIZTEGIA (1.Gaia)",
+  "weekStart": null,
+  "description": "Vocabulario del tema 1 (1.Gaia).",
+  "entries": [
+    {
+      "basque": "Zaborrontzia",
+      "translations": {
+        "es": [
+          "cubo de la basura"
+        ],
+        "ru": [
+          "мусорное ведро"
+        ]
+      },
+      "emoji": "🗑️",
+      "imageHint": "a rubbish bin"
+    },
+    {
+      "basque": "Ordularia",
+      "translations": {
+        "es": [
+          "reloj"
+        ],
+        "ru": [
+          "часы"
+        ]
+      },
+      "emoji": "⏰",
+      "imageHint": "a clock or watch"
+    },
+    {
+      "basque": "Eskulana",
+      "translations": {
+        "es": [
+          "manualidad"
+        ],
+        "ru": [
+          "поделка"
+        ]
+      },
+      "imageHint": "children doing a craft with paper and glue"
+    },
+    {
+      "basque": "Bizkar-zorroa",
+      "translations": {
+        "es": [
+          "mochila"
+        ],
+        "ru": [
+          "рюкзак"
+        ]
+      },
+      "emoji": "🎒",
+      "imageHint": "a school backpack"
+    },
+    {
+      "basque": "Ordenagailua",
+      "translations": {
+        "es": [
+          "ordenador"
+        ],
+        "ru": [
+          "компьютер"
+        ]
+      },
+      "emoji": "💻",
+      "imageHint": "a computer"
+    },
+    {
+      "basque": "Ordutegia",
+      "translations": {
+        "es": [
+          "horario"
+        ],
+        "ru": [
+          "расписание"
+        ]
+      },
+      "imageHint": "a school timetable grid"
+    },
+    {
+      "basque": "Txapelketa",
+      "translations": {
+        "es": [
+          "campeonato",
+          "concurso"
+        ],
+        "ru": [
+          "чемпионат",
+          "конкурс"
+        ]
+      }
+    },
+    {
+      "basque": "Loreontzi",
+      "translations": {
+        "es": [
+          "florero"
+        ],
+        "ru": [
+          "ваза"
+        ]
+      },
+      "imageHint": "a vase with flowers"
+    },
+    {
+      "basque": "Irabazle",
+      "translations": {
+        "es": [
+          "ganador"
+        ],
+        "ru": [
+          "победитель"
+        ]
+      }
+    },
+    {
+      "basque": "Lantegi",
+      "translations": {
+        "es": [
+          "taller",
+          "fábrica"
+        ],
+        "ru": [
+          "мастерская",
+          "фабрика"
+        ]
+      }
+    },
+    {
+      "basque": "Igogailu",
+      "translations": {
+        "es": [
+          "ascensor"
+        ],
+        "ru": [
+          "лифт"
+        ]
+      },
+      "emoji": "🛗",
+      "imageHint": "a lift / elevator"
+    },
+    {
+      "basque": "Idazle",
+      "translations": {
+        "es": [
+          "escritor"
+        ],
+        "ru": [
+          "писатель"
+        ]
+      }
+    },
+    {
+      "basque": "Arrantzale",
+      "translations": {
+        "es": [
+          "pescador"
+        ],
+        "ru": [
+          "рыбак"
+        ]
+      },
+      "imageHint": "a fisherman with a rod"
+    },
+    {
+      "basque": "Antzinakoa",
+      "translations": {
+        "es": [
+          "antiguo"
+        ],
+        "ru": [
+          "древний",
+          "старинный"
+        ]
+      }
+    },
+    {
+      "basque": "Koloretsua",
+      "translations": {
+        "es": [
+          "colorido"
+        ],
+        "ru": [
+          "красочный"
+        ]
+      }
+    },
+    {
+      "basque": "Aspergarria",
+      "translations": {
+        "es": [
+          "aburrido"
+        ],
+        "ru": [
+          "скучный"
+        ]
+      }
+    },
+    {
+      "basque": "Bitxia",
+      "translations": {
+        "es": [
+          "curioso",
+          "peculiar"
+        ],
+        "ru": [
+          "любопытный",
+          "необычный"
+        ]
+      }
+    },
+    {
+      "basque": "Erosoa",
+      "translations": {
+        "es": [
+          "cómodo"
+        ],
+        "ru": [
+          "удобный"
+        ]
+      }
+    },
+    {
+      "basque": "Txukuna",
+      "translations": {
+        "es": [
+          "ordenado"
+        ],
+        "ru": [
+          "аккуратный"
+        ]
+      }
+    },
+    {
+      "basque": "Urduri",
+      "translations": {
+        "es": [
+          "nervioso"
+        ],
+        "ru": [
+          "нервный"
+        ]
+      }
+    },
+    {
+      "basque": "Txalupa",
+      "translations": {
+        "es": [
+          "barca",
+          "bote"
+        ],
+        "ru": [
+          "лодка"
+        ]
+      },
+      "imageHint": "a small rowing boat"
+    },
+    {
+      "basque": "Legatza",
+      "translations": {
+        "es": [
+          "merluza"
+        ],
+        "ru": [
+          "хек"
+        ]
+      },
+      "emoji": "🐟",
+      "imageHint": "a hake fish"
+    },
+    {
+      "basque": "Hiria",
+      "translations": {
+        "es": [
+          "ciudad"
+        ],
+        "ru": [
+          "город"
+        ]
+      },
+      "emoji": "🏙️",
+      "imageHint": "a city skyline"
+    },
+    {
+      "basque": "Igerilekua",
+      "translations": {
+        "es": [
+          "piscina"
+        ],
+        "ru": [
+          "бассейн"
+        ]
+      },
+      "emoji": "🏊",
+      "imageHint": "a swimming pool"
+    },
+    {
+      "basque": "Ahaztu",
+      "translations": {
+        "es": [
+          "olvidar"
+        ],
+        "ru": [
+          "забыть"
+        ]
+      }
+    },
+    {
+      "basque": "Aire girotua",
+      "translations": {
+        "es": [
+          "aire acondicionado"
+        ],
+        "ru": [
+          "кондиционер"
+        ]
+      },
+      "imageHint": "an air-conditioning unit"
+    }
+  ]
+}

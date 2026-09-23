@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "title": "HILABETEAK ETA ASTEGUNAK",
+  "weekStart": null,
+  "description": "Los meses y los días de la semana.",
+  "groups": [
+    {
+      "key": "hilabeteak",
+      "title": "HILABETEAK",
+      "ordered": true
+    },
+    {
+      "key": "astegunak",
+      "title": "ASTEGUNAK",
+      "ordered": true
+    }
+  ],
+  "entries": [
+    {
+      "basque": "urtarrila",
+      "translations": {
+        "es": [
+          "enero"
+        ],
+        "ru": [
+          "январь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "otsaila",
+      "translations": {
+        "es": [
+          "febrero"
+        ],
+        "ru": [
+          "февраль"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "martxoa",
+      "translations": {
+        "es": [
+          "marzo"
+        ],
+        "ru": [
+          "март"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "apirila",
+      "translations": {
+        "es": [
+          "abril"
+        ],
+        "ru": [
+          "апрель"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "maiatza",
+      "translations": {
+        "es": [
+          "mayo"
+        ],
+        "ru": [
+          "май"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "ekaina",
+      "translations": {
+        "es": [
+          "junio"
+        ],
+        "ru": [
+          "июнь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "uztaila",
+      "translations": {
+        "es": [
+          "julio"
+        ],
+        "ru": [
+          "июль"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "abuztua",
+      "translations": {
+        "es": [
+          "agosto"
+        ],
+        "ru": [
+          "август"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "iraila",
+      "translations": {
+        "es": [
+          "septiembre"
+        ],
+        "ru": [
+          "сентябрь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "urria",
+      "translations": {
+        "es": [
+          "octubre"
+        ],
+        "ru": [
+          "октябрь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "azaroa",
+      "translations": {
+        "es": [
+          "noviembre"
+        ],
+        "ru": [
+          "ноябрь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "abendua",
+      "translations": {
+        "es": [
+          "diciembre"
+        ],
+        "ru": [
+          "декабрь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "basque": "astelehena",
+      "translations": {
+        "es": [
+          "lunes"
+        ],
+        "ru": [
+          "понедельник"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "basque": "asteartea",
+      "translations": {
+        "es": [
+          "martes"
+        ],
+        "ru": [
+          "вторник"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "basque": "asteazkena",
+      "translations": {
+        "es": [
+          "miércoles"
+        ],
+        "ru": [
+          "среда"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "basque": "osteguna",
+      "translations": {
+        "es": [
+          "jueves"
+        ],
+        "ru": [
+          "четверг"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "basque": "ostirala",
+      "translations": {
+        "es": [
+          "viernes"
+        ],
+        "ru": [
+          "пятница"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "basque": "larunbata",
+      "translations": {
+        "es": [
+          "sábado"
+        ],
+        "ru": [
+          "суббота"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "basque": "igandea",
+      "translations": {
+        "es": [
+          "domingo"
+        ],
+        "ru": [
+          "воскресенье"
+        ]
+      },
+      "group": "astegunak"
+    }
+  ]
+}

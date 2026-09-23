@@ -1,0 +1,61 @@
+# EUSKALDUO — local stack. Start with:  docker compose up --build
+# Only the web container publishes a port; PHP-FPM is reachable only inside
+# the compose network.
+name: euskalduo
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+      target: prod
+    restart: unless-stopped
+    environment:
+      APP_SECRET: ${APP_SECRET:-}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
+      SEED_SAMPLE_CONTENT: ${SEED_SAMPLE_CONTENT:-true}
+    volumes:
+      - content:/data
+      - uploads:/uploads
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      target: prod
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "${EUSKALDUO_BIND:-127.0.0.1}:${EUSKALDUO_PORT:-8765}:8080"
+      - "${EUSKALDUO_BIND6:-[::1]}:${EUSKALDUO_PORT:-8765}:8080"
+    volumes:
+      - uploads:/srv/uploads:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+
+  # Test runners (not started by default):
+  #   docker compose --profile test run --rm api-test
+  #   docker compose --profile test run --rm web-test
+  api-test:
+    profiles: [test]
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+      target: dev
+
+  web-test:
+    profiles: [test]
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      target: test
+
+volumes:
+  content:
+  uploads:

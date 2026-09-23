@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://euskalduo.local/schema/homework-v1.json",
+  "title": "EUSKALDUO homework import, schemaVersion 1",
+  "description": "Documentation of the import format. The server-side validator (api/src/Content/ImportValidator.php) is authoritative and additionally normalises Unicode (NFC), trims whitespace, rejects control characters and < >, and warns about duplicates.",
+  "type": "object",
+  "required": ["schemaVersion", "title", "entries"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "weekStart": {
+      "description": "Monday of the homework week (ISO date). May be null in an import; the admin assigns it during review. Required before publishing.",
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "description": { "type": ["string", "null"], "maxLength": 500 },
+    "groups": {
+      "description": "Optional named sections. ordered=true means the entries of the group have a meaningful sequence (months, weekdays) and enables the ordering exercise.",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": ["key", "title"],
+        "properties": {
+          "key": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$" },
+          "title": { "type": "string", "minLength": 1, "maxLength": 60 },
+          "ordered": { "type": "boolean", "default": false }
+        },
+        "additionalProperties": false
+      }
+    },
+    "entries": {
+      "description": "Vocabulary in its source order. The order is kept.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 300,
+      "items": {
+        "type": "object",
+        "required": ["basque", "translations"],
+        "properties": {
+          "id": {
+            "description": "Optional stable id. Omit it and the server generates one.",
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$"
+          },
+          "basque": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "translations": {
+            "type": "object",
+            "required": ["es"],
+            "properties": {
+              "es": { "$ref": "#/$defs/alternatives" },
+              "ru": { "$ref": "#/$defs/alternatives" }
+            },
+            "additionalProperties": false
+          },
+          "note": { "type": ["string", "null"], "maxLength": 300 },
+          "imageHint": {
+            "description": "Editorial suggestion for a picture the admin may upload. Never shown to learners, never a URL.",
+            "type": ["string", "null"],
+            "maxLength": 200
+          },
+          "emoji": { "type": ["string", "null"], "maxLength": 8 },
+          "group": { "description": "Key of a group declared in groups.", "type": ["string", "null"] },
+          "needsReview": {
+            "description": "true when the source was unclear. Flagged sets cannot be published until a human clears the flag.",
+            "type": "boolean",
+            "default": false
+          },
+          "reviewNote": { "type": ["string", "null"], "maxLength": 300 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "alternatives": {
+      "description": "Each accepted translation is a separate string. Do not join alternatives with commas.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "type": "string", "minLength": 1, "maxLength": 120 }
+    }
+  }
+}
