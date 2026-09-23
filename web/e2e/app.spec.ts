@@ -11,6 +11,11 @@ const PNG = resolve(here, 'fixtures/mochila.png');
 /** Answers whatever question is on screen (not necessarily correctly). */
 async function answerCurrent(page: Page) {
   const card = page.locator('.question-card');
+  // Basque → meaning: a picture would give the answer away before answering.
+  const title = await card.locator('.prompt-title').innerText();
+  if (title === '¿Qué significa?' || title === 'Escribe qué significa') {
+    await expect(card.locator('.word-visual')).toHaveCount(0);
+  }
   if (await card.locator('.options').count()) {
     await card.locator('.option').first().click();
   } else if (await card.locator('.order-sequence').count()) {

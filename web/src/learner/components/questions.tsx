@@ -68,7 +68,8 @@ export function ChoiceQuestionView({ question, lang, answered, onAnswer }: Props
     <div onKeyDown={onKeyDown}>
       {question.kind === 'meaning-choice' ? (
         <Prompt title={t('whatMeans')}>
-          <WordVisual entry={item.entry} />
+          {/* The picture would give the meaning away: show it only after answering. */}
+          {answered && <WordVisual entry={item.entry} />}
           <Basque text={item.entry.basque} />
         </Prompt>
       ) : (
@@ -207,7 +208,7 @@ export function TypeMeaningView({ question, lang, answered, onAnswer }: Props<Ex
   return (
     <div>
       <Prompt title={t('typeMeaning')}>
-        <WordVisual entry={entry} />
+        {answered && <WordVisual entry={entry} />}
         <Basque text={entry.basque} />
       </Prompt>
       <TypedAnswer value={typed} onChange={setTyped} onSubmit={submit} answered={answered} lang={lang} />
