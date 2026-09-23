@@ -18,6 +18,8 @@ export interface LearnerState {
   version: 1;
   displayName: string;
   lang: Lang;
+  /** Sound effects for answers (on by default). */
+  sound: boolean;
   /** Set id chosen manually as "this week", or null for the newest week. */
   pinnedWeek: string | null;
   entries: Record<string, EntryStats>;
@@ -25,7 +27,7 @@ export interface LearnerState {
 }
 
 export function emptyState(): LearnerState {
-  return { version: 1, displayName: '', lang: 'es', pinnedWeek: null, entries: {}, sets: {} };
+  return { version: 1, displayName: '', lang: 'es', sound: true, pinnedWeek: null, entries: {}, sets: {} };
 }
 
 export function entryKey(setId: string, entryId: string): string {
@@ -66,6 +68,7 @@ export function parseState(raw: unknown): LearnerState | null {
   const state = emptyState();
   if (typeof r.displayName === 'string') state.displayName = r.displayName.slice(0, 40);
   if (r.lang === 'es' || r.lang === 'ru') state.lang = r.lang;
+  if (typeof r.sound === 'boolean') state.sound = r.sound;
   if (typeof r.pinnedWeek === 'string' && SET_ID.test(r.pinnedWeek)) state.pinnedWeek = r.pinnedWeek;
   if (typeof r.entries === 'object' && r.entries !== null) {
     for (const [key, value] of Object.entries(r.entries)) {

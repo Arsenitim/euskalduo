@@ -43,6 +43,13 @@ describe('learner progress storage', () => {
     expect(Object.keys(state!.sets)).toEqual(['s1']);
   });
 
+  it('keeps sound on by default and remembers turning it off', () => {
+    expect(emptyState().sound).toBe(true);
+    expect(parseState({ version: 1 })?.sound).toBe(true);
+    expect(parseState({ version: 1, sound: false })?.sound).toBe(false);
+    expect(parseState({ version: 1, sound: 'loud' })?.sound).toBe(true);
+  });
+
   it('exports and imports progress for moving to another device', () => {
     const state = { ...emptyState(), lang: 'ru' as const, sets: { s1: { rounds: 1, bestStars: 2, last: '2026-09-23' } } };
     expect(importProgress(exportProgress(state))).toEqual(state);

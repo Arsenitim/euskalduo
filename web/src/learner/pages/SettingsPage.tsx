@@ -70,6 +70,16 @@ export function SettingsPage() {
         ))}
       </fieldset>
 
+      <fieldset className="card">
+        <legend>{t('soundSetting')}</legend>
+        {([true, false] as const).map((on) => (
+          <label key={String(on)} className="radio">
+            <input type="radio" name="sound" checked={state.sound === on} onChange={() => update((s) => ({ ...s, sound: on }))} />{' '}
+            {on ? `🔊 ${t('soundYes')}` : `🔇 ${t('soundNo')}`}
+          </label>
+        ))}
+      </fieldset>
+
       <div className="card">
         <p className="muted">
           {t('privacyP3')} <Link to="/privacidad">{t('navPrivacy')}</Link>

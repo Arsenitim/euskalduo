@@ -8,6 +8,7 @@ import { useLearner } from '../LearnerContext';
 import { buildRound, meaningsOf, retryQuestion, starsFor, type Item, type Mode, type Question } from '../questions';
 import type { LearnerState } from '../progress';
 import { recordAnswer, todayIso } from '../scheduler';
+import { playCorrect, playRoundDone, playWrong } from '../sounds';
 
 const MAX_RETRIES = 4;
 const RETRY_GAP = 3;
@@ -60,6 +61,7 @@ export function PracticePage() {
   const onAnswer = (outcome: Outcome) => {
     if (!question || session.outcome) return;
     const correct = outcome.verdict !== 'wrong';
+    if (state.sound) (correct ? playCorrect : playWrong)();
     const next: Session = { ...session, outcome, firstTry: { ...session.firstTry } };
 
     if (question.kind === 'order') {
@@ -108,7 +110,7 @@ export function PracticePage() {
   };
 
   if (session.done) {
-    return <RoundSummary session={session} lang={state.lang} onAgain={() => setSession(newSession(sets, mode, state, session.round + 1))} />;
+    return <RoundSummary session={session} lang={state.lang} sound={state.sound} onAgain={() => setSession(newSession(sets, mode, state, session.round + 1))} />;
   }
   if (!question) return null;
 
@@ -119,6 +121,15 @@ export function PracticePage() {
     <div className="practice">
       <div className="practice-top">
         <ProgressBar value={session.index + (session.outcome ? 1 : 0)} max={total} label={t('questionOf', { n: session.index + 1, total })} />
+        <button
+          className="btn btn-small"
+          aria-pressed={state.sound}
+          aria-label={state.sound ? t('soundOn') : t('soundOff')}
+          title={state.sound ? t('soundOn') : t('soundOff')}
+          onClick={() => update((s) => ({ ...s, sound: !s.sound }))}
+        >
+          <span aria-hidden="true">{state.sound ? '🔊' : '🔇'}</span>
+        </button>
         <Link className="btn btn-small" to="/">
           {t('exit')}
         </Link>
@@ -184,7 +195,12 @@ function Feedback({ question, outcome, lang, willRetry, onNext }: { question: Qu
   );
 }
 
-function RoundSummary({ session, lang, onAgain }: { session: Session; lang: Lang; onAgain: () => void }) {
+function RoundSummary({ session, lang, sound, onAgain }: { session: Session; lang: Lang; sound: boolean; onAgain: () => void }) {
+  useEffect(() => {
+    if (sound) playRoundDone();
+    // Only once, when the summary appears.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const scored = Object.values(session.firstTry);
   const right = scored.filter(Boolean).length;
   const stars = starsFor(right, scored.length);

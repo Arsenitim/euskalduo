@@ -90,6 +90,35 @@ test.describe('learner', () => {
     expect((await page.context().cookies()).length).toBe(0);
   });
 
+  test('plays answer sounds, and the mute toggle silences them', async ({ page }) => {
+    // Count synthesised notes (headless Chromium has no speakers to listen to).
+    await page.addInitScript(() => {
+      const w = window as unknown as { __notes: number };
+      w.__notes = 0;
+      const start = OscillatorNode.prototype.start;
+      OscillatorNode.prototype.start = function (...args: Parameters<typeof start>) {
+        w.__notes++;
+        return start.apply(this, args);
+      };
+    });
+    const notes = () => page.evaluate(() => (window as unknown as { __notes: number }).__notes);
+
+    await page.goto('/');
+    await page.getByRole('link', { name: /Esta semana/ }).click();
+    await answerCurrent(page);
+    expect(await notes()).toBeGreaterThan(0);
+
+    await page.getByRole('button', { name: 'Sonido activado' }).click();
+    await expect(page.getByRole('button', { name: 'Sonido desactivado' })).toBeVisible();
+    const before = await notes();
+    await answerCurrent(page);
+    await answerCurrent(page);
+    expect(await notes()).toBe(before);
+
+    await page.goto('/#/ajustes');
+    await expect(page.getByRole('radio', { name: /No/ })).toBeChecked();
+  });
+
   test('mixes earlier weeks chosen by the learner', async ({ page }) => {
     await page.goto('/#/mezclar');
     const older = page.locator('.check-list .check-card').first();

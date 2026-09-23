@@ -8,7 +8,9 @@ with no accounts, ads, leaderboards or streak penalties.
 * **Learners:** "Esta semana", "Elegir semana", "Mezclar semanas"; five
   exercise types (choose the meaning, choose the Basque word, spell with letter
   tiles, type the meaning, put months/weekdays in order); immediate feedback;
-  missed words come back later; stars at the end of a round; progress per week.
+  missed words come back later; stars at the end of a round; progress per week;
+  short synthesised sound effects for right/wrong answers (mute with 🔊 or in
+  Ajustes).
   The child-facing UI is simple Spanish; meanings can be shown in Spanish or
   Russian.
 * **Admin:** log in, paste/upload JSON (or quick `Basque — Spanish` lines),
@@ -212,7 +214,7 @@ browser-only state, the practice algorithm).
 
 * Progress is per browser. There is no sync between devices except manual
   export/import.
-* No audio or pronunciation. Only the typed-meaning exercise accepts
+* No spoken audio or pronunciation (only synthesised effect sounds). Only the typed-meaning exercise accepts
   accent-less answers ("almost"); Basque spelling must be exact.
 * The ordering exercise uses runs of up to 5 items from an ordered group, not
   the full 12-month sequence.

@@ -44,6 +44,8 @@ export const es = {
 
   questionOf: 'Pregunta {n} de {total}',
   exit: 'Salir',
+  soundOn: 'Sonido activado',
+  soundOff: 'Sonido desactivado',
   exitConfirm: '¿Salir de la ronda? Lo que ya has respondido está guardado.',
   whatMeans: '¿Qué significa?',
   howSay: '¿Cómo se dice en euskera?',
@@ -87,6 +89,9 @@ export const es = {
   save: 'Guardar',
   saved: 'Guardado',
   meaningLang: 'Idioma de las traducciones',
+  soundSetting: 'Sonidos al responder',
+  soundYes: 'Sí',
+  soundNo: 'No',
   langEs: 'Español',
   langRu: 'Русский (ruso)',
   exportProgress: 'Descargar mi progreso',
