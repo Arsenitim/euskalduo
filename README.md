@@ -42,3 +42,7 @@ Open <http://127.0.0.1:8765/> (learners) or <http://127.0.0.1:8765/admin/>
 
 Built with React + TypeScript + Vite, PHP 8.4 + Symfony 8 + SQLite, nginx and
 Docker Compose.
+
+## License
+
+[MIT](LICENSE)

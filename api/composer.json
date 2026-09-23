@@ -2,7 +2,7 @@
     "name": "euskalduo/api",
     "description": "EUSKALDUO content and admin API",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
