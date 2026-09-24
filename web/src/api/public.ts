@@ -1,7 +1,8 @@
 import type { Content } from '../types';
 
 /**
- * The only request the learner app makes to the server. It carries no query
+ * The only request the learner app makes while playing (feedback is sent
+ * only from the feedback form, see feedback.ts). It carries no query
  * parameters, no body and no cookies: the whole published catalogue is
  * downloaded and every choice (week, answers, name) stays in the browser.
  */

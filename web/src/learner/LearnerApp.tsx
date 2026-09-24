@@ -1,5 +1,6 @@
 import { HashRouter, Link, NavLink, Route, Routes } from 'react-router-dom';
 import { t } from '../i18n';
+import { FeedbackButton } from './components/FeedbackDialog';
 import { LearnerProvider, useLearner } from './LearnerContext';
 import { HomePage } from './pages/HomePage';
 import { MixPage } from './pages/MixPage';
@@ -36,6 +37,7 @@ export function LearnerApp() {
             <NavLink to="/ajustes">
               <span aria-hidden="true">⚙️</span> {t('navSettings')}
             </NavLink>
+            <FeedbackButton />
           </nav>
         </header>
         <main id="main" tabIndex={-1} className="app-main">

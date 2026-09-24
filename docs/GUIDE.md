@@ -16,8 +16,11 @@ with no accounts, ads, leaderboards or streak penalties.
 * **Admin:** log in, paste/upload JSON (or quick `Basque — Spanish` lines),
   review with per-entry errors and warnings, assign the week, add pictures,
   preview, publish/unpublish, edit and delete.
-* **Privacy:** the server stores only homework content. Names, answers and
-  progress stay in the child's browser.
+* **Privacy:** the server stores only homework content, plus feedback that
+  someone deliberately sends. Names, answers and progress stay in the child's
+  browser.
+* **Feedback:** a *Comentarios* button opens a form (message, optional name
+  and screenshot). Entries are stored as files for you to download.
 
 ## Quick start
 
@@ -67,6 +70,8 @@ them in the admin whenever you like; they are never re-created.
 | `ADMIN_PASSWORD` | *(empty)* | Admin password (≥ 12 characters recommended). Empty + no hash → a password is generated once. |
 | `ADMIN_PASSWORD_HASH` | *(empty)* | Alternative to the plain password: a `password_hash()` bcrypt/argon2 hash. Write every `$` as `$$` in `.env`. |
 | `APP_SECRET` | *(generated)* | Symfony secret. It is generated into the data volume if empty. |
+| `FEEDBACK_MAX_MB` | `256` | Total size of stored feedback. When it is reached, new feedback is refused until you purge what you have downloaded. |
+| `FEEDBACK_CONTACT` | *(empty)* | Name shown to learners when the feedback box is full ("escribe directamente a …"). |
 | `FPM_MAX_CHILDREN` | `8` | Max PHP worker processes (started on demand). Use 2–3 on a 512 MB server. |
 | `EUSKALDUO_API_MEM_LIMIT` / `EUSKALDUO_WEB_MEM_LIMIT` | `512m` / `128m` | Container memory caps, so the app cannot starve other services on a shared host. |
 | `SEED_SAMPLE_CONTENT` | `true` | Load the sample sets into an empty database on first start. |
@@ -107,13 +112,20 @@ in [`docs/IMPORT_FORMAT.md`](IMPORT_FORMAT.md) and
 
 * **No learner data on the server.** There are no learner accounts. Names,
   answers, scores and progress are stored in the browser's `localStorage`
-  only. The learner app makes one request, `GET /api/public/content`, with no
+  only. While playing, the learner app makes one request, `GET /api/public/content`, with no
   parameters, no body and no cookies. It downloads all published homework, so
   the server does not even learn which week a child opens. Learner pages use
   `#` URLs, which browsers do not send to the server.
 * **No third parties.** No analytics, ads, trackers, external fonts, CDNs or
   external images. A Content-Security-Policy restricts everything to the same
   origin.
+* **Feedback is the exception, and only on purpose.** When someone sends
+  the *Comentarios* form, the server stores the message, the optional name
+  and screenshot (re-encoded, metadata dropped), the current screen
+  (`#/…`), window size, browser user agent and IP address. The IP is kept
+  to spot abuse; for rate limiting it is also kept in the database for up to
+  one hour. Progress and the name from *Ajustes* are never sent. The
+  *Privacidad* page says this. Delete feedback once you have reviewed it.
 * **Logging.** The nginx access log records only time, method, path, status
   and size: no IP address, user agent, query string or referrer. PHP-FPM
   access logs are disabled. The API never logs request bodies.
@@ -141,6 +153,13 @@ footer).
   lazily loaded chunk.
 * All imported/edited text is validated (UTF-8, NFC, lengths, no control
   characters, no `<` `>`) and rendered as text only.
+* Feedback (`POST /api/public/feedback`, no login): at most 10 attempts per
+  IP per hour, messages ≤ 5000 characters, screenshots go through the same
+  image checks as pictures (scaled to ≤ 1600 px). The total size is capped
+  (`FEEDBACK_MAX_MB`), so a flood cannot fill the disk. Behind a proxy the
+  IP comes from `X-Forwarded-For`, trusted only from private networks.
+  Without a proxy in front, someone who reaches the container from such a network could fake it
+  and get around the per-IP limit; the size cap still holds.
 * Uploads: type detected from content, only PNG/JPEG/WebP, size and dimension
   limits, re-encoded to WebP (drops EXIF/GPS), random file names, served with
   `nosniff` and a sandboxing CSP. SVG is not accepted.
@@ -160,6 +179,30 @@ Treat publishing to a class as a separate decision. Before doing it:
 5. Check the published content: sample sets, translations and pictures
    (you must have the right to use every picture).
 6. Get the agreement of the school/teacher and parents where appropriate.
+
+## Collecting feedback
+
+Feedback lives in the content volume under `/data/feedback`: one
+`<id>.json` per message and `<id>.webp` for its screenshot. Ids are UUIDv7,
+so file names sort by arrival time.
+
+```sh
+# How much is there?
+docker compose exec api php bin/feedback.php stats
+
+# Download everything into ./feedback-inbox/ (on a server: prefix with ssh)
+mkdir -p feedback-inbox
+docker compose exec -T api tar -C /data/feedback -cf - . | tar -xf - -C feedback-inbox
+#   ssh server 'cd euskalduo && docker compose exec -T api tar -C /data/feedback -cf - .' | tar -xf - -C feedback-inbox
+
+# After downloading, free the space: deletes everything up to and including
+# the given id (use the "newest" id that `stats` printed before downloading,
+# so anything that arrived in the meantime is kept).
+docker compose exec api php bin/feedback.php purge-through <id>
+```
+
+When the box is full, learners see a message asking them to contact
+`FEEDBACK_CONTACT` instead.
 
 ## Backups and resetting
 

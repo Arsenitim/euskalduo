@@ -36,7 +36,9 @@ final class Kernel extends BaseKernel
             ->set('env(UPLOAD_DIR)', '/uploads')
             ->set('env(ADMIN_USERNAME)', 'admin')
             ->set('env(ADMIN_PASSWORD)', '')
-            ->set('env(ADMIN_PASSWORD_HASH)', '');
+            ->set('env(ADMIN_PASSWORD_HASH)', '')
+            ->set('env(FEEDBACK_MAX_MB)', '256')
+            ->set('env(FEEDBACK_CONTACT)', '');
 
         $container->extension('framework', [
             'secret' => '%env(APP_SECRET)%',
@@ -78,6 +80,11 @@ final class Kernel extends BaseKernel
             ->arg('$dataDir', '%env(DATA_DIR)%');
         $services->get(Content\ImageStore::class)
             ->arg('$uploadDir', '%env(UPLOAD_DIR)%');
+        $services->get(Feedback\FeedbackStore::class)
+            ->arg('$dataDir', '%env(DATA_DIR)%')
+            ->arg('$maxMegabytes', '%env(int:FEEDBACK_MAX_MB)%');
+        $services->get(Controller\FeedbackController::class)
+            ->arg('$contact', '%env(FEEDBACK_CONTACT)%');
         $services->get(Security\AdminCredentials::class)
             ->arg('$dataDir', '%env(DATA_DIR)%')
             ->arg('$username', '%env(ADMIN_USERNAME)%')

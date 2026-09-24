@@ -17,11 +17,12 @@ final class ImageStore
     public const MAX_BYTES = 5 * 1024 * 1024;
     private const MAX_SIDE = 8000;
     private const MAX_PIXELS = 30_000_000;
-    private const OUTPUT_SIDE = 800;
     private const FILE_PATTERN = '/^[a-f0-9]{32}\.webp$/';
 
-    public function __construct(private readonly string $uploadDir)
-    {
+    public function __construct(
+        private readonly string $uploadDir,
+        private readonly int $outputSide = 800,
+    ) {
     }
 
     /**
@@ -58,7 +59,7 @@ final class ImageStore
             throw new \InvalidArgumentException('The image could not be decoded.');
         }
 
-        $scale = min(1, self::OUTPUT_SIDE / max($width, $height));
+        $scale = min(1, $this->outputSide / max($width, $height));
         $targetW = max(1, (int) round($width * $scale));
         $targetH = max(1, (int) round($height * $scale));
         $target = imagecreatetruecolor($targetW, $targetH);

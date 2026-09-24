@@ -128,7 +128,12 @@ a {
   align-items: center;
 }
 
-.app-nav a {
+.app-nav a,
+.app-nav .nav-button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
   padding: 10px 14px;
   border-radius: 999px;
   text-decoration: none;
@@ -141,7 +146,8 @@ a {
 }
 
 .app-nav a:hover,
-.app-nav a.active {
+.app-nav a.active,
+.app-nav .nav-button:hover {
   background: var(--primary-soft);
 }
 
@@ -938,6 +944,79 @@ fieldset legend {
   font-weight: 700;
 }
 
+/* Feedback dialog */
+.feedback-dialog {
+  width: min(560px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.feedback-dialog::backdrop {
+  background: rgba(29, 35, 48, 0.45);
+}
+
+.feedback-dialog h2 {
+  margin-top: 0;
+}
+
+.feedback-form label:not(.btn),
+.feedback-label {
+  display: block;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.feedback-form textarea,
+.feedback-form input:not([type]) {
+  display: block;
+  margin-top: 4px;
+  font: inherit;
+  font-weight: 400;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  min-height: 48px;
+  width: 100%;
+  background: var(--surface);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.feedback-attach {
+  margin-top: 4px;
+}
+
+.feedback-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.feedback-preview img {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 8px;
+  border: 2px solid var(--line);
+}
+
+.feedback-error {
+  background: var(--wrong-soft);
+  color: var(--wrong);
+  font-weight: 700;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
 /* Admin */
 .admin {
   font-size: 16px;
@@ -1147,6 +1226,20 @@ fieldset legend {
   padding: 8px 0;
 }
 
+@media (max-width: 720px) {
+  /* Once the nav drops below the logo it has no room for a fourth item:
+     feedback moves up, beside the logo. */
+  .app-header {
+    position: relative;
+  }
+
+  .app-nav .nav-button {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+  }
+}
+
 @media (max-width: 560px) {
   body {
     font-size: 17px;
@@ -1162,10 +1255,16 @@ fieldset legend {
     justify-content: space-between;
   }
 
-  .app-nav a {
+  .app-nav a,
+  .app-nav .nav-button {
     padding: 6px 8px;
     font-size: 0.9rem;
     gap: 4px;
+  }
+
+  .app-nav .nav-button {
+    top: 8px;
+    right: 12px;
   }
 
   .entry-row {
@@ -1183,6 +1282,18 @@ fieldset legend {
 
   .slot {
     width: 34px;
+  }
+}
+
+@media (max-width: 349px) {
+  /* Icon only on very narrow phones; the label stays for screen readers. */
+  .app-nav .nav-button-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }
 

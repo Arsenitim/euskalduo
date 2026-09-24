@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Content;
 
 /**
- * Thin wrapper around a SQLite file holding homework content only.
- * No learner data is ever stored here.
+ * Thin wrapper around a SQLite file holding homework content, plus
+ * short-lived throttling counters. No learner data is ever stored here.
  */
 final class Database
 {
-    private const SCHEMA_VERSION = 1;
+    private const SCHEMA_VERSION = 2;
 
     private ?\PDO $pdo = null;
 
@@ -94,6 +94,9 @@ final class Database
             )
             SQL);
         $pdo->exec('CREATE TABLE IF NOT EXISTS login_throttle (id INTEGER PRIMARY KEY CHECK (id = 1), failures INTEGER NOT NULL, window_start INTEGER NOT NULL)');
+        // v2: rows older than FeedbackThrottle::WINDOW are pruned on every submission.
+        $pdo->exec('CREATE TABLE IF NOT EXISTS feedback_throttle (ip TEXT NOT NULL, at INTEGER NOT NULL)');
+        $pdo->exec('CREATE INDEX IF NOT EXISTS feedback_throttle_ip ON feedback_throttle(ip, at)');
         $pdo->exec("INSERT INTO meta(key, value) VALUES('schema_version', '".self::SCHEMA_VERSION."') ON CONFLICT(key) DO UPDATE SET value = excluded.value");
         $pdo->commit();
     }

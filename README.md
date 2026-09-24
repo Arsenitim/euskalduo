@@ -14,7 +14,10 @@ leaderboards, and no pressure.
 - **Gentle feedback:** instant feedback with sounds, missed words come back
   later, and stars at the end of a round.
 - **This week, any week, or a mix of earlier weeks.**
-- **Private by design:** the server stores only homework content. Names,
+- **Feedback button:** learners can send a message and a screenshot;
+  you collect them as files (no e-mail, no chat).
+- **Private by design:** the server stores only homework content (plus
+  feedback people choose to send). Names,
   answers and progress stay in the child's browser.
 - **Admin panel:** import, review, add pictures, publish.
 
