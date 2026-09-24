@@ -111,6 +111,29 @@ test.describe('learner', () => {
     await expect(page.locator('.check-card strong', { hasText: /^HILABETEAK$/ })).toHaveCount(0);
   });
 
+  test('spelling offers a locked hint and "No lo sé" to skip', async ({ page }) => {
+    // Play rounds until a letter-tiles question comes up (question types are random).
+    for (let round = 0; round < 6; round++) {
+      await page.goto('/');
+      await page.getByRole('link', { name: /Esta semana/ }).click();
+      for (let i = 0; i < 20; i++) {
+        const card = page.locator('.question-card');
+        if (await page.getByRole('heading', { name: '¡Ronda terminada!' }).isVisible()) break;
+        if (await card.locator('.tile').count()) {
+          await card.getByRole('button', { name: /Pista/ }).click();
+          await expect(card.locator('.slot-hint').first()).toBeVisible();
+          await expect(card.getByRole('button', { name: /Pista/ })).toBeDisabled();
+          await expect(card.getByRole('button', { name: /Borrar/ })).toBeDisabled();
+          await card.getByRole('button', { name: 'No lo sé' }).click();
+          await expect(page.locator('.feedback-wrong')).toBeVisible();
+          return;
+        }
+        await answerCurrent(page);
+      }
+    }
+    throw new Error('No spelling question with letter tiles came up');
+  });
+
   test('plays answer sounds, and the mute toggle silences them', async ({ page }) => {
     // Count synthesised notes (headless Chromium has no speakers to listen to).
     await page.addInitScript(() => {

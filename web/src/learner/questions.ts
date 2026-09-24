@@ -288,8 +288,21 @@ function spreadRepeats(questions: WordQuestion[]): WordQuestion[] {
   return result;
 }
 
-export function starsFor(firstTryCorrect: number, total: number): number {
+/**
+ * Letters the spelling hint fills in: the first third of the word (rounded
+ * up), never the whole word. A one-letter word gets no hint.
+ */
+export function hintLength(letters: number): number {
+  return letters <= 1 ? 0 : Math.min(letters - 1, Math.ceil(letters / 3));
+}
+
+/** Round score of a first answer: 1 on its own, ½ with a hint, 0 wrong or skipped. */
+export function pointsFor(correct: boolean, hinted: boolean): number {
+  return correct ? (hinted ? 0.5 : 1) : 0;
+}
+
+export function starsFor(points: number, total: number): number {
   if (total === 0) return 0;
-  const ratio = firstTryCorrect / total;
+  const ratio = points / total;
   return ratio >= 0.9 ? 3 : ratio >= 0.6 ? 2 : 1;
 }

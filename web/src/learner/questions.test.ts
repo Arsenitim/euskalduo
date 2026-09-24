@@ -5,9 +5,12 @@ import { entryKey } from './progress';
 import {
   basqueOptions,
   buildRound,
+  hintLength,
   itemsOf,
   meaningOptions,
+  pointsFor,
   retryQuestion,
+  starsFor,
   type Item,
   type OrderQuestion,
   type Question,
@@ -116,7 +119,7 @@ describe('small sets', () => {
 
 describe('week mode', () => {
   const allDue: Record<string, EntryStats> = Object.fromEntries(
-    itemsOf(calendar).map((i) => [i.key, recordAnswer(recordAnswer(undefined, true, '2026-09-01'), true, '2026-09-02')]),
+    itemsOf(calendar).map((i) => [i.key, recordAnswer(recordAnswer(undefined, 'correct', '2026-09-01'), 'correct', '2026-09-02')]),
   );
 
   it('keeps the chosen homework as the main focus; old due words fill at most two slots', () => {
@@ -139,8 +142,8 @@ describe('week mode', () => {
     const missedKey = entryKey('hiztegia', item(hiztegia, 'Aspergarria').entry.id);
     const stats: Record<string, EntryStats> = {};
     // Everything practised and resting, except one word the child missed today.
-    for (const i of itemsOf(hiztegia)) stats[i.key] = recordAnswer(recordAnswer(undefined, true, TODAY), true, TODAY);
-    stats[missedKey] = recordAnswer(stats[missedKey], false, TODAY);
+    for (const i of itemsOf(hiztegia)) stats[i.key] = recordAnswer(recordAnswer(undefined, 'correct', TODAY), 'correct', TODAY);
+    stats[missedKey] = recordAnswer(stats[missedKey], 'wrong', TODAY);
     const hits = seeds.filter((seed) =>
       words(round({ sets: [hiztegia], mode: { kind: 'week', setId: 'hiztegia' }, stats }, seed)).some((q) => q.item.key === missedKey),
     ).length;
@@ -206,5 +209,18 @@ describe('retries', () => {
       expect(retry.retry).toBe(true);
       expect(retry.kind).not.toBe(q.kind === 'type-meaning' ? 'type-meaning' : q.kind);
     }
+  });
+});
+
+describe('spelling hints and scoring', () => {
+  it('fills the first third of a word, never all of it', () => {
+    expect([1, 2, 3, 6, 7, 9, 10].map(hintLength)).toEqual([0, 1, 1, 2, 3, 3, 4]);
+  });
+
+  it('gives full, half or no credit, and stars follow the points', () => {
+    expect([pointsFor(true, false), pointsFor(true, true), pointsFor(false, true), pointsFor(false, false)]).toEqual([1, 0.5, 0, 0]);
+    // 8 on their own + 2 with a hint out of 10 = 9 points → 3 stars; 5 + 4 hints = 7 → 2 stars.
+    expect(starsFor(8 + 2 * 0.5 + 0, 10)).toBe(3);
+    expect(starsFor(5 + 4 * 0.5, 10)).toBe(2);
   });
 });

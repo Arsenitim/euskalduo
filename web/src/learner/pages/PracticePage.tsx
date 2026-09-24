@@ -5,7 +5,7 @@ import type { HomeworkSet, Lang } from '../../types';
 import { ProgressBar, Stars } from '../components/bits';
 import { ChoiceQuestionView, OrderQuestionView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
 import { useLearner } from '../LearnerContext';
-import { buildRound, meaningsOf, retryQuestion, starsFor, type Item, type Mode, type Question } from '../questions';
+import { buildRound, meaningsOf, pointsFor, retryQuestion, starsFor, type Item, type Mode, type Question } from '../questions';
 import type { LearnerState } from '../progress';
 import { recordAnswer, todayIso } from '../scheduler';
 import { playCorrect, playRoundDone, playWrong } from '../sounds';
@@ -18,7 +18,8 @@ interface Session {
   questions: Question[];
   index: number;
   outcome: Outcome | null;
-  firstTry: Record<string, boolean>;
+  /** Points per question for its first answer: 1, ½ with a hint, 0. */
+  firstTry: Record<string, number>;
   answeredWords: string[];
   retried: string[];
   missed: Item[];
@@ -65,15 +66,16 @@ export function PracticePage() {
     const next: Session = { ...session, outcome, firstTry: { ...session.firstTry } };
 
     if (question.kind === 'order') {
-      next.firstTry[question.id] = correct;
+      next.firstTry[question.id] = pointsFor(correct, false);
     } else {
       const key = question.item.key;
-      if (!question.retry) next.firstTry[question.id] = correct;
+      const hinted = outcome.hinted === true;
+      if (!question.retry) next.firstTry[question.id] = pointsFor(correct, hinted);
       // Only the first answer to a word in a round moves it between boxes.
       if (!question.retry && !session.answeredWords.includes(key)) {
         next.answeredWords = [...session.answeredWords, key];
         const today = todayIso();
-        update((s) => ({ ...s, entries: { ...s.entries, [key]: recordAnswer(s.entries[key], correct, today) } }));
+        update((s) => ({ ...s, entries: { ...s.entries, [key]: recordAnswer(s.entries[key], !correct ? 'wrong' : hinted ? 'hinted' : 'correct', today) } }));
       }
       if (!correct) {
         if (!session.missed.some((i) => i.key === key)) next.missed = [...session.missed, question.item];
@@ -95,7 +97,7 @@ export function PracticePage() {
       return;
     }
     const scored = Object.values(session.firstTry);
-    const stars = starsFor(scored.filter(Boolean).length, scored.length);
+    const stars = starsFor(sum(scored), scored.length);
     const today = todayIso();
     const setIds = mode.kind === 'week' ? [mode.setId] : mode.setIds;
     update((s) => {
@@ -151,6 +153,8 @@ export function PracticePage() {
   );
 }
 
+const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
+
 function correctAnswer(question: Question, lang: Lang): string {
   switch (question.kind) {
     case 'meaning-choice':
@@ -177,10 +181,10 @@ function Feedback({ question, outcome, lang, willRetry, onNext }: { question: Qu
       </span>
       <div className="feedback-text">
         {outcome.verdict === 'exact' ? (
-          <strong>{t('correct')}</strong>
+          <strong>{outcome.hinted ? t('correctWithHint') : t('correct')}</strong>
         ) : (
           <>
-            <strong>{outcome.verdict === 'almost' ? t('almost') : t('wrong')}</strong>{' '}
+            <strong>{outcome.verdict === 'almost' ? t('almost') : outcome.skipped ? t('skippedAnswer') : t('wrong')}</strong>{' '}
             <span className="feedback-answer" lang={answerLang}>
               {correctAnswer(question, lang)}
             </span>
@@ -202,8 +206,9 @@ function RoundSummary({ session, lang, sound, onAgain }: { session: Session; lan
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const scored = Object.values(session.firstTry);
-  const right = scored.filter(Boolean).length;
-  const stars = starsFor(right, scored.length);
+  const right = scored.filter((p) => p > 0).length;
+  const hints = scored.filter((p) => p > 0 && p < 1).length;
+  const stars = starsFor(sum(scored), scored.length);
   const reducedMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   return (
@@ -212,7 +217,7 @@ function RoundSummary({ session, lang, sound, onAgain }: { session: Session; lan
       <h1>{t('roundDone')}</h1>
       <Stars count={stars} big />
       <p className="lead">{stars === 3 ? t('greatJob') : stars === 2 ? t('goodJob') : t('keepGoing')}</p>
-      <p>{t('firstTry', { n: right, total: scored.length })}</p>
+      <p>{hints > 0 ? t('firstTryHints', { n: right, total: scored.length, hints }) : t('firstTry', { n: right, total: scored.length })}</p>
       {session.missed.length > 0 && (
         <>
           <h2>{t('wordsToReview')}</h2>

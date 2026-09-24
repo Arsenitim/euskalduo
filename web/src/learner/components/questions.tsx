@@ -2,12 +2,16 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { t } from '../../i18n';
 import type { Lang } from '../../types';
 import { answerKey, checkTyped, type TypedVerdict } from '../normalize';
-import { meaningsOf, type Item, type OrderQuestion, type WordQuestion } from '../questions';
+import { hintLength, meaningsOf, type Item, type OrderQuestion, type WordQuestion } from '../questions';
 import { WordVisual } from './bits';
 
 export interface Outcome {
   verdict: TypedVerdict;
   given?: string;
+  /** The spelling hint was used: a right answer earns half credit. */
+  hinted?: boolean;
+  /** "No lo sé": counted as wrong, but the feedback is not "almost". */
+  skipped?: boolean;
 }
 
 interface Props<Q> {
@@ -108,9 +112,36 @@ export function SpellQuestionView({ question, lang, answered, onAnswer }: Props<
   const target = Array.from(item.entry.basque);
   const [placed, setPlaced] = useState<number[]>([]);
   const [typed, setTyped] = useState('');
+  // Number of leading letters filled in by the hint (0 = no hint used).
+  const [hinted, setHinted] = useState(0);
+  const letters = target.filter((c) => c !== ' ' && c !== '-');
+  const slots = letters.length;
+  const hintSize = hintLength(slots);
+  const skip = () => !answered && onAnswer({ verdict: 'wrong', hinted: hinted > 0, skipped: true });
+
+  const helpButtons = (onHint: () => void) =>
+    !answered && (
+      <div className="button-row help-row">
+        {hintSize > 0 && (
+          <button className="btn btn-small" onClick={onHint} disabled={hinted > 0}>
+            💡 {t('hint')}
+          </button>
+        )}
+        <button className="btn btn-link" onClick={skip}>
+          {t('dontKnow')}
+        </button>
+      </div>
+    );
 
   if (!tiles) {
-    const submit = () => !answered && typed.trim() && onAnswer({ verdict: checkTyped(typed, [item.entry.basque], 'basque'), given: typed });
+    const submit = () => !answered && typed.trim() && onAnswer({ verdict: checkTyped(typed, [item.entry.basque], 'basque'), given: typed, hinted: hinted > 0 });
+    // Long words are typed freely: the hint pre-types the first third (spaces and hyphens included).
+    const hint = () => {
+      let count = 0;
+      const prefix = Array.from(item.entry.basque).findIndex((c) => c !== ' ' && c !== '-' && ++count > hintSize);
+      setTyped(Array.from(item.entry.basque).slice(0, prefix < 0 ? undefined : prefix).join(''));
+      setHinted(hintSize);
+    };
     return (
       <div>
         <Prompt title={t('spellIt')}>
@@ -118,11 +149,11 @@ export function SpellQuestionView({ question, lang, answered, onAnswer }: Props<
           <Meaning item={item} lang={lang} />
         </Prompt>
         <TypedAnswer value={typed} onChange={setTyped} onSubmit={submit} answered={answered} lang="eu" />
+        {helpButtons(hint)}
       </div>
     );
   }
 
-  const slots = target.filter((c) => c !== ' ' && c !== '-').length;
   const complete = placed.length === slots;
   const built = (() => {
     let next = 0;
@@ -133,11 +164,24 @@ export function SpellQuestionView({ question, lang, answered, onAnswer }: Props<
     if (answered || placed.includes(tileIndex) || complete) return;
     setPlaced((p) => [...p, tileIndex]);
   };
-  const erase = () => !answered && setPlaced((p) => p.slice(0, -1));
+  // Hinted letters are locked in place; erasing stops at them.
+  const erase = () => !answered && setPlaced((p) => (p.length > hinted ? p.slice(0, -1) : p));
   const check = () => {
     if (answered || !complete) return;
     const word = built.join('');
-    onAnswer({ verdict: checkTyped(word, [item.entry.basque], 'basque'), given: word });
+    onAnswer({ verdict: checkTyped(word, [item.entry.basque], 'basque'), given: word, hinted: hinted > 0 });
+  };
+  /** Replaces whatever was placed with the correct first letters, taken from the tiles. */
+  const hint = () => {
+    if (answered || hinted > 0) return;
+    const used: number[] = [];
+    for (const letter of letters.slice(0, hintSize)) {
+      const index = tiles.findIndex((tile, i) => !used.includes(i) && answerKey(tile) === answerKey(letter));
+      if (index < 0) return;
+      used.push(index);
+    }
+    setPlaced(used);
+    setHinted(used.length);
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -173,7 +217,7 @@ export function SpellQuestionView({ question, lang, answered, onAnswer }: Props<
               -
             </span>
           ) : (
-            <span key={i} className={c ? 'slot slot-filled' : 'slot'}>
+            <span key={i} className={c ? (letterIndex(target, i) < hinted ? 'slot slot-filled slot-hint' : 'slot slot-filled') : 'slot'}>
               {c ?? ''}
             </span>
           ),
@@ -187,15 +231,21 @@ export function SpellQuestionView({ question, lang, answered, onAnswer }: Props<
         ))}
       </div>
       <div className="button-row">
-        <button className="btn" onClick={erase} disabled={answered || placed.length === 0}>
+        <button className="btn" onClick={erase} disabled={answered || placed.length <= hinted}>
           ⌫ {t('erase')}
         </button>
         <button className="btn btn-primary" onClick={check} disabled={answered || !complete}>
           {t('check')}
         </button>
       </div>
+      {helpButtons(hint)}
     </div>
   );
+}
+
+/** Position of target[i] among the letters only (spaces and hyphens are not slots). */
+function letterIndex(target: string[], i: number): number {
+  return target.slice(0, i).filter((c) => c !== ' ' && c !== '-').length;
 }
 
 export function TypeMeaningView({ question, lang, answered, onAnswer }: Props<Extract<WordQuestion, { kind: 'type-meaning' }>>) {
@@ -213,7 +263,7 @@ export function TypeMeaningView({ question, lang, answered, onAnswer }: Props<Ex
       </Prompt>
       <TypedAnswer value={typed} onChange={setTyped} onSubmit={submit} answered={answered} lang={lang} />
       {!answered && (
-        <button className="btn btn-link" onClick={() => onAnswer({ verdict: 'wrong' })}>
+        <button className="btn btn-link" onClick={() => onAnswer({ verdict: 'wrong', skipped: true })}>
           {t('dontKnow')}
         </button>
       )}

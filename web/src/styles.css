@@ -702,6 +702,17 @@ img.word-visual-small {
   border-color: var(--primary);
 }
 
+/* Letters filled in by the hint: locked, shown in the hint colour. */
+.slot-hint {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 8px 8px 0 0;
+}
+
+.question-card .help-row {
+  margin-top: 4px;
+}
+
 .slot-space {
   width: 20px;
   border: none;

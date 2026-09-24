@@ -66,7 +66,8 @@ server, so even the chosen week does not reach server logs.
 `web/src/learner/scheduler.ts` and `web/src/learner/questions.ts`.
 
 * **Boxes (Leitner).** Each word is in box 0–5. The first answer to a word in a
-  round moves it up one box if right, back to box 0 if wrong. A word in box *b*
+  round moves it up one box if right, back to box 0 if wrong or skipped
+  ("No lo sé"), and leaves it where it is if it was spelled with the hint. A word in box *b*
   becomes due again after 0, 1, 2, 4, 7, 14 days. Missing days never moves a
   word down. Box ≥ 3 counts as "learned" in the progress view.
 * **Selection weights.** Missed last time (box 0) 4 › never seen 3 › due
@@ -94,5 +95,10 @@ server, so even the chosen week does not reach server logs.
   Basque terms must match letter for letter (no morphological relaxation).
 * **Retries.** A missed word comes back (max. 4 per round) three questions
   later with a different exercise type. Retries do not change boxes or stars.
-* **Stars.** First-try accuracy ≥ 90 % → 3, ≥ 60 % → 2, otherwise 1. Finishing
-  always earns at least one star.
+* **Spelling help.** Spelling questions offer **💡 Pista** once: it fills in
+  the first third of the letters (rounded up, never the whole word), which
+  then cannot be erased. **No lo sé** skips the question; it counts as wrong,
+  so the word comes back.
+* **Stars.** Each question's first answer scores 1 point, ½ if the hint was
+  used, 0 if wrong or skipped. Points / questions ≥ 90 % → 3 stars, ≥ 60 % → 2,
+  otherwise 1. Finishing always earns at least one star.

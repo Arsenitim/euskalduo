@@ -15,7 +15,7 @@ function memoryStorage() {
 describe('learner progress storage', () => {
   it('round-trips through storage', () => {
     const storage = memoryStorage();
-    const state = { ...emptyState(), displayName: 'Ane', entries: { 's1/e1': recordAnswer(undefined, true, '2026-09-23') } };
+    const state = { ...emptyState(), displayName: 'Ane', entries: { 's1/e1': recordAnswer(undefined, 'correct', '2026-09-23') } };
     saveState(state, storage);
     expect(loadState(storage)).toEqual(state);
   });
@@ -29,7 +29,7 @@ describe('learner progress storage', () => {
   });
 
   it('drops invalid records individually', () => {
-    const good = recordAnswer(undefined, false, '2026-09-23');
+    const good = recordAnswer(undefined, 'wrong', '2026-09-23');
     const state = parseState({
       version: 1,
       displayName: 'x'.repeat(500),

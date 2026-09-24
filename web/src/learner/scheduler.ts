@@ -2,7 +2,8 @@
  * Simple, documented "boxes" scheduler (a Leitner system):
  *
  * - Every word has a box from 0 to 5. New words start unseen.
- * - First answer of a word in a round: correct → one box up; wrong → box 0.
+ * - First answer of a word in a round: correct → one box up; wrong (or
+ *   "No lo sé") → box 0; correct with a hint → stays in its box.
  * - A word in box b is "due" again INTERVAL_DAYS[b] days after it was last
  *   answered. Missing days never moves a word down — breaks are not punished.
  * - Selection weight: words just answered wrong come first, then new words,
@@ -35,14 +36,18 @@ export function todayIso(now: Date = new Date()): string {
   return local.toISOString().slice(0, 10);
 }
 
-export function recordAnswer(stats: EntryStats | undefined, correct: boolean, today: string): EntryStats {
+/** How a word was answered: on its own, with a hint (half credit), or not at all. */
+export type AnswerResult = 'correct' | 'hinted' | 'wrong';
+
+export function recordAnswer(stats: EntryStats | undefined, result: AnswerResult, today: string): EntryStats {
   const previous = stats ?? { box: 0, seen: 0, correct: 0, wrong: 0, last: today, due: today };
-  const box = correct ? Math.min(MAX_BOX, previous.box + 1) : 0;
+  const correct = result === 'correct';
+  const box = correct ? Math.min(MAX_BOX, previous.box + 1) : result === 'hinted' ? previous.box : 0;
   return {
     box,
     seen: previous.seen + 1,
     correct: previous.correct + (correct ? 1 : 0),
-    wrong: previous.wrong + (correct ? 0 : 1),
+    wrong: previous.wrong + (result === 'wrong' ? 1 : 0),
     last: today,
     due: addDays(today, INTERVAL_DAYS[box] ?? 14),
   };

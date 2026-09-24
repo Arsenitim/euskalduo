@@ -9,7 +9,8 @@ with no accounts, ads, leaderboards or streak penalties.
   "Categorías" (word groups without a week: days of the week and months are
   built in; add more as sets of type *category*); five
   exercise types (choose the meaning, choose the Basque word, spell with letter
-  tiles, type the meaning, put months/weekdays in order); immediate feedback;
+  tiles, type the meaning, put months/weekdays in order); spelling has a
+  💡 hint (half credit) and "No lo sé" to skip; immediate feedback;
   missed words come back later; stars at the end of a round; progress per week;
   short synthesised sound effects for right/wrong answers (mute with 🔊 or in
   Ajustes).
