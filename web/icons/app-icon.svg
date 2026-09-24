@@ -1,0 +1,14 @@
+<!-- Home-screen icon source (full bleed; the OS rounds or masks the corners).
+     The "E" is drawn with shapes, not a font, and stays inside the central
+     80 % "safe zone" so it also works as a maskable icon. Rendered to
+     public/icons/*.png by icons/render.mjs. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#1f7a5a"/>
+  <g fill="#ffffff" transform="rotate(-6 256 256)">
+    <rect x="166" y="136" width="56" height="240" rx="16"/>
+    <rect x="166" y="136" width="180" height="54" rx="16"/>
+    <rect x="166" y="229" width="158" height="54" rx="16"/>
+    <rect x="166" y="322" width="180" height="54" rx="16"/>
+  </g>
+  <circle cx="394" cy="366" r="22" fill="#ffd23f"/>
+</svg>

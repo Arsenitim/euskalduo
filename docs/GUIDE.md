@@ -95,6 +95,13 @@ with `docker save euskalduo-api euskalduo-web | gzip | ssh server 'gunzip | dock
 then start with `docker compose ... up -d --no-build`. At idle the app uses
 about 25 MB of RAM.
 
+**Home screen.** Learners can add the site to their home screen (Android:
+browser menu → *Add to Home screen* / *Install app*; iPhone: Safari → Share →
+*Add to Home Screen*). It then opens full screen with the EUSKALDUO icon. The
+app stays online-only on purpose: there is no service worker or offline cache,
+so updates arrive like any page reload. The icons are rendered from
+`web/icons/app-icon.svg` with `node web/icons/render.mjs`.
+
 ## Import format
 
 The canonical format is versioned JSON (`schemaVersion: 1`). It is documented
