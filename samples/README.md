@@ -16,6 +16,11 @@ deleted, and they never overwrite real content.
   no translations; the Spanish ones here were added for admin review. The
   decorative flower drawing on the sheet is deliberately not used as a
   picture.
+* `topics/` — the built-in categories (`"kind": "topic"`): `astegunak.json`
+  (the 7 weekdays) and `hilabeteak.json` (the 12 months), each one ordered
+  group. They are published under **Categorías** once per install (also on
+  existing installs), never re-created once deleted. Entry ids are the Basque
+  words, so they stay stable.
 * `homework.schema.json` — JSON Schema describing the import format.
 
 Editorial additions made by the developer and worth a human check:

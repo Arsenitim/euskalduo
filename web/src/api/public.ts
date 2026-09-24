@@ -20,5 +20,6 @@ export async function fetchContent(): Promise<Content> {
   if (!data || !Array.isArray(data.sets)) {
     throw new Error('Unexpected content format');
   }
-  return data;
+  // Responses from before categories existed have no kind: they are all weeks.
+  return { ...data, sets: data.sets.map((set) => ({ ...set, kind: set.kind === 'topic' ? 'topic' : 'week' })) };
 }

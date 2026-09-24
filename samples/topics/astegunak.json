@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "topic",
+  "title": "ASTEGUNAK",
+  "description": "Los días de la semana.",
+  "groups": [
+    {
+      "key": "astegunak",
+      "title": "ASTEGUNAK",
+      "ordered": true
+    }
+  ],
+  "entries": [
+    {
+      "id": "astelehena",
+      "basque": "astelehena",
+      "translations": {
+        "es": [
+          "lunes"
+        ],
+        "ru": [
+          "понедельник"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "id": "asteartea",
+      "basque": "asteartea",
+      "translations": {
+        "es": [
+          "martes"
+        ],
+        "ru": [
+          "вторник"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "id": "asteazkena",
+      "basque": "asteazkena",
+      "translations": {
+        "es": [
+          "miércoles"
+        ],
+        "ru": [
+          "среда"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "id": "osteguna",
+      "basque": "osteguna",
+      "translations": {
+        "es": [
+          "jueves"
+        ],
+        "ru": [
+          "четверг"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "id": "ostirala",
+      "basque": "ostirala",
+      "translations": {
+        "es": [
+          "viernes"
+        ],
+        "ru": [
+          "пятница"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "id": "larunbata",
+      "basque": "larunbata",
+      "translations": {
+        "es": [
+          "sábado"
+        ],
+        "ru": [
+          "суббота"
+        ]
+      },
+      "group": "astegunak"
+    },
+    {
+      "id": "igandea",
+      "basque": "igandea",
+      "translations": {
+        "es": [
+          "domingo"
+        ],
+        "ru": [
+          "воскресенье"
+        ]
+      },
+      "group": "astegunak"
+    }
+  ]
+}

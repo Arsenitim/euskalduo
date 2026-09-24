@@ -1,4 +1,4 @@
-import type { Group } from '../types';
+import type { Group, SetKind } from '../types';
 
 export interface Issue {
   path: string;
@@ -20,6 +20,7 @@ export interface AdminEntry {
 }
 
 export interface Draft {
+  kind: SetKind;
   title: string;
   weekStart: string | null;
   description: string | null;

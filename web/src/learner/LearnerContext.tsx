@@ -1,17 +1,22 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { fetchContent } from '../api/public';
-import type { HomeworkSet } from '../types';
+import { isWeek, type HomeworkSet, type WeekSet } from '../types';
 import { clearState, emptyState, loadState, saveState, type LearnerState } from './progress';
 
 interface LearnerContextValue {
+  /** Every published set (weeks and categories), for practice and progress. */
   sets: HomeworkSet[] | null;
+  /** Homework weeks, newest first. */
+  weeks: WeekSet[];
+  /** Categories (days of the week, months…), by title. */
+  topics: HomeworkSet[];
   error: boolean;
   reload: () => void;
   state: LearnerState;
   update: (fn: (state: LearnerState) => LearnerState) => void;
   reset: () => void;
   storageOk: boolean;
-  currentSet: HomeworkSet | null;
+  currentSet: WeekSet | null;
 }
 
 const LearnerContext = createContext<LearnerContextValue | null>(null);
@@ -28,8 +33,7 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
     fetchContent()
       .then((content) => {
         if (cancelled) return;
-        // Newest week first; the server already orders, this keeps it explicit.
-        setSets([...content.sets].sort((a, b) => b.weekStart.localeCompare(a.weekStart)));
+        setSets(content.sets);
         setError(false);
       })
       .catch(() => !cancelled && setError(true));
@@ -52,9 +56,14 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<LearnerContextValue>(() => {
-    const pinned = sets?.find((s) => s.id === state.pinnedWeek);
+    // Newest week first; the server already orders, this keeps it explicit.
+    const weeks = (sets ?? []).filter(isWeek).sort((a, b) => b.weekStart.localeCompare(a.weekStart));
+    const topics = (sets ?? []).filter((s) => s.kind === 'topic').sort((a, b) => a.title.localeCompare(b.title, 'eu'));
+    const pinned = weeks.find((s) => s.id === state.pinnedWeek);
     return {
       sets,
+      weeks,
+      topics,
       error,
       reload: () => {
         setError(false);
@@ -64,7 +73,7 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
       update,
       reset,
       storageOk,
-      currentSet: pinned ?? sets?.[0] ?? null,
+      currentSet: pinned ?? weeks[0] ?? null,
     };
   }, [sets, error, state, update, reset, storageOk]);
 

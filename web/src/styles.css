@@ -354,6 +354,10 @@ a {
   background: linear-gradient(160deg, #fbe3ea, #ffffff 70%);
 }
 
+.action-topics {
+  background: linear-gradient(160deg, #e3ecfb, #ffffff 70%);
+}
+
 .action-icon {
   font-size: 2.6rem;
 }

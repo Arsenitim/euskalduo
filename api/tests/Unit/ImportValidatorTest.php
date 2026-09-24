@@ -6,6 +6,7 @@ namespace App\Tests\Unit;
 
 use App\Content\ImportValidator;
 use App\Content\LineParser;
+use App\Content\SetRepository;
 use App\Tests\TempDirs;
 use PHPUnit\Framework\TestCase;
 
@@ -140,6 +141,28 @@ final class ImportValidatorTest extends TestCase
             ['schemaVersion', 'weekStart', 'groups[0].key', 'entries[0].group'],
             array_column($result->errors, 'path'),
         );
+    }
+
+    public function testTopicsHaveNoWeekAndPublishWithoutOne(): void
+    {
+        foreach (['astegunak.json' => 7, 'hilabeteak.json' => 12] as $file => $count) {
+            $result = $this->validator->validate($this->sample("topics/$file"));
+            self::assertTrue($result->isValid(), json_encode($result->errors));
+            self::assertSame('topic', $result->draft['kind']);
+            self::assertCount($count, $result->draft['entries']);
+            self::assertTrue($result->draft['groups'][0]['ordered']);
+            self::assertSame([], SetRepository::publishBlockers($result->draft));
+        }
+
+        $dated = $this->validator->validate(['kind' => 'topic', 'weekStart' => '2026-09-21'] + $this->doc([['basque' => 'etxea', 'translations' => ['es' => ['casa']]]]));
+        self::assertNull($dated->draft['weekStart']);
+        self::assertSame(['weekStart'], array_column($dated->warnings, 'path'));
+
+        $week = $this->validator->validate($this->doc([['basque' => 'etxea', 'translations' => ['es' => ['casa']]]]));
+        self::assertSame('week', $week->draft['kind'], 'Sets are homework weeks unless marked otherwise.');
+        self::assertNotSame([], SetRepository::publishBlockers($week->draft), 'A week still needs its date.');
+
+        self::assertFalse($this->validator->validate(['kind' => 'unit'] + $this->doc([['basque' => 'a', 'translations' => ['es' => ['b']]]]))->isValid());
     }
 
     public function testNonMondayWeekStartIsOnlyAWarning(): void

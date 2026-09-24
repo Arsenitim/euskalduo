@@ -10,7 +10,7 @@ namespace App\Content;
  */
 final class Database
 {
-    private const SCHEMA_VERSION = 2;
+    private const SCHEMA_VERSION = 3;
 
     private ?\PDO $pdo = null;
 
@@ -97,6 +97,11 @@ final class Database
         // v2: rows older than FeedbackThrottle::WINDOW are pruned on every submission.
         $pdo->exec('CREATE TABLE IF NOT EXISTS feedback_throttle (ip TEXT NOT NULL, at INTEGER NOT NULL)');
         $pdo->exec('CREATE INDEX IF NOT EXISTS feedback_throttle_ip ON feedback_throttle(ip, at)');
+        // v3: a set is either a homework week or a topic (category) without a week.
+        $columns = array_column($pdo->query('PRAGMA table_info(homework_sets)')->fetchAll(), 'name');
+        if (!\in_array('kind', $columns, true)) {
+            $pdo->exec("ALTER TABLE homework_sets ADD COLUMN kind TEXT NOT NULL DEFAULT 'week' CHECK (kind IN ('week', 'topic'))");
+        }
         $pdo->exec("INSERT INTO meta(key, value) VALUES('schema_version', '".self::SCHEMA_VERSION."') ON CONFLICT(key) DO UPDATE SET value = excluded.value");
         $pdo->commit();
     }

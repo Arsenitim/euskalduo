@@ -90,6 +90,27 @@ test.describe('learner', () => {
     expect((await page.context().cookies()).length).toBe(0);
   });
 
+  test('categories: days of the week and months are practised apart from the weeks', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('link', { name: /Categorías/ }).click();
+    await expect(page.getByRole('heading', { name: 'Categorías' })).toBeVisible();
+    await expect(page.locator('.week-card')).toHaveText([/ASTEGUNAK.*7 palabras/s, /HILABETEAK.*12 palabras/s]);
+
+    await page.locator('.week-card', { hasText: 'ASTEGUNAK' }).click();
+    await expect(page.locator('.word-group ol li')).toHaveCount(7);
+    await expect(page.getByRole('button', { name: 'Usar como mi semana actual' })).toHaveCount(0);
+    await page.getByRole('link', { name: '¡A practicar!' }).click();
+    await playRound(page);
+
+    // Categories are not weeks: they never show up in the week list or the mix.
+    // (The sample week "HILABETEAK ETA ASTEGUNAK" is a different, longer title.)
+    await page.goto('/#/semanas');
+    await expect(page.locator('.week-list')).toBeVisible();
+    await expect(page.locator('.week-title', { hasText: /^ASTEGUNAK\b/ })).toHaveCount(0);
+    await page.goto('/#/mezclar');
+    await expect(page.locator('.check-card strong', { hasText: /^HILABETEAK$/ })).toHaveCount(0);
+  });
+
   test('plays answer sounds, and the mute toggle silences them', async ({ page }) => {
     // Count synthesised notes (headless Chromium has no speakers to listen to).
     await page.addInitScript(() => {

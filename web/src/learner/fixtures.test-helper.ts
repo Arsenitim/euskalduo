@@ -14,6 +14,7 @@ export function sampleSet(file: string, id: string, weekStart: string): Homework
   const doc = JSON.parse(readFileSync(resolve(__dirname, '../../../samples', file), 'utf8'));
   return {
     id,
+    kind: 'week',
     title: doc.title,
     weekStart,
     description: doc.description ?? null,
@@ -34,6 +35,7 @@ export function sampleSet(file: string, id: string, weekStart: string): Homework
 export function tinySet(id: string, weekStart: string, words: Array<[string, string[]]>): HomeworkSet {
   return {
     id,
+    kind: 'week',
     title: id,
     weekStart,
     description: null,

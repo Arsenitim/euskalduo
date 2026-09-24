@@ -2,6 +2,7 @@ import { HashRouter, Link, NavLink, Route, Routes } from 'react-router-dom';
 import { t } from '../i18n';
 import { FeedbackButton } from './components/FeedbackDialog';
 import { LearnerProvider, useLearner } from './LearnerContext';
+import { CategoriesPage } from './pages/CategoriesPage';
 import { HomePage } from './pages/HomePage';
 import { MixPage } from './pages/MixPage';
 import { PracticePage } from './pages/PracticePage';
@@ -46,6 +47,8 @@ export function LearnerApp() {
               <Route path="/" element={<HomePage />} />
               <Route path="/semanas" element={<WeeksPage />} />
               <Route path="/semana/:setId" element={<WeekPage />} />
+              <Route path="/categorias" element={<CategoriesPage />} />
+              <Route path="/categoria/:setId" element={<WeekPage />} />
               <Route path="/mezclar" element={<MixPage />} />
               <Route path="/practicar" element={<PracticePage />} />
               <Route path="/progreso" element={<ProgressPage />} />

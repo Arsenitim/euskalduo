@@ -118,7 +118,7 @@ export function ImportPage() {
         <section className="card">
           <h2>Review before saving</h2>
           <p className="muted">
-            {model.rows.length} entries. Fix any errors, assign the homework week, and clear “needs review” flags before publishing.
+            {model.rows.length} entries. Fix any errors, assign the homework week (or make it a category), and clear “needs review” flags before publishing.
           </p>
           <SetEditor model={model} onChange={setModel} errors={errors} warnings={warnings} />
           <div className="button-row sticky-actions">

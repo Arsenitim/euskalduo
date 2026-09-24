@@ -19,7 +19,7 @@ final class SetRepository
                    SUM(e.needs_review) AS review_count
             FROM homework_sets s LEFT JOIN entries e ON e.set_id = s.id
             GROUP BY s.id
-            ORDER BY s.week_start IS NULL DESC, s.week_start DESC, s.created_at DESC
+            ORDER BY s.kind = 'topic', s.week_start IS NULL DESC, s.week_start DESC, s.title
             SQL)->fetchAll();
 
         return array_map(fn (array $row): array => $this->setHeader($row) + [
@@ -43,7 +43,7 @@ final class SetRepository
     }
 
     /**
-     * All published sets with entries, newest week first. This is the only
+     * All published sets with entries: weeks newest first, then topics by title. This is the only
      * content learners download; they receive everything in one response so
      * the server never learns which week a child chose to practise.
      *
@@ -51,13 +51,14 @@ final class SetRepository
      */
     public function publishedContent(): array
     {
-        $rows = $this->db->pdo()->query("SELECT * FROM homework_sets WHERE status = 'published' ORDER BY week_start DESC, created_at DESC")->fetchAll();
+        $rows = $this->db->pdo()->query("SELECT * FROM homework_sets WHERE status = 'published' ORDER BY kind = 'topic', week_start DESC, title, created_at DESC")->fetchAll();
 
         return array_map(function (array $row): array {
             $header = $this->setHeader($row);
 
             return [
                 'id' => $header['id'],
+                'kind' => $header['kind'],
                 'title' => $header['title'],
                 'weekStart' => $header['weekStart'],
                 'description' => $header['description'],
@@ -78,8 +79,8 @@ final class SetRepository
         $now = self::now();
         $pdo->beginTransaction();
         try {
-            $pdo->prepare('INSERT INTO homework_sets (id, title, week_start, description, groups_json, status, is_sample, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                ->execute([$id, $draft['title'], $draft['weekStart'], $draft['description'], self::json($draft['groups']), 'draft', (int) $isSample, $now, $now]);
+            $pdo->prepare('INSERT INTO homework_sets (id, kind, title, week_start, description, groups_json, status, is_sample, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                ->execute([$id, $draft['kind'], $draft['title'], $draft['weekStart'], $draft['description'], self::json($draft['groups']), 'draft', (int) $isSample, $now, $now]);
             $this->insertEntries($id, $draft['entries'], []);
             $pdo->commit();
         } catch (\Throwable $e) {
@@ -108,8 +109,8 @@ final class SetRepository
 
         $pdo->beginTransaction();
         try {
-            $pdo->prepare('UPDATE homework_sets SET title = ?, week_start = ?, description = ?, groups_json = ?, updated_at = ? WHERE id = ?')
-                ->execute([$draft['title'], $draft['weekStart'], $draft['description'], self::json($draft['groups']), self::now(), $id]);
+            $pdo->prepare('UPDATE homework_sets SET kind = ?, title = ?, week_start = ?, description = ?, groups_json = ?, updated_at = ? WHERE id = ?')
+                ->execute([$draft['kind'], $draft['title'], $draft['weekStart'], $draft['description'], self::json($draft['groups']), self::now(), $id]);
             $pdo->prepare('DELETE FROM entries WHERE set_id = ?')->execute([$id]);
             $kept = $this->insertEntries($id, $draft['entries'], $existing);
             $pdo->commit();
@@ -169,7 +170,7 @@ final class SetRepository
     public static function publishBlockers(array $set): array
     {
         $blockers = [];
-        if (null === $set['weekStart']) {
+        if ('week' === $set['kind'] && null === $set['weekStart']) {
             $blockers[] = 'Assign the homework week (weekStart) before publishing.';
         }
         if ([] === $set['entries']) {
@@ -238,6 +239,7 @@ final class SetRepository
     {
         return [
             'id' => $row['id'],
+            'kind' => $row['kind'],
             'title' => $row['title'],
             'weekStart' => $row['week_start'],
             'description' => $row['description'],

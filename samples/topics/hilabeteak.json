@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "kind": "topic",
+  "title": "HILABETEAK",
+  "description": "Los meses del año.",
+  "groups": [
+    {
+      "key": "hilabeteak",
+      "title": "HILABETEAK",
+      "ordered": true
+    }
+  ],
+  "entries": [
+    {
+      "id": "urtarrila",
+      "basque": "urtarrila",
+      "translations": {
+        "es": [
+          "enero"
+        ],
+        "ru": [
+          "январь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "otsaila",
+      "basque": "otsaila",
+      "translations": {
+        "es": [
+          "febrero"
+        ],
+        "ru": [
+          "февраль"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "martxoa",
+      "basque": "martxoa",
+      "translations": {
+        "es": [
+          "marzo"
+        ],
+        "ru": [
+          "март"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "apirila",
+      "basque": "apirila",
+      "translations": {
+        "es": [
+          "abril"
+        ],
+        "ru": [
+          "апрель"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "maiatza",
+      "basque": "maiatza",
+      "translations": {
+        "es": [
+          "mayo"
+        ],
+        "ru": [
+          "май"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "ekaina",
+      "basque": "ekaina",
+      "translations": {
+        "es": [
+          "junio"
+        ],
+        "ru": [
+          "июнь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "uztaila",
+      "basque": "uztaila",
+      "translations": {
+        "es": [
+          "julio"
+        ],
+        "ru": [
+          "июль"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "abuztua",
+      "basque": "abuztua",
+      "translations": {
+        "es": [
+          "agosto"
+        ],
+        "ru": [
+          "август"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "iraila",
+      "basque": "iraila",
+      "translations": {
+        "es": [
+          "septiembre"
+        ],
+        "ru": [
+          "сентябрь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "urria",
+      "basque": "urria",
+      "translations": {
+        "es": [
+          "octubre"
+        ],
+        "ru": [
+          "октябрь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "azaroa",
+      "basque": "azaroa",
+      "translations": {
+        "es": [
+          "noviembre"
+        ],
+        "ru": [
+          "ноябрь"
+        ]
+      },
+      "group": "hilabeteak"
+    },
+    {
+      "id": "abendua",
+      "basque": "abendua",
+      "translations": {
+        "es": [
+          "diciembre"
+        ],
+        "ru": [
+          "декабрь"
+        ]
+      },
+      "group": "hilabeteak"
+    }
+  ]
+}

@@ -27,6 +27,8 @@ export const es = {
   chooseWeekHint: 'Mira todas las semanas',
   mixWeeks: 'Mezclar semanas',
   mixWeeksHint: 'Repasa palabras de otras semanas',
+  categories: 'Categorías',
+  categoriesHint: 'Días de la semana, meses y más',
   noContent: 'Todavía no hay deberes publicados.',
   weekOf: 'Semana del {date}',
   words: '{count} palabras',
@@ -38,6 +40,11 @@ export const es = {
   useAsCurrent: 'Usar como mi semana actual',
   isCurrent: 'Es tu semana actual',
   wordList: 'Palabras',
+
+  categoriesTitle: 'Categorías',
+  categoriesIntro: 'Palabras agrupadas por tema, para practicar en cualquier momento.',
+  noCategories: 'Todavía no hay categorías.',
+  category: 'Categoría',
 
   mixTitle: 'Mezclar semanas',
   mixIntro: 'Elige una o más semanas para repasar.',

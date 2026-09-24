@@ -50,7 +50,7 @@ per-session `X-CSRF-Token`. The session cookie is `HttpOnly`,
 
 Everything about a learner is in `localStorage` key `euskalduo.learner.v1`
 (`web/src/learner/progress.ts`): optional display name, meaning language,
-pinned "current week", per-entry statistics keyed `"<setId>/<entryId>"`, and
+pinned "current week" (always a homework week, never a category), per-entry statistics keyed `"<setId>/<entryId>"`, and
 per-set rounds/best stars. It is validated on load and on import; invalid
 records are dropped individually. Export/import is a local JSON file download
 and file read — nothing is uploaded.

@@ -26,7 +26,7 @@ interface Session {
 }
 
 function parseMode(params: URLSearchParams, sets: HomeworkSet[]): Mode | null {
-  if (params.get('modo') === 'semana') {
+  if (params.get('modo') === 'semana' || params.get('modo') === 'categoria') {
     const id = params.get('id');
     return id && sets.some((s) => s.id === id) ? { kind: 'week', setId: id } : null;
   }

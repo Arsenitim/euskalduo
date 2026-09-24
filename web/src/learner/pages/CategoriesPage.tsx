@@ -1,25 +1,26 @@
 import { Link } from 'react-router-dom';
-import { t, weekLabel, wordCount } from '../../i18n';
+import { t, wordCount } from '../../i18n';
 import { ProgressBar, SampleBadge, Stars } from '../components/bits';
 import { useLearner } from '../LearnerContext';
+import { setPath } from '../routes';
 import { setProgress } from '../setProgress';
 
-export function WeeksPage() {
-  const { weeks, state, currentSet } = useLearner();
+export function CategoriesPage() {
+  const { topics, state } = useLearner();
   return (
     <div>
-      <h1>{t('weeksTitle')}</h1>
-      {weeks.length === 0 && <p className="card center-note">{t('noContent')}</p>}
+      <h1>{t('categoriesTitle')}</h1>
+      <p className="lead">{t('categoriesIntro')}</p>
+      {topics.length === 0 && <p className="card center-note">{t('noCategories')}</p>}
       <ul className="week-list">
-        {weeks.map((set) => {
+        {topics.map((set) => {
           const p = setProgress(set, state);
           return (
             <li key={set.id}>
-              <Link className="week-card" to={`/semana/${set.id}`}>
-                <span className="week-date">{weekLabel(set.weekStart)}</span>
+              <Link className="week-card" to={setPath(set)}>
+                {set.description && <span className="week-date">{set.description}</span>}
                 <span className="week-title">
                   {set.title} {set.sample && <SampleBadge />}
-                  {set.id === currentSet?.id && <span className="badge badge-current">{t('current')}</span>}
                 </span>
                 <span className="week-meta">
                   {wordCount(p.total)} · <Stars count={p.stars} />

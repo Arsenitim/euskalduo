@@ -5,7 +5,9 @@ homework. A parent (the admin) imports each week's word list, checks it and
 publishes it. Children practise in short rounds on a tablet, phone or computer,
 with no accounts, ads, leaderboards or streak penalties.
 
-* **Learners:** "Esta semana", "Elegir semana", "Mezclar semanas"; five
+* **Learners:** "Esta semana", "Elegir semana", "Mezclar semanas" and
+  "Categorías" (word groups without a week: days of the week and months are
+  built in; add more as sets of type *category*); five
   exercise types (choose the meaning, choose the Basque word, spell with letter
   tiles, type the meaning, put months/weekdays in order); immediate feedback;
   missed words come back later; stars at the end of a round; progress per week;

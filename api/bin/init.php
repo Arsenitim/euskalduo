@@ -39,10 +39,12 @@ if (null !== $generated) {
 }
 
 if (filter_var(getenv('SEED_SAMPLE_CONTENT') ?: 'true', FILTER_VALIDATE_BOOL)) {
-    $repository = new SetRepository($db);
-    $seeded = (new SampleSeeder($db, $repository, new ImportValidator()))
-        ->seedOnce(getenv('SAMPLE_DIR') ?: dirname(__DIR__).'/samples');
-    foreach ($seeded as $title) {
+    $sampleDir = getenv('SAMPLE_DIR') ?: dirname(__DIR__).'/samples';
+    $seeder = new SampleSeeder($db, new SetRepository($db), new ImportValidator());
+    foreach ($seeder->seedOnce($sampleDir) as $title) {
         fwrite(STDOUT, "Seeded sample set: $title\n");
+    }
+    foreach ($seeder->seedTopicsOnce($sampleDir.'/topics') as $title) {
+        fwrite(STDOUT, "Seeded category: $title\n");
     }
 }

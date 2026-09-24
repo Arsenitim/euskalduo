@@ -15,13 +15,14 @@ final class ImportValidator
 {
     public const SCHEMA_VERSION = 1;
     public const LANGUAGES = ['es', 'ru'];
+    public const KINDS = ['week', 'topic'];
 
     private const MAX_ENTRIES = 300;
     private const MAX_GROUPS = 20;
     private const MAX_ALTERNATIVES = 8;
     private const ID_PATTERN = '/^[a-z0-9][a-z0-9_-]{0,39}$/';
 
-    private const TOP_KEYS = ['schemaVersion', 'title', 'weekStart', 'description', 'groups', 'entries'];
+    private const TOP_KEYS = ['schemaVersion', 'kind', 'title', 'weekStart', 'description', 'groups', 'entries'];
     private const ENTRY_KEYS = ['id', 'basque', 'translations', 'note', 'imageHint', 'emoji', 'group', 'needsReview', 'reviewNote'];
 
     /** @var list<array{path: string, entry: ?int, message: string}> */
@@ -56,11 +57,17 @@ final class ImportValidator
 
         $title = $this->text($input['title'] ?? null, 'title', null, 120, required: true);
         $description = $this->text($input['description'] ?? null, 'description', null, 500);
+        $kind = $this->kind($input['kind'] ?? null);
         $weekStart = $this->weekStart($input['weekStart'] ?? null);
+        if ('topic' === $kind && null !== $weekStart) {
+            $this->warning('weekStart', null, 'Categories have no homework week; weekStart was ignored.');
+            $weekStart = null;
+        }
         $groups = $this->groups($input['groups'] ?? []);
         $entries = $this->entries($input['entries'] ?? null, array_column($groups, 'key'));
 
         $draft = [
+            'kind' => $kind,
             'title' => $title ?? '',
             'weekStart' => $weekStart,
             'description' => $description,
@@ -69,6 +76,21 @@ final class ImportValidator
         ];
 
         return new ValidationResult($draft, $this->errors, $this->warnings);
+    }
+
+    /** "week" (homework for a given week, the default) or "topic" (a category such as the months). */
+    private function kind(mixed $value): string
+    {
+        if (null === $value) {
+            return 'week';
+        }
+        if (!\in_array($value, self::KINDS, true)) {
+            $this->error('kind', null, 'kind must be "week" or "topic".');
+
+            return 'week';
+        }
+
+        return $value;
     }
 
     private function weekStart(mixed $value): ?string

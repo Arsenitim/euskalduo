@@ -58,7 +58,7 @@ export function SetListPage() {
             <tbody>
               {sets.map((s) => (
                 <tr key={s.id}>
-                  <td>{s.weekStart ?? <em>not set</em>}</td>
+                  <td>{s.kind === 'topic' ? <em>category</em> : (s.weekStart ?? <em>not set</em>)}</td>
                   <td>
                     <Link to={`/sets/${s.id}`}>{s.title}</Link> {s.sample && <span className="badge badge-sample">sample</span>}
                   </td>

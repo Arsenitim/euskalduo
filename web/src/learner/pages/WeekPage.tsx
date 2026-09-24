@@ -4,16 +4,19 @@ import type { Entry, HomeworkSet, Lang } from '../../types';
 import { ProgressBar, SampleBadge, WordVisual } from '../components/bits';
 import { useLearner } from '../LearnerContext';
 import { meaningsOf } from '../questions';
+import { practicePath } from '../routes';
 import { setProgress } from '../setProgress';
 
+/** A homework week or a category: word list, progress and "practise". */
 export function WeekPage() {
   const { setId } = useParams();
   const { sets, state, update, currentSet } = useLearner();
   const set = sets?.find((s) => s.id === setId);
+  const backTo = set?.kind === 'topic' ? '/categorias' : '/semanas';
   if (!set) {
     return (
       <p className="card center-note">
-        {t('noContent')} <Link to="/semanas">{t('back')}</Link>
+        {t('noContent')} <Link to={backTo}>{t('back')}</Link>
       </p>
     );
   }
@@ -23,25 +26,26 @@ export function WeekPage() {
   return (
     <div>
       <p>
-        <Link to="/semanas">← {t('back')}</Link>
+        <Link to={backTo}>← {t('back')}</Link>
       </p>
       <h1>
         {set.title} {set.sample && <SampleBadge />}
       </h1>
-      <p className="lead">{weekLabel(set.weekStart)}</p>
+      <p className="lead">{set.weekStart !== null && set.kind === 'week' ? weekLabel(set.weekStart) : t('category')}</p>
       {set.description && <p>{set.description}</p>}
       <ProgressBar value={p.learned} max={p.total} label={t('learned', { n: p.learned, total: p.total })} />
       <div className="button-row">
-        <Link className="btn btn-primary btn-big" to={`/practicar?modo=semana&id=${set.id}`}>
+        <Link className="btn btn-primary btn-big" to={practicePath(set)}>
           {t('practice')}
         </Link>
-        {isCurrent ? (
-          <span className="badge badge-current">{t('isCurrent')}</span>
-        ) : (
-          <button className="btn" onClick={() => update((s) => ({ ...s, pinnedWeek: set.id }))}>
-            {t('useAsCurrent')}
-          </button>
-        )}
+        {set.kind === 'week' &&
+          (isCurrent ? (
+            <span className="badge badge-current">{t('isCurrent')}</span>
+          ) : (
+            <button className="btn" onClick={() => update((s) => ({ ...s, pinnedWeek: set.id }))}>
+              {t('useAsCurrent')}
+            </button>
+          ))}
       </div>
       <h2>{t('wordList')}</h2>
       <WordList set={set} lang={state.lang} />
@@ -60,7 +64,7 @@ function WordList({ set, lang }: { set: HomeworkSet; lang: Lang }) {
         const List = group.ordered ? 'ol' : 'ul';
         return (
           <section key={group.key} className="word-group">
-            <h3>{group.title}</h3>
+            {group.title !== set.title && <h3>{group.title}</h3>}
             <List className="word-grid">
               {entries.map((e) => (
                 <WordCard key={e.id} entry={e} lang={lang} />

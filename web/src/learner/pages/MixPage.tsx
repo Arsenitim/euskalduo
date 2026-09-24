@@ -5,9 +5,9 @@ import { SampleBadge } from '../components/bits';
 import { useLearner } from '../LearnerContext';
 
 export function MixPage() {
-  const { sets, currentSet } = useLearner();
+  const { weeks, currentSet } = useLearner();
   const navigate = useNavigate();
-  const previous = (sets ?? []).filter((s) => s.id !== currentSet?.id);
+  const previous = weeks.filter((s) => s.id !== currentSet?.id);
   const [selected, setSelected] = useState<string[]>([]);
   const allSelected = previous.length > 0 && selected.length === previous.length;
 

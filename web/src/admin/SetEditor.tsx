@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Group } from '../types';
+import type { Group, SetKind } from '../types';
 import { adminApi, type AdminEntry, type Draft, type Issue } from './api';
 
 export interface Row {
@@ -18,6 +18,7 @@ export interface Row {
 }
 
 export interface EditorModel {
+  kind: SetKind;
   title: string;
   weekStart: string;
   description: string;
@@ -39,6 +40,7 @@ const nullIfEmpty = (s: string) => (s.trim() === '' ? null : s.trim());
 
 export function modelFromDraft(draft: Draft): EditorModel {
   return {
+    kind: draft.kind,
     title: draft.title,
     weekStart: draft.weekStart ?? '',
     description: draft.description ?? '',
@@ -62,8 +64,9 @@ export function modelFromDraft(draft: Draft): EditorModel {
 
 export function draftFromModel(model: EditorModel): Draft {
   return {
+    kind: model.kind,
     title: model.title,
-    weekStart: model.weekStart || null,
+    weekStart: model.kind === 'week' ? model.weekStart || null : null,
     description: nullIfEmpty(model.description),
     groups: model.groups,
     entries: model.rows.map((r): AdminEntry => {
@@ -126,9 +129,18 @@ export function SetEditor({ model, onChange, errors, warnings, setId, onImageCha
           <input value={model.title} maxLength={120} onChange={(e) => setField('title', e.target.value)} required />
         </label>
         <label>
-          Homework week (Monday)
-          <input type="date" value={model.weekStart} onChange={(e) => setField('weekStart', e.target.value)} />
+          Type
+          <select value={model.kind} onChange={(e) => setField('kind', e.target.value as SetKind)}>
+            <option value="week">Homework week</option>
+            <option value="topic">Category (no week: months, animals…)</option>
+          </select>
         </label>
+        {model.kind === 'week' && (
+          <label>
+            Homework week (Monday)
+            <input type="date" value={model.weekStart} onChange={(e) => setField('weekStart', e.target.value)} />
+          </label>
+        )}
         <label className="wide">
           Description / theme (optional)
           <input value={model.description} maxLength={500} onChange={(e) => setField('description', e.target.value)} />

@@ -6,8 +6,9 @@ namespace App\Content;
 
 /**
  * Loads the sample homework once, on the very first start of an empty
- * database. A flag in the meta table makes sure deleted or edited sample
- * sets are never recreated and real content is never overwritten.
+ * database, and the built-in categories (samples/topics) once per install,
+ * including existing ones. Flags in the meta table make sure deleted or
+ * edited sets are never recreated and real content is never overwritten.
  */
 final class SampleSeeder
 {
@@ -49,6 +50,35 @@ final class SampleSeeder
             $seeded[] = $document['title'];
         }
         $this->db->setMeta('samples_seeded', gmdate('c'));
+
+        return $seeded;
+    }
+
+    /**
+     * Built-in categories (days of the week, months): real content, not
+     * samples, published as they are.
+     *
+     * @return list<string> titles of seeded sets
+     */
+    public function seedTopicsOnce(string $topicDir): array
+    {
+        if (null !== $this->db->getMeta('topics_seeded')) {
+            return [];
+        }
+        $files = glob($topicDir.'/*.json') ?: [];
+        sort($files);
+        $seeded = [];
+        foreach ($files as $path) {
+            $document = json_decode((string) file_get_contents($path), true, 64, \JSON_THROW_ON_ERROR);
+            $result = $this->validator->validate($document);
+            if (!$result->isValid() || 'topic' !== $result->draft['kind']) {
+                throw new \RuntimeException('Topic '.basename($path).' is invalid: '.json_encode($result->errors));
+            }
+            $id = $this->sets->create($result->draft);
+            $this->sets->setStatus($id, 'published');
+            $seeded[] = $document['title'];
+        }
+        $this->db->setMeta('topics_seeded', gmdate('c'));
 
         return $seeded;
     }

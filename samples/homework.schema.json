@@ -7,9 +7,14 @@
   "required": ["schemaVersion", "title", "entries"],
   "properties": {
     "schemaVersion": { "const": 1 },
+    "kind": {
+      "description": "week (default): homework for one school week. topic: a category such as the months or animals; it has no weekStart, is listed under Categorías and never becomes the current week.",
+      "enum": ["week", "topic"],
+      "default": "week"
+    },
     "title": { "type": "string", "minLength": 1, "maxLength": 120 },
     "weekStart": {
-      "description": "Monday of the homework week (ISO date). May be null in an import; the admin assigns it during review. Required before publishing.",
+      "description": "Monday of the homework week (ISO date). May be null in an import; the admin assigns it during review. Required before publishing a week; ignored for a topic.",
       "type": ["string", "null"],
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
     },

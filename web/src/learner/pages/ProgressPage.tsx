@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom';
 import { t, weekLabel } from '../../i18n';
 import { ProgressBar, SampleBadge, Stars } from '../components/bits';
 import { useLearner } from '../LearnerContext';
+import { setPath } from '../routes';
 import { setProgress } from '../setProgress';
 
 export function ProgressPage() {
-  const { sets, state } = useLearner();
-  const rows = (sets ?? []).map((set) => ({ set, p: setProgress(set, state) }));
+  const { weeks, topics, state } = useLearner();
+  const rows = [...weeks, ...topics].map((set) => ({ set, p: setProgress(set, state) }));
   const learned = rows.reduce((n, r) => n + r.p.learned, 0);
   const total = rows.reduce((n, r) => n + r.p.total, 0);
 
@@ -20,8 +21,8 @@ export function ProgressPage() {
       <ul className="week-list">
         {rows.map(({ set, p }) => (
           <li key={set.id}>
-            <Link className="week-card" to={`/semana/${set.id}`}>
-              <span className="week-date">{weekLabel(set.weekStart)}</span>
+            <Link className="week-card" to={setPath(set)}>
+              <span className="week-date">{set.kind === 'week' && set.weekStart !== null ? weekLabel(set.weekStart) : t('category')}</span>
               <span className="week-title">
                 {set.title} {set.sample && <SampleBadge />}
               </span>
