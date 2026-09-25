@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "title": "HIZTEGIA (DENBORAZKOAK)",
+  "weekStart": "2026-09-28",
+  "description": "Vocabulario de expresiones de tiempo (denborazkoak).",
+  "entries": [
+    {
+      "basque": "GOIZEAN",
+      "translations": {
+        "es": [
+          "a la mañana"
+        ]
+      }
+    },
+    {
+      "basque": "ARRATSALDEAN",
+      "translations": {
+        "es": [
+          "a la tarde"
+        ]
+      }
+    },
+    {
+      "basque": "EGUERDIAN",
+      "translations": {
+        "es": [
+          "al mediodía"
+        ]
+      }
+    },
+    {
+      "basque": "GAUEAN",
+      "translations": {
+        "es": [
+          "a la noche"
+        ]
+      }
+    },
+    {
+      "basque": "EGUNA",
+      "translations": {
+        "es": [
+          "día"
+        ]
+      }
+    },
+    {
+      "basque": "ASTEA",
+      "translations": {
+        "es": [
+          "semana"
+        ]
+      }
+    },
+    {
+      "basque": "HILABETEA",
+      "translations": {
+        "es": [
+          "mes"
+        ]
+      }
+    },
+    {
+      "basque": "URTEA",
+      "translations": {
+        "es": [
+          "año"
+        ]
+      }
+    },
+    {
+      "basque": "GAUR",
+      "translations": {
+        "es": [
+          "hoy"
+        ]
+      }
+    },
+    {
+      "basque": "BIHAR",
+      "translations": {
+        "es": [
+          "mañana"
+        ]
+      }
+    },
+    {
+      "basque": "HERENEGUN",
+      "translations": {
+        "es": [
+          "antes de ayer"
+        ]
+      }
+    },
+    {
+      "basque": "ETZI",
+      "translations": {
+        "es": [
+          "pasado mañana"
+        ]
+      }
+    },
+    {
+      "basque": "IAZ",
+      "translations": {
+        "es": [
+          "el año pasado"
+        ]
+      }
+    },
+    {
+      "basque": "ASPALDI",
+      "translations": {
+        "es": [
+          "hace mucho tiempo"
+        ]
+      }
+    },
+    {
+      "basque": "PASA DEN HILABETEAN",
+      "translations": {
+        "es": [
+          "el mes pasado"
+        ]
+      }
+    },
+    {
+      "basque": "DUELA 3 ASTE",
+      "translations": {
+        "es": [
+          "hace 3 semanas"
+        ]
+      }
+    },
+    {
+      "basque": "ORAIN DELA 2 URTE",
+      "translations": {
+        "es": [
+          "hace 2 años"
+        ]
+      }
+    },
+    {
+      "basque": "JOAN DEN ASTEAN",
+      "translations": {
+        "es": [
+          "la semana pasada"
+        ]
+      }
+    },
+    {
+      "basque": "DATORREN URTEAN",
+      "translations": {
+        "es": [
+          "el año que viene"
+        ]
+      }
+    },
+    {
+      "basque": "HURRENGO HILABETEAN",
+      "translations": {
+        "es": [
+          "el mes que viene"
+        ]
+      }
+    },
+    {
+      "basque": "LEHEN",
+      "translations": {
+        "es": [
+          "antes"
+        ]
+      }
+    },
+    {
+      "basque": "ATZO",
+      "translations": {
+        "es": [
+          "ayer"
+        ]
+      }
+    },
+    {
+      "basque": "Aurten",
+      "translations": {
+        "es": [
+          "este año"
+        ]
+      }
+    }
+  ]
+}

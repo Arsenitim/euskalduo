@@ -59,6 +59,32 @@ final class SampleSeederTest extends TestCase
         self::assertCount(4, $sets->listSummaries());
     }
 
+    public function testWeeksAreSeededOncePerFileWithTheirOwnDates(): void
+    {
+        $db = new Database($this->tempDir());
+        $sets = new SetRepository($db);
+        $seeder = new SampleSeeder($db, $sets, new ImportValidator());
+        $weekDir = \dirname(self::samplePath('hiztegia-1-gaia.json')).'/weeks';
+
+        self::assertSame(['HIZTEGIA (DENBORAZKOAK)'], $seeder->seedWeeksOnce($weekDir));
+        $published = $sets->publishedContent();
+        self::assertSame('week', $published[0]['kind']);
+        self::assertSame('2026-09-28', $published[0]['weekStart']);
+        self::assertFalse($published[0]['sample']);
+        self::assertCount(23, $published[0]['entries']);
+
+        $sets->delete($published[0]['id']);
+        self::assertSame([], $seeder->seedWeeksOnce($weekDir), 'Deleted weeks must not come back on the next start.');
+
+        $extra = $this->tempDir();
+        copy($weekDir.'/hiztegia-denborazkoak.json', $extra.'/hiztegia-denborazkoak.json');
+        $other = json_decode((string) file_get_contents($weekDir.'/hiztegia-denborazkoak.json'), true);
+        $other['title'] = 'Later week';
+        $other['weekStart'] = '2026-10-05';
+        file_put_contents($extra.'/later.json', json_encode($other));
+        self::assertSame(['Later week'], $seeder->seedWeeksOnce($extra), 'A week added later still reaches this install.');
+    }
+
     public function testExistingDatabaseGainsTheKindColumn(): void
     {
         $dir = $this->tempDir();

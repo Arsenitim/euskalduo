@@ -21,6 +21,13 @@ deleted, and they never overwrite real content.
   group. They are published under **Categorías** once per install (also on
   existing installs), never re-created once deleted. Entry ids are the Basque
   words, so they stay stable.
+* `weeks/` — real homework weeks with their own `weekStart` dates, published
+  as they are (not "Ejemplo"). Each file is seeded once per install, also on
+  existing installs, and never re-created once deleted, so adding a new week
+  here and restarting is enough.
+  * `hiztegia-denborazkoak.json` — the sheet `HIZTEGIA (DENBORAZKOAK)`, 23
+    time expressions, week of 2026-09-28. Reading order: left column top to
+    bottom, then right column. Spelling kept as printed (`Aurten`).
 * `homework.schema.json` — JSON Schema describing the import format.
 
 Editorial additions made by the developer and worth a human check:

@@ -6,8 +6,9 @@ namespace App\Content;
 
 /**
  * Loads the sample homework once, on the very first start of an empty
- * database, and the built-in categories (samples/topics) once per install,
- * including existing ones. Flags in the meta table make sure deleted or
+ * database, the built-in categories (samples/topics) once per install,
+ * including existing ones, and each real homework week (samples/weeks) once
+ * per install. Flags in the meta table make sure deleted or
  * edited sets are never recreated and real content is never overwritten.
  */
 final class SampleSeeder
@@ -79,6 +80,37 @@ final class SampleSeeder
             $seeded[] = $document['title'];
         }
         $this->db->setMeta('topics_seeded', gmdate('c'));
+
+        return $seeded;
+    }
+
+    /**
+     * Real homework weeks (samples/weeks), with the dates from the files.
+     * Each file is seeded once per install, tracked by its name, so a week
+     * added to the repo later also reaches existing installs.
+     *
+     * @return list<string> titles of seeded sets
+     */
+    public function seedWeeksOnce(string $weekDir): array
+    {
+        $files = glob($weekDir.'/*.json') ?: [];
+        sort($files);
+        $seeded = [];
+        foreach ($files as $path) {
+            $key = 'week_seeded:'.basename($path);
+            if (null !== $this->db->getMeta($key)) {
+                continue;
+            }
+            $document = json_decode((string) file_get_contents($path), true, 64, \JSON_THROW_ON_ERROR);
+            $result = $this->validator->validate($document);
+            if (!$result->isValid() || 'week' !== $result->draft['kind']) {
+                throw new \RuntimeException('Week '.basename($path).' is invalid: '.json_encode($result->errors));
+            }
+            $id = $this->sets->create($result->draft);
+            $this->sets->setStatus($id, 'published');
+            $this->db->setMeta($key, gmdate('c'));
+            $seeded[] = $document['title'];
+        }
 
         return $seeded;
     }

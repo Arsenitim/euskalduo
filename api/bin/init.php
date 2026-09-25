@@ -47,4 +47,7 @@ if (filter_var(getenv('SEED_SAMPLE_CONTENT') ?: 'true', FILTER_VALIDATE_BOOL)) {
     foreach ($seeder->seedTopicsOnce($sampleDir.'/topics') as $title) {
         fwrite(STDOUT, "Seeded category: $title\n");
     }
+    foreach ($seeder->seedWeeksOnce($sampleDir.'/weeks') as $title) {
+        fwrite(STDOUT, "Seeded week: $title\n");
+    }
 }
