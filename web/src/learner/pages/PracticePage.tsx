@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { reportAnswer, reportRound } from '../../api/stats';
 import { t } from '../../i18n';
 import type { HomeworkSet, Lang } from '../../types';
 import { ProgressBar, Stars } from '../components/bits';
@@ -63,6 +64,7 @@ export function PracticePage() {
     if (!question || session.outcome) return;
     const correct = outcome.verdict !== 'wrong';
     if (state.sound) (correct ? playCorrect : playWrong)();
+    reportAnswer(correct ? (outcome.hinted ? 'hinted' : 'correct') : outcome.skipped ? 'skipped' : 'wrong', todayIso());
     const next: Session = { ...session, outcome, firstTry: { ...session.firstTry } };
 
     if (question.kind === 'order') {
@@ -99,6 +101,7 @@ export function PracticePage() {
     const scored = Object.values(session.firstTry);
     const stars = starsFor(sum(scored), scored.length);
     const today = todayIso();
+    reportRound(today);
     const setIds = mode.kind === 'week' ? [mode.setId] : mode.setIds;
     update((s) => {
       const updated = { ...s.sets };

@@ -139,6 +139,7 @@ export const es = {
   privacyTitle: 'Privacidad',
   privacyP1: 'EUSKALDUO no tiene cuentas. Tu nombre, tus respuestas y tu progreso se guardan solo en este navegador, en este dispositivo.',
   privacyP2: 'El servidor solo envía las palabras de los deberes. No recibe tus respuestas ni tu nombre, y no usamos publicidad ni rastreadores.',
+  privacyStats: 'Para saber cuánto se usa la app, al practicar se envían contadores anónimos: que se ha respondido una pregunta (bien, con pista, mal o saltada), que se ha terminado una ronda y, una sola vez, que es un dispositivo nuevo y, una vez al día, que ha practicado hoy. No se envían tu nombre, tus respuestas ni ningún identificador: el servidor solo guarda totales por día.',
   privacyFeedback: 'Solo si envías un comentario, el servidor guarda lo que escribes, la imagen que adjuntes, la pantalla en la que estabas, el tipo de navegador y la dirección IP (para frenar abusos). Los comentarios se borran después de revisarlos.',
   privacyP3: 'Si borras los datos del navegador, el progreso se pierde. Puedes descargarlo en Ajustes para pasarlo a otro dispositivo.',
   privacyP4: 'Para madres, padres y tutores: como cualquier web, el servidor puede ver datos técnicos como la dirección IP de la conexión. Más detalles en el README del proyecto.',

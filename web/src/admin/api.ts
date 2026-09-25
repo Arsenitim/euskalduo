@@ -43,6 +43,23 @@ export interface SetSummary extends Omit<AdminSet, 'entries'> {
   reviewCount: number;
 }
 
+export interface UsageCounters {
+  new_devices: number;
+  active_devices: number;
+  answers: number;
+  correct: number;
+  hinted: number;
+  wrong: number;
+  skipped: number;
+  rounds: number;
+}
+
+export interface UsageReport {
+  totals: UsageCounters;
+  /** Last 30 days (UTC), newest first. */
+  days: Array<UsageCounters & { day: string }>;
+}
+
 export interface ValidationResponse {
   valid: boolean;
   draft: Draft | null;
@@ -108,6 +125,7 @@ export const adminApi = {
     form.append('image', file);
     return request<{ image: string }>('POST', `/api/admin/sets/${setId}/entries/${entryId}/image`, form);
   },
+  stats: () => request<UsageReport>('GET', '/api/admin/stats'),
   deleteImage: (setId: string, entryId: string) => request<unknown>('DELETE', `/api/admin/sets/${setId}/entries/${entryId}/image`),
 };
 

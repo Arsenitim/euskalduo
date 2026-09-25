@@ -32,6 +32,8 @@ Endpoints:
 | --- | --- | --- |
 | `GET /api/public/content` | anyone | All published sets with entries, one response. No input, no cookies, no session. ETag for cheap revalidation. |
 | `POST /api/public/feedback` | anyone | Learner feedback (multipart: `message`, optional `name`, `page`, `viewport`, `screenshot`). Stored as files, rate-limited per IP, total size capped. The only learner request with a body, sent only from the feedback form. |
+| `POST /api/public/stats` | anyone | Anonymous usage counters (JSON: `newDevice`, `activeToday`, `answers`, `rounds`), added to one row of totals per day. No id, no IP; each counter capped per request. |
+| `GET /api/admin/stats` | admin | Totals and the last 30 days for **Admin → Usage**. |
 | `GET /api/health` | anyone | Health check. |
 | `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/session` | admin | Session login (JSON body required). |
 | `GET/POST /api/admin/sets`, `GET/PUT/DELETE /api/admin/sets/{id}` | admin | CRUD. The same validator runs for import and every save. |

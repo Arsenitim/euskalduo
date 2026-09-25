@@ -71,6 +71,6 @@ final class SampleSeederTest extends TestCase
 
         $db = new Database($dir);
         self::assertSame('week', (new SetRepository($db))->find('sold')['kind']);
-        self::assertSame('3', $db->getMeta('schema_version'));
+        self::assertSame((string) Database::SCHEMA_VERSION, $db->getMeta('schema_version'));
     }
 }

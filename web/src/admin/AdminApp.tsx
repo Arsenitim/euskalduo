@@ -4,6 +4,7 @@ import { adminApi } from './api';
 import { ImportPage } from './ImportPage';
 import { SetListPage } from './SetListPage';
 import { SetPage } from './SetPage';
+import { UsagePage } from './UsagePage';
 
 type Auth = { state: 'checking' } | { state: 'out' } | { state: 'in'; username: string };
 
@@ -32,6 +33,7 @@ export default function AdminApp() {
           <nav className="app-nav" aria-label="Admin">
             <Link to="/">Homework sets</Link>
             <Link to="/import">Import</Link>
+            <Link to="/uso">Usage</Link>
             <a href="/" target="_blank" rel="noopener">
               Learner view ↗
             </a>
@@ -51,6 +53,7 @@ export default function AdminApp() {
             <Route path="/" element={<SetListPage />} />
             <Route path="/import" element={<ImportPage />} />
             <Route path="/sets/:id" element={<SetPage />} />
+            <Route path="/uso" element={<UsagePage />} />
           </Routes>
         </main>
       </div>

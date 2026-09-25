@@ -48,6 +48,7 @@ final class AdminApiTest extends WebTestCase
         yield 'publish' => ['POST', '/api/admin/sets/sabc/publish'];
         yield 'unpublish' => ['POST', '/api/admin/sets/sabc/unpublish'];
         yield 'upload' => ['POST', '/api/admin/sets/sabc/entries/e1/image'];
+        yield 'usage stats' => ['GET', '/api/admin/stats'];
         yield 'unknown admin path' => ['POST', '/api/admin/anything'];
     }
 

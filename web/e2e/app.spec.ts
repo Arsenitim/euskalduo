@@ -72,21 +72,32 @@ test.describe('learner', () => {
     const stored = await page.evaluate(() => localStorage.getItem('euskalduo.learner.v1'));
     expect(JSON.parse(stored!).displayName).toBe('Ane');
 
-    // Privacy: only same-origin GETs without bodies; nothing identifying leaves the browser.
+    // Privacy: same-origin GETs without bodies, plus anonymous stats counters;
+    // nothing identifying leaves the browser.
     const origin = new URL(baseURL!).origin;
+    const stats = requests.filter((r) => new URL(r.url()).pathname === '/api/public/stats');
     for (const r of requests) {
       expect(new URL(r.url()).origin, r.url()).toBe(origin);
-      expect(r.method(), r.url()).toBe('GET');
-      expect(r.postData()).toBeNull();
       expect(new URL(r.url()).search, r.url()).toBe('');
       const headers = await r.allHeaders();
       expect(headers.cookie ?? '').toBe('');
       expect(JSON.stringify(headers)).not.toContain('Ane');
+      if (stats.includes(r)) {
+        expect(r.method()).toBe('POST');
+        const body = JSON.parse(r.postData() ?? '{}');
+        expect(['newDevice', 'activeToday', 'answers', 'rounds']).toEqual(expect.arrayContaining(Object.keys(body)));
+        expect(r.postData()).not.toContain('Ane');
+      } else {
+        expect(r.method(), r.url()).toBe('GET');
+        expect(r.postData()).toBeNull();
+      }
     }
+    expect(stats.length).toBeGreaterThan(0);
+    expect(stats.filter((r) => JSON.parse(r.postData()!).newDevice === true)).toHaveLength(1);
     expect(requests.filter((r) => r.url().includes('/api/')).map((r) => new URL(r.url()).pathname)).toEqual(
       expect.arrayContaining(['/api/public/content']),
     );
-    expect(requests.every((r) => !r.url().includes('/api/') || new URL(r.url()).pathname === '/api/public/content')).toBe(true);
+    expect(requests.every((r) => !r.url().includes('/api/') || ['/api/public/content', '/api/public/stats'].includes(new URL(r.url()).pathname))).toBe(true);
     expect((await page.context().cookies()).length).toBe(0);
   });
 

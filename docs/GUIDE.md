@@ -122,13 +122,22 @@ in [`docs/IMPORT_FORMAT.md`](IMPORT_FORMAT.md) and
 
 * **No learner data on the server.** There are no learner accounts. Names,
   answers, scores and progress are stored in the browser's `localStorage`
-  only. While playing, the learner app makes one request, `GET /api/public/content`, with no
+  only. The learner app downloads content with one request, `GET /api/public/content`, with no
   parameters, no body and no cookies. It downloads all published homework, so
   the server does not even learn which week a child opens. Learner pages use
   `#` URLs, which browsers do not send to the server.
 * **No third parties.** No analytics, ads, trackers, external fonts, CDNs or
   external images. A Content-Security-Policy restricts everything to the same
   origin.
+* **Anonymous usage counters.** While practising, the app posts small
+  counters to `POST /api/public/stats`: one answer (right / with hint / wrong
+  / skipped) or one finished round, plus two yes/no flags sent at most once:
+  "new device" (ever) and "active today" (per day). The browser remembers in
+  `localStorage` (`euskalduo.stats.v1`) that it already sent them; there is no
+  device id. The server adds them to one row of totals per day (no IP, no id,
+  capped per request) shown under **Admin → Usage**. Browsing without
+  practising sends nothing. Clearing browser data makes a device count as new
+  again, so "devices" is an upper bound.
 * **Feedback is the exception, and only on purpose.** When someone sends
   the *Comentarios* form, the server stores the message, the optional name
   and screenshot (re-encoded, metadata dropped), the current screen

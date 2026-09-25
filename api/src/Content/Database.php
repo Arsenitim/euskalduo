@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Content;
 
 /**
- * Thin wrapper around a SQLite file holding homework content, plus
- * short-lived throttling counters. No learner data is ever stored here.
+ * Thin wrapper around a SQLite file holding homework content, short-lived
+ * throttling counters and anonymous daily usage totals. No learner data is
+ * ever stored here.
  */
 final class Database
 {
-    private const SCHEMA_VERSION = 3;
+    public const SCHEMA_VERSION = 4;
 
     private ?\PDO $pdo = null;
 
@@ -102,6 +103,8 @@ final class Database
         if (!\in_array('kind', $columns, true)) {
             $pdo->exec("ALTER TABLE homework_sets ADD COLUMN kind TEXT NOT NULL DEFAULT 'week' CHECK (kind IN ('week', 'topic'))");
         }
+        // v4: anonymous usage counters, one row per day (see App\Stats\UsageStats).
+        $pdo->exec('CREATE TABLE IF NOT EXISTS usage_daily (day TEXT PRIMARY KEY, new_devices INTEGER NOT NULL DEFAULT 0, active_devices INTEGER NOT NULL DEFAULT 0, answers INTEGER NOT NULL DEFAULT 0, correct INTEGER NOT NULL DEFAULT 0, hinted INTEGER NOT NULL DEFAULT 0, wrong INTEGER NOT NULL DEFAULT 0, skipped INTEGER NOT NULL DEFAULT 0, rounds INTEGER NOT NULL DEFAULT 0)');
         $pdo->exec("INSERT INTO meta(key, value) VALUES('schema_version', '".self::SCHEMA_VERSION."') ON CONFLICT(key) DO UPDATE SET value = excluded.value");
         $pdo->commit();
     }
