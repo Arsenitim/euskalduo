@@ -13,7 +13,10 @@ with no accounts, ads, leaderboards or streak penalties.
   💡 hint (half credit) and "No lo sé" to skip; immediate feedback;
   missed words come back later; stars at the end of a round; progress per week;
   short synthesised sound effects for right/wrong answers (mute with 🔊 or in
-  Ajustes).
+  Ajustes); an animated mascot, Triku the hedgehog or Txapi the sheep, reacts
+  only occasionally: on streaks (3, 7, 12 in a row, then every 5), a word
+  fixed on its retry, a second miss in a row, or a 10% surprise, never twice
+  within 3 answers. Both mascots appear on the round summary.
   The child-facing UI is simple Spanish; meanings can be shown in Spanish or
   Russian.
 * **Admin:** log in, paste/upload JSON (or quick `Basque — Spanish` lines),

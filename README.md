@@ -12,7 +12,8 @@ leaderboards, and no pressure.
   with letter tiles, type the meaning, and put months/weekdays in order.
   Everything works without pictures.
 - **Gentle feedback:** instant feedback with sounds, missed words come back
-  later, and stars at the end of a round.
+  later, and stars at the end of a round. Now and then a mascot (a hedgehog or
+  a sheep in a txapela) cheers or sulks along.
 - **This week, any week, or a mix of earlier weeks.**
 - **Feedback button:** learners can send a message and a screenshot;
   you collect them as files (no e-mail, no chat).

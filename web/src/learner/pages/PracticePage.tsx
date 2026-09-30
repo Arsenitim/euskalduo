@@ -4,8 +4,10 @@ import { reportAnswer, reportRound } from '../../api/stats';
 import { t } from '../../i18n';
 import type { HomeworkSet, Lang } from '../../types';
 import { ProgressBar, Stars } from '../components/bits';
+import { Mascot } from '../components/Mascot';
 import { ChoiceQuestionView, OrderQuestionView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
 import { useLearner } from '../LearnerContext';
+import { newMascotTracker, nextMascot, type MascotShow, type MascotTracker } from '../mascot';
 import { buildRound, meaningsOf, pointsFor, retryQuestion, starsFor, type Item, type Mode, type Question } from '../questions';
 import type { LearnerState } from '../progress';
 import { recordAnswer, todayIso } from '../scheduler';
@@ -24,6 +26,9 @@ interface Session {
   answeredWords: string[];
   retried: string[];
   missed: Item[];
+  mascot: MascotTracker;
+  /** The mascot reacting to the current answer, if it is its turn. */
+  shown: MascotShow | null;
   done: boolean;
 }
 
@@ -41,7 +46,7 @@ function parseMode(params: URLSearchParams, sets: HomeworkSet[]): Mode | null {
 
 function newSession(sets: HomeworkSet[], mode: Mode, state: LearnerState, round: number): Session {
   const questions = buildRound({ sets, mode, stats: state.entries, today: todayIso(), lang: state.lang, rng: Math.random });
-  return { round, questions, index: 0, outcome: null, firstTry: {}, answeredWords: [], retried: [], missed: [], done: questions.length === 0 };
+  return { round, questions, index: 0, outcome: null, firstTry: {}, answeredWords: [], retried: [], missed: [], mascot: newMascotTracker(Math.random), shown: null, done: questions.length === 0 };
 }
 
 export function PracticePage() {
@@ -65,7 +70,9 @@ export function PracticePage() {
     const correct = outcome.verdict !== 'wrong';
     if (state.sound) (correct ? playCorrect : playWrong)();
     reportAnswer(correct ? (outcome.hinted ? 'hinted' : 'correct') : outcome.skipped ? 'skipped' : 'wrong', todayIso());
-    const next: Session = { ...session, outcome, firstTry: { ...session.firstTry } };
+    const retry = question.kind !== 'order' && question.retry;
+    const mascot = nextMascot(session.mascot, { correct, hinted: outcome.hinted, almost: outcome.verdict === 'almost', skipped: outcome.skipped, retry }, Math.random);
+    const next: Session = { ...session, outcome, firstTry: { ...session.firstTry }, mascot: mascot.tracker, shown: mascot.show };
 
     if (question.kind === 'order') {
       next.firstTry[question.id] = pointsFor(correct, false);
@@ -95,7 +102,7 @@ export function PracticePage() {
   const goNext = () => {
     const index = session.index + 1;
     if (index < session.questions.length) {
-      setSession({ ...session, index, outcome: null });
+      setSession({ ...session, index, outcome: null, shown: null });
       return;
     }
     const scored = Object.values(session.firstTry);
@@ -111,7 +118,7 @@ export function PracticePage() {
       }
       return { ...s, sets: updated };
     });
-    setSession({ ...session, done: true, outcome: null });
+    setSession({ ...session, done: true, outcome: null, shown: null });
   };
 
   if (session.done) {
@@ -151,7 +158,7 @@ export function PracticePage() {
           <OrderQuestionView question={question} {...common} />
         )}
       </div>
-      {session.outcome && <Feedback question={question} outcome={session.outcome} lang={state.lang} willRetry={session.questions.some((q) => q.id === `${question.id}-retry`)} onNext={goNext} />}
+      {session.outcome && <Feedback question={question} outcome={session.outcome} mascot={session.shown} lang={state.lang} willRetry={session.questions.some((q) => q.id === `${question.id}-retry`)} onNext={goNext} />}
     </div>
   );
 }
@@ -171,7 +178,7 @@ function correctAnswer(question: Question, lang: Lang): string {
   }
 }
 
-function Feedback({ question, outcome, lang, willRetry, onNext }: { question: Question; outcome: Outcome; lang: Lang; willRetry: boolean; onNext: () => void }) {
+function Feedback({ question, outcome, mascot, lang, willRetry, onNext }: { question: Question; outcome: Outcome; mascot: MascotShow | null; lang: Lang; willRetry: boolean; onNext: () => void }) {
   const nextRef = useRef<HTMLButtonElement>(null);
   useEffect(() => nextRef.current?.focus(), []);
   const answerLang = question.kind === 'meaning-choice' || question.kind === 'type-meaning' ? lang : 'eu';
@@ -179,9 +186,13 @@ function Feedback({ question, outcome, lang, willRetry, onNext }: { question: Qu
 
   return (
     <div className={cls} role="status">
-      <span className="feedback-icon" aria-hidden="true">
-        {outcome.verdict === 'wrong' ? '🤔' : '🎉'}
-      </span>
+      {mascot ? (
+        <Mascot kind={mascot.kind} state={mascot.state} className="feedback-mascot" />
+      ) : (
+        <span className="feedback-icon" aria-hidden="true">
+          {outcome.verdict === 'wrong' ? '🤔' : '🎉'}
+        </span>
+      )}
       <div className="feedback-text">
         {outcome.verdict === 'exact' ? (
           <strong>{outcome.hinted ? t('correctWithHint') : t('correct')}</strong>
@@ -217,6 +228,10 @@ function RoundSummary({ session, lang, sound, onAgain }: { session: Session; lan
   return (
     <div className="card summary">
       {!reducedMotion && <Confetti />}
+      <div className="summary-mascots">
+        <Mascot kind="hedgehog" state={stars >= 2 ? 'cheer' : 'hint'} />
+        <Mascot kind="sheep" state={stars >= 2 ? 'cheer' : 'hint'} />
+      </div>
       <h1>{t('roundDone')}</h1>
       <Stars count={stars} big />
       <p className="lead">{stars === 3 ? t('greatJob') : stars === 2 ? t('goodJob') : t('keepGoing')}</p>

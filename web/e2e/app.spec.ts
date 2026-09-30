@@ -181,7 +181,10 @@ test.describe('learner', () => {
     await older.click();
     await page.getByRole('button', { name: 'Empezar repaso' }).click();
     await expect(page.locator('.question-card')).toBeVisible();
-    expect(title).toContain('HILABETEAK');
+    // The first choice is the newest week before this one.
+    const { sets } = (await (await page.request.get('/api/public/content')).json()) as { sets: { kind: string; title: string; weekStart: string }[] };
+    const weeks = sets.filter((s) => s.kind === 'week').sort((a, b) => b.weekStart.localeCompare(a.weekStart));
+    expect(title).toBe(weeks[1]?.title);
     await playRound(page);
   });
 });
