@@ -224,3 +224,44 @@ describe('spelling hints and scoring', () => {
     expect(starsFor(5 + 4 * 0.5, 10)).toBe(2);
   });
 });
+
+describe('word formation', () => {
+  const week = sampleSet('weeks/2026-10-05-hitz-motak.json', 'october5', '2026-10-05');
+  const topic = { ...sampleSet('topics/hitz-motak.json', 'formation', ''), kind: 'topic' as const, weekStart: null };
+
+  it('always practises both compounds and suffixes in the week and the permanent category', () => {
+    for (const set of [week, topic]) {
+      for (const seed of seeds) {
+        const qs = round({ sets: [set], mode: { kind: 'week', setId: set.id } }, seed);
+        expect(qs).toHaveLength(10);
+        const builds = qs.filter((q) => q.kind === 'word-build');
+        expect(builds.map((q) => q.item.entry.formation!.kind).sort()).toEqual(['compound', 'derived']);
+        for (const q of builds) {
+          expect(q.options.filter((o) => o.correct).map((o) => o.label)).toEqual([q.item.entry.formation!.parts[1]]);
+          expect(q.options.length).toBeGreaterThanOrEqual(2);
+          expect(new Set(q.options.map((o) => o.label)).size).toBe(q.options.length);
+          if (q.item.entry.formation!.kind === 'derived') expect(q.options.every((o) => o.label.startsWith('-'))).toBe(true);
+          const retry = retryQuestion(q, [set], 'es', seeded(seed));
+          expect(retry.item.key).toBe(q.item.key);
+          expect(retry.retry).toBe(true);
+          expect(retry.kind).not.toBe('word-build');
+        }
+      }
+    }
+  });
+
+  it('keeps every selected set represented in a large mix with word building', () => {
+    const sets = [topic, ...Array.from({ length: 9 }, (_, i) => tinySet(`other${i}`, '2026-09-07', [[`word${i}`, [`meaning${i}`]]]))];
+    for (const seed of seeds.slice(0, 20)) {
+      const qs = round({ sets, mode: { kind: 'mix', setIds: sets.map((s) => s.id) } }, seed);
+      expect(qs).toHaveLength(10);
+      expect(new Set(words(qs).map((q) => q.item.setId)).size).toBe(10);
+    }
+  });
+
+  it('does not build a choice with no distractors or invent morphology for ordinary vocabulary', () => {
+    const one = { ...topic, entries: [topic.entries[0]!] };
+    expect(round({ sets: [one], mode: { kind: 'week', setId: one.id } }, 1).some((q) => q.kind === 'word-build')).toBe(false);
+    expect(round({ sets: [hiztegia], mode: { kind: 'week', setId: hiztegia.id } }, 1).some((q) => q.kind === 'word-build')).toBe(false);
+  });
+});

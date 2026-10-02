@@ -58,6 +58,36 @@
             },
             "additionalProperties": false
           },
+          "formation": {
+            "description": "Optional curated stem + word/suffix. The final spelling is basque; articles and spelling changes may be explained in note.",
+            "type": [
+              "object",
+              "null"
+            ],
+            "required": [
+              "kind",
+              "parts"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "compound",
+                  "derived"
+                ]
+              },
+              "parts": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "additionalProperties": false
+          },
           "note": { "type": ["string", "null"], "maxLength": 300 },
           "imageHint": {
             "description": "Editorial suggestion for a picture the admin may upload. Never shown to learners, never a URL.",

@@ -105,7 +105,7 @@ test.describe('learner', () => {
     await page.goto('/');
     await page.getByRole('link', { name: /Categorías/ }).click();
     await expect(page.getByRole('heading', { name: 'Categorías' })).toBeVisible();
-    await expect(page.locator('.week-card')).toHaveText([/ASTEGUNAK.*7 palabras/s, /HILABETEAK.*12 palabras/s]);
+    await expect(page.locator('.week-card')).toHaveText([/ASTEGUNAK.*7 palabras/s, /Formación de palabras.*19 palabras/s, /HILABETEAK.*12 palabras/s]);
 
     await page.locator('.week-card', { hasText: 'ASTEGUNAK' }).click();
     await expect(page.locator('.word-group ol li')).toHaveCount(7);

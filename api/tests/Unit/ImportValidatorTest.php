@@ -21,6 +21,31 @@ final class ImportValidatorTest extends TestCase
         $this->validator = new ImportValidator();
     }
 
+    public function testFormationSurvivesStorageAndEditorUpdates(): void
+    {
+        $document = $this->sample('topics/hitz-motak.json');
+        $result = $this->validator->validate($document);
+        self::assertTrue($result->isValid(), json_encode($result->errors));
+        self::assertSame([], $result->warnings);
+        $sets = new SetRepository(new \App\Content\Database($this->tempDir()));
+        $id = $sets->create($result->draft);
+        $sets->setStatus($id, 'published');
+        $saved = $sets->find($id);
+        self::assertSame($document['entries'][0]['formation'], $saved['entries'][0]['formation']);
+        $draft = $this->validator->validate($saved, false);
+        self::assertTrue($draft->isValid());
+        $sets->update($id, $draft->draft);
+        self::assertSame($document['entries'][0]['formation'], $sets->publishedContent()[0]['entries'][0]['formation']);
+    }
+
+    public function testMalformedFormationIsRejected(): void
+    {
+        foreach ([['kind' => 'unknown', 'parts' => ['lore', 'ontzi']], ['kind' => 'compound', 'parts' => ['lore']], ['kind' => 'derived', 'parts' => ['margo', 'lari']], ['kind' => 'compound', 'parts' => ['', 'ontzi']]] as $formation) {
+            $doc = $this->doc([['basque' => 'loreontzi', 'translations' => ['es' => ['maceta']], 'formation' => $formation]]);
+            self::assertFalse($this->validator->validate($doc)->isValid());
+        }
+    }
+
     public function testHandoutSampleKeepsSpellingAndSeparateAlternatives(): void
     {
         $result = $this->validator->validate($this->sample('hiztegia-1-gaia.json'));

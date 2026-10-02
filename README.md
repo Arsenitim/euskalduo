@@ -8,8 +8,8 @@ from a photo of the handout), checks it and publishes it. Kids then play short
 rounds on a tablet, phone or computer. There are no accounts, ads or
 leaderboards, and no pressure.
 
-- **Five exercises:** choose the meaning, choose the Basque word, spell it
-  with letter tiles, type the meaning, and put months/weekdays in order.
+- **Six exercises:** choose the meaning, choose the Basque word, spell it
+  with letter tiles, type the meaning, put months/weekdays in order, and build words from words or suffixes.
   Everything works without pictures.
 - **Gentle feedback:** instant feedback with sounds, missed words come back
   later, and stars at the end of a round. Now and then a mascot (a hedgehog or

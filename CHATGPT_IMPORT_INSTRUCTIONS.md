@@ -78,3 +78,11 @@ not need. Return the JSON only.
 
 The full field reference is in `docs/IMPORT_FORMAT.md` and
 `samples/homework.schema.json`.
+
+For word-formation worksheets, optionally add `formation` to a vocabulary entry:
+`{"kind":"compound","parts":["lore","ontzi"]}` or
+`{"kind":"derived","parts":["margo","-lari"]}`. Use exactly two curated
+word/stem and word/suffix parts, keeping `basque` as the final correct spelling.
+A suffix starts with `-`. Explain article endings or spelling changes in
+`note`; do not invent decompositions when unsure. Ordinary vocabulary needs
+no formation metadata.

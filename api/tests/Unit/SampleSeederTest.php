@@ -48,15 +48,15 @@ final class SampleSeederTest extends TestCase
         $sampleDir = \dirname(self::samplePath('hiztegia-1-gaia.json'));
         $seeder->seedOnce($sampleDir, new \DateTimeImmutable('2026-09-24'));
 
-        self::assertSame(['ASTEGUNAK', 'HILABETEAK'], $seeder->seedTopicsOnce($sampleDir.'/topics'));
+        self::assertSame(['ASTEGUNAK', 'HILABETEAK', 'Formación de palabras · Hitz motak'], $seeder->seedTopicsOnce($sampleDir.'/topics'));
         $published = $sets->publishedContent();
-        self::assertSame(['week', 'week', 'topic', 'topic'], array_column($published, 'kind'), 'Weeks first, then categories.');
-        self::assertSame([null, null], array_column(\array_slice($published, 2), 'weekStart'));
+        self::assertSame(['week', 'week', 'topic', 'topic', 'topic'], array_column($published, 'kind'), 'Weeks first, then categories.');
+        self::assertSame([null, null, null], array_column(\array_slice($published, 2), 'weekStart'));
         self::assertFalse($published[2]['sample']);
         self::assertSame(['astelehena', 'asteartea'], \array_slice(array_column($published[2]['entries'], 'id'), 0, 2));
 
         self::assertSame([], $seeder->seedTopicsOnce($sampleDir.'/topics'));
-        self::assertCount(4, $sets->listSummaries());
+        self::assertCount(5, $sets->listSummaries());
     }
 
     public function testWeeksAreSeededOncePerFileWithTheirOwnDates(): void
@@ -66,12 +66,15 @@ final class SampleSeederTest extends TestCase
         $seeder = new SampleSeeder($db, $sets, new ImportValidator());
         $weekDir = \dirname(self::samplePath('hiztegia-1-gaia.json')).'/weeks';
 
-        self::assertSame(['HIZTEGIA (DENBORAZKOAK)'], $seeder->seedWeeksOnce($weekDir));
+        self::assertSame(['Hitz motak, izan eta denborazkoak', 'HIZTEGIA (DENBORAZKOAK)'], $seeder->seedWeeksOnce($weekDir));
         $published = $sets->publishedContent();
         self::assertSame('week', $published[0]['kind']);
-        self::assertSame('2026-09-28', $published[0]['weekStart']);
+        self::assertSame('2026-10-05', $published[0]['weekStart']);
+        self::assertSame('2026-09-28', $published[1]['weekStart']);
         self::assertFalse($published[0]['sample']);
-        self::assertCount(23, $published[0]['entries']);
+        self::assertCount(57, $published[0]['entries']);
+        self::assertNotNull($published[0]['entries'][0]['formation']);
+        self::assertCount(23, $published[1]['entries']);
 
         $sets->delete($published[0]['id']);
         self::assertSame([], $seeder->seedWeeksOnce($weekDir), 'Deleted weeks must not come back on the next start.');
@@ -83,6 +86,19 @@ final class SampleSeederTest extends TestCase
         $other['weekStart'] = '2026-10-05';
         file_put_contents($extra.'/later.json', json_encode($other));
         self::assertSame(['Later week'], $seeder->seedWeeksOnce($extra), 'A week added later still reaches this install.');
+    }
+
+    public function testNewCategoryReachesLegacyInstallsWithoutRecreatingOldCategories(): void
+    {
+        $db = new Database($this->tempDir());
+        $db->setMeta('topics_seeded', 'already seeded');
+        $sets = new SetRepository($db);
+        $seeder = new SampleSeeder($db, $sets, new ImportValidator());
+        $dir = \dirname(self::samplePath('hiztegia-1-gaia.json')).'/topics';
+        self::assertSame(['Formación de palabras · Hitz motak'], $seeder->seedTopicsOnce($dir));
+        $sets->delete($sets->publishedContent()[0]['id']);
+        self::assertSame([], $seeder->seedTopicsOnce($dir));
+        self::assertSame([], $sets->publishedContent());
     }
 
     public function testExistingDatabaseGainsTheKindColumn(): void

@@ -1,8 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import type { Entry, HomeworkSet } from '../types';
+import type { Entry, Formation, HomeworkSet } from '../types';
 
 interface SampleEntry {
+  formation?: Formation;
+  note?: string;
   basque: string;
   translations: { es: string[]; ru?: string[] };
   group?: string;
@@ -24,7 +26,8 @@ export function sampleSet(file: string, id: string, weekStart: string): Homework
       id: `e${i}`,
       basque: e.basque,
       translations: e.translations,
-      note: null,
+      note: e.note ?? null,
+      formation: e.formation ?? null,
       group: e.group ?? null,
       emoji: e.emoji ?? null,
       image: null,

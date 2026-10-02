@@ -25,7 +25,8 @@ export type WordQuestion =
   | (WordQuestionBase & { kind: 'meaning-choice'; options: Option[] })
   | (WordQuestionBase & { kind: 'basque-choice'; options: Option[]; pictureOnly: boolean })
   | (WordQuestionBase & { kind: 'spell'; tiles: string[] | null })
-  | (WordQuestionBase & { kind: 'type-meaning' });
+  | (WordQuestionBase & { kind: 'type-meaning' })
+  | (WordQuestionBase & { kind: 'word-build'; options: Option[] });
 
 export interface OrderQuestion {
   id: string;
@@ -95,7 +96,18 @@ export function buildRound(input: RoundInput): Question[] {
   if (length === 0) return [];
 
   const order = length >= 6 ? buildOrderQuestion(sourceSets, rng) : null;
-  let slots = length - (order ? 1 : 0);
+  // One of each formation type per round, so the new skill is always practised.
+  const builders = (['compound', 'derived'] as const).flatMap((kind) => {
+    const candidates = sourceItems.filter((i) => i.entry.formation?.kind === kind && formationOptions(i, sourceItems, rng).length >= 2);
+    return weightedSample(candidates, weight, 1, rng);
+  });
+  // Keep room for each selected set in a mix, counting the builders too.
+  const available = length - (order ? 1 : 0);
+  const nonemptySets = sourceSets.filter((s) => s.entries.length > 0).length;
+  if (mode.kind === 'mix') {
+    while (builders.length && available - builders.length + new Set(builders.map((i) => i.setId)).size < Math.min(available, nonemptySets)) builders.pop();
+  }
+  let slots = available - builders.length;
 
   let picks: Item[];
   if (mode.kind === 'week') {
@@ -104,7 +116,7 @@ export function buildRound(input: RoundInput): Question[] {
     slots -= reviewCount;
     picks = [...pickWords(sourceItems, slots, weight, rng), ...weightedSample(reviewPool, weight, reviewCount, rng)];
   } else {
-    picks = pickMixed(sourceSets.map(itemsOf).filter((l) => l.length > 0), slots, weight, rng);
+    picks = pickMixed(sourceSets.map(itemsOf).filter((l) => l.length > 0), slots, weight, rng, new Set(builders.map((i) => i.setId)));
   }
 
   const used = new Map<string, WordKind[]>();
@@ -115,6 +127,7 @@ export function buildRound(input: RoundInput): Question[] {
     return q;
   });
 
+  questions.push(...builders.map((item, i) => wordQuestion(item, 'word-build', sourceItems, input, `build${i}`, false)));
   const arranged: Question[] = spreadRepeats(shuffle(questions, rng));
   if (order) {
     const at = Math.max(1, Math.floor(arranged.length / 2) + Math.floor(rng() * Math.ceil(arranged.length / 2)));
@@ -132,10 +145,10 @@ function pickWords(items: Item[], slots: number, weight: (i: Item) => number, rn
   return result;
 }
 
-function pickMixed(perSet: Item[][], slots: number, weight: (i: Item) => number, rng: Rng): Item[] {
+function pickMixed(perSet: Item[][], slots: number, weight: (i: Item) => number, rng: Rng, covered = new Set<string>()): Item[] {
   const result: Item[] = [];
   // One guaranteed word per selected set (random sets if there are more sets than slots).
-  for (const list of shuffle(perSet, rng).slice(0, slots)) {
+  for (const list of shuffle(perSet.filter((list) => !covered.has(list[0]!.setId)), rng).slice(0, slots)) {
     result.push(...weightedSample(list, weight, 1, rng));
   }
   // Remaining slots: weight normalised by set so every set has the same share.
@@ -158,10 +171,10 @@ function chooseKind(item: Item, stats: EntryStats | undefined, previous: WordKin
   const box = stats?.box ?? 0;
   const seen = (stats?.seen ?? 0) > 0;
   const weights: Record<WordKind, number> = !seen || box === 0
-    ? { 'meaning-choice': 3, 'basque-choice': 2, spell: 1, 'type-meaning': 0 }
+    ? { 'meaning-choice': 3, 'basque-choice': 2, spell: 1, 'type-meaning': 0, 'word-build': 0 }
     : box <= 2
-      ? { 'meaning-choice': 1, 'basque-choice': 2, spell: 2, 'type-meaning': box === 2 ? 1 : 0 }
-      : { 'meaning-choice': 1, 'basque-choice': 1, spell: 2, 'type-meaning': 2 };
+      ? { 'meaning-choice': 1, 'basque-choice': 2, spell: 2, 'type-meaning': box === 2 ? 1 : 0, 'word-build': 0 }
+      : { 'meaning-choice': 1, 'basque-choice': 1, spell: 2, 'type-meaning': 2, 'word-build': 0 };
   if (meaningOptions(item, allItems, input.lang, input.rng).length < 2) weights['meaning-choice'] = 0;
   if (basqueOptions(item, allItems, input.rng).length < 2) weights['basque-choice'] = 0;
   for (const kind of previous) weights[kind] *= 0.1;
@@ -180,6 +193,8 @@ function wordQuestion(item: Item, kind: WordKind, allItems: Item[], input: Round
       return { id, kind, item, retry, tiles: spellingTiles(item.entry.basque, rng) };
     case 'type-meaning':
       return { id, kind, item, retry };
+    case 'word-build':
+      return { id, kind, item, retry, options: formationOptions(item, allItems, rng) };
   }
 }
 
@@ -248,6 +263,17 @@ export function basqueOptions(item: Item, allItems: Item[], rng: Rng): Option[] 
 function orderCandidates(item: Item, allItems: Item[], rng: Rng): Item[] {
   const others = allItems.filter((o) => o.key !== item.key);
   return [...shuffle(others.filter((o) => o.setId === item.setId), rng), ...shuffle(others.filter((o) => o.setId !== item.setId), rng)];
+}
+
+/** Only use curated parts of the same formation type; no invented suffixes. */
+export function formationOptions(item: Item, allItems: Item[], rng: Rng): Option[] {
+  const formation = item.entry.formation;
+  if (!formation) return [];
+  const correct = formation.parts[1];
+  // Exclude alternatives taught for the same stem (both could be legitimate).
+  const accepted = new Set(allItems.filter((i) => i.entry.formation?.kind === formation.kind && i.entry.formation.parts[0] === formation.parts[0]).map((i) => i.entry.formation!.parts[1]));
+  const labels = [...new Set(allItems.filter((i) => i.entry.formation?.kind === formation.kind).map((i) => i.entry.formation!.parts[1]))].filter((s) => !accepted.has(s));
+  return shuffle([{ label: correct, correct: true }, ...shuffle(labels, rng).slice(0, MAX_OPTIONS - 1).map((label) => ({ label, correct: false }))], rng);
 }
 
 /** Letter tiles for spelling, or null for long terms (typed instead). */

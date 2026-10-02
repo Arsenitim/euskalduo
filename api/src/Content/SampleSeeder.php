@@ -6,7 +6,7 @@ namespace App\Content;
 
 /**
  * Loads the sample homework once, on the very first start of an empty
- * database, the built-in categories (samples/topics) once per install,
+ * database, each built-in category (samples/topics) once per install,
  * including existing ones, and each real homework week (samples/weeks) once
  * per install. Flags in the meta table make sure deleted or
  * edited sets are never recreated and real content is never overwritten.
@@ -56,20 +56,22 @@ final class SampleSeeder
     }
 
     /**
-     * Built-in categories (days of the week, months): real content, not
+     * Built-in categories (days, months, word formation): real content, not
      * samples, published as they are.
      *
      * @return list<string> titles of seeded sets
      */
     public function seedTopicsOnce(string $topicDir): array
     {
-        if (null !== $this->db->getMeta('topics_seeded')) {
-            return [];
-        }
+        $legacySeeded = null !== $this->db->getMeta('topics_seeded');
         $files = glob($topicDir.'/*.json') ?: [];
         sort($files);
         $seeded = [];
         foreach ($files as $path) {
+            $key = 'topic_seeded:'.basename($path);
+            if (null !== $this->db->getMeta($key) || ($legacySeeded && \in_array(basename($path), ['astegunak.json', 'hilabeteak.json'], true))) {
+                continue;
+            }
             $document = json_decode((string) file_get_contents($path), true, 64, \JSON_THROW_ON_ERROR);
             $result = $this->validator->validate($document);
             if (!$result->isValid() || 'topic' !== $result->draft['kind']) {
@@ -77,6 +79,7 @@ final class SampleSeeder
             }
             $id = $this->sets->create($result->draft);
             $this->sets->setStatus($id, 'published');
+            $this->db->setMeta($key, gmdate('c'));
             $seeded[] = $document['title'];
         }
         $this->db->setMeta('topics_seeded', gmdate('c'));

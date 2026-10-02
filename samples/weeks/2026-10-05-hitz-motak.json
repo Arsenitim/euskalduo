@@ -1,0 +1,848 @@
+{
+  "schemaVersion": 1,
+  "kind": "week",
+  "title": "Hitz motak, izan eta denborazkoak",
+  "weekStart": "2026-10-05",
+  "description": "Material escolar: formación de palabras, pronombres y el verbo izan, expresiones de tiempo y reglas de mayúsculas. Construye palabras compuestas y derivadas.",
+  "groups": [
+    {
+      "key": "elkartuak",
+      "title": "Hitz elkartuak · Palabras compuestas",
+      "ordered": false
+    },
+    {
+      "key": "eratorriak",
+      "title": "Hitz eratorriak · Palabras derivadas",
+      "ordered": false
+    },
+    {
+      "key": "denborazkoak",
+      "title": "Denborazkoak · El tiempo",
+      "ordered": false
+    },
+    {
+      "key": "izenordainak",
+      "title": "Izenordainak · Pronombres",
+      "ordered": false
+    },
+    {
+      "key": "izan",
+      "title": "Izan · Ser",
+      "ordered": false
+    },
+    {
+      "key": "letra-larria",
+      "title": "Letra larria · Mayúsculas",
+      "ordered": false
+    }
+  ],
+  "entries": [
+    {
+      "id": "loreontzi",
+      "basque": "loreontzi",
+      "translations": {
+        "es": [
+          "maceta"
+        ],
+        "ru": [
+          "цветочный горшок"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "lore",
+          "ontzi"
+        ]
+      }
+    },
+    {
+      "id": "zaborrontzi",
+      "basque": "zaborrontzi",
+      "translations": {
+        "es": [
+          "cubo de basura"
+        ],
+        "ru": [
+          "мусорное ведро"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "zabor",
+          "ontzi"
+        ]
+      },
+      "note": "zabor + ontzi → zaborrontzi: la r se duplica entre vocales."
+    },
+    {
+      "id": "eskulana",
+      "basque": "eskulana",
+      "translations": {
+        "es": [
+          "trabajo manual"
+        ],
+        "ru": [
+          "поделка"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "esku",
+          "lan"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "bizkar-zorroa",
+      "basque": "bizkar-zorroa",
+      "translations": {
+        "es": [
+          "mochila"
+        ],
+        "ru": [
+          "рюкзак"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "bizkar",
+          "zorro"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "ikastetxea",
+      "basque": "ikastetxea",
+      "translations": {
+        "es": [
+          "centro escolar"
+        ],
+        "ru": [
+          "школа"
+        ]
+      },
+      "group": "elkartuak",
+      "note": "Palabra compuesta de la ficha. Su forma cambia al unir las raíces; no se construye pegando letras sin más."
+    },
+    {
+      "id": "jolastokia",
+      "basque": "jolastokia",
+      "translations": {
+        "es": [
+          "patio de juegos"
+        ],
+        "ru": [
+          "игровая площадка"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "jolas",
+          "toki"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "jantokia",
+      "basque": "jantokia",
+      "translations": {
+        "es": [
+          "comedor"
+        ],
+        "ru": [
+          "столовая"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "jan",
+          "toki"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "aldagela",
+      "basque": "aldagela",
+      "translations": {
+        "es": [
+          "vestuario"
+        ],
+        "ru": [
+          "раздевалка"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "alda",
+          "gela"
+        ]
+      }
+    },
+    {
+      "id": "pilotalekua",
+      "basque": "pilotalekua",
+      "translations": {
+        "es": [
+          "frontón"
+        ],
+        "ru": [
+          "площадка для пелоты"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "pilota",
+          "leku"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "margolari",
+      "basque": "margolari",
+      "translations": {
+        "es": [
+          "pintor"
+        ],
+        "ru": [
+          "художник"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "margo",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "ordularia",
+      "basque": "ordularia",
+      "translations": {
+        "es": [
+          "reloj"
+        ],
+        "ru": [
+          "часы"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ordu",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. La ficha añade -a (el artículo)."
+    },
+    {
+      "id": "ordenagailua",
+      "basque": "ordenagailua",
+      "translations": {
+        "es": [
+          "ordenador"
+        ],
+        "ru": [
+          "компьютер"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ordena",
+          "-gailu"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. La ficha añade -a (el artículo)."
+    },
+    {
+      "id": "ordutegia",
+      "basque": "ordutegia",
+      "translations": {
+        "es": [
+          "horario"
+        ],
+        "ru": [
+          "расписание"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ordu",
+          "-tegi"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. La ficha añade -a (el artículo)."
+    },
+    {
+      "id": "txapelketa",
+      "basque": "txapelketa",
+      "translations": {
+        "es": [
+          "campeonato"
+        ],
+        "ru": [
+          "чемпионат"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "txapel",
+          "-keta"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. txapel + -keta → txapelketa: las dos k se escriben como una."
+    },
+    {
+      "id": "ikasle",
+      "basque": "ikasle",
+      "translations": {
+        "es": [
+          "alumno"
+        ],
+        "ru": [
+          "ученик"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ikas",
+          "-le"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "irakasle",
+      "basque": "irakasle",
+      "translations": {
+        "es": [
+          "profesor"
+        ],
+        "ru": [
+          "учитель"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "irakas",
+          "-le"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "liburutegi",
+      "basque": "liburutegi",
+      "translations": {
+        "es": [
+          "biblioteca"
+        ],
+        "ru": [
+          "библиотека"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "liburu",
+          "-tegi"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "aurrelari",
+      "basque": "aurrelari",
+      "translations": {
+        "es": [
+          "delantero"
+        ],
+        "ru": [
+          "нападающий"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "aurre",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "atzelari",
+      "basque": "atzelari",
+      "translations": {
+        "es": [
+          "defensa"
+        ],
+        "ru": [
+          "защитник"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "atze",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "basque": "GOIZEAN",
+      "translations": {
+        "es": [
+          "a la mañana"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "ARRATSALDEAN",
+      "translations": {
+        "es": [
+          "a la tarde"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "EGUERDIAN",
+      "translations": {
+        "es": [
+          "al mediodía"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "GAUEAN",
+      "translations": {
+        "es": [
+          "a la noche"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "EGUNA",
+      "translations": {
+        "es": [
+          "día"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "ASTEA",
+      "translations": {
+        "es": [
+          "semana"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "HILABETEA",
+      "translations": {
+        "es": [
+          "mes"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "URTEA",
+      "translations": {
+        "es": [
+          "año"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "GAUR",
+      "translations": {
+        "es": [
+          "hoy"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "BIHAR",
+      "translations": {
+        "es": [
+          "mañana"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "HERENEGUN",
+      "translations": {
+        "es": [
+          "antes de ayer"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "ETZI",
+      "translations": {
+        "es": [
+          "pasado mañana"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "IAZ",
+      "translations": {
+        "es": [
+          "el año pasado"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "ASPALDI",
+      "translations": {
+        "es": [
+          "hace mucho tiempo"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "PASA DEN HILABETEAN",
+      "translations": {
+        "es": [
+          "el mes pasado"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "DUELA 3 ASTE",
+      "translations": {
+        "es": [
+          "hace 3 semanas"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "ORAIN DELA 2 URTE",
+      "translations": {
+        "es": [
+          "hace 2 años"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "JOAN DEN ASTEAN",
+      "translations": {
+        "es": [
+          "la semana pasada"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "DATORREN URTEAN",
+      "translations": {
+        "es": [
+          "el año que viene"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "HURRENGO HILABETEAN",
+      "translations": {
+        "es": [
+          "el mes que viene"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "LEHEN",
+      "translations": {
+        "es": [
+          "antes"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "ATZO",
+      "translations": {
+        "es": [
+          "ayer"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "basque": "Aurten",
+      "translations": {
+        "es": [
+          "este año"
+        ]
+      },
+      "group": "denborazkoak"
+    },
+    {
+      "id": "ni",
+      "basque": "ni",
+      "translations": {
+        "es": [
+          "yo"
+        ],
+        "ru": [
+          "я"
+        ]
+      },
+      "group": "izenordainak"
+    },
+    {
+      "id": "zu",
+      "basque": "zu",
+      "translations": {
+        "es": [
+          "tú"
+        ],
+        "ru": [
+          "ты"
+        ]
+      },
+      "group": "izenordainak"
+    },
+    {
+      "id": "hura",
+      "basque": "hura",
+      "translations": {
+        "es": [
+          "él",
+          "ella",
+          "aquello"
+        ],
+        "ru": [
+          "он",
+          "она",
+          "то"
+        ]
+      },
+      "group": "izenordainak",
+      "note": "También ella / aquello. Una persona, un nombre (Maialen) o una forma en -a, como neska o etxea, lleva da."
+    },
+    {
+      "id": "gu",
+      "basque": "gu",
+      "translations": {
+        "es": [
+          "nosotros"
+        ],
+        "ru": [
+          "мы"
+        ]
+      },
+      "group": "izenordainak",
+      "note": "Incluye a quien habla: … eta ni; lagunok (nosotros, los amigos)."
+    },
+    {
+      "id": "zuek",
+      "basque": "zuek",
+      "translations": {
+        "es": [
+          "vosotros"
+        ],
+        "ru": [
+          "вы"
+        ]
+      },
+      "group": "izenordainak",
+      "note": "Incluye a quien escucha: … eta zu."
+    },
+    {
+      "id": "haiek",
+      "basque": "haiek",
+      "translations": {
+        "es": [
+          "ellos",
+          "ellas"
+        ],
+        "ru": [
+          "они"
+        ]
+      },
+      "group": "izenordainak",
+      "note": "También ellas. Varios nombres (Maialen eta Peio) o formas plurales en -ak, como neskak, llevan dira."
+    },
+    {
+      "id": "ni-naiz",
+      "basque": "Ni naiz",
+      "translations": {
+        "es": [
+          "yo soy"
+        ],
+        "ru": [
+          "я являюсь"
+        ]
+      },
+      "group": "izan"
+    },
+    {
+      "id": "zu-zara",
+      "basque": "Zu zara",
+      "translations": {
+        "es": [
+          "tú eres"
+        ],
+        "ru": [
+          "ты являешься"
+        ]
+      },
+      "group": "izan"
+    },
+    {
+      "id": "hura-da",
+      "basque": "Hura da",
+      "translations": {
+        "es": [
+          "él es",
+          "ella es"
+        ],
+        "ru": [
+          "он является",
+          "она является"
+        ]
+      },
+      "group": "izan"
+    },
+    {
+      "id": "gu-gara",
+      "basque": "Gu gara",
+      "translations": {
+        "es": [
+          "nosotros somos"
+        ],
+        "ru": [
+          "мы являемся"
+        ]
+      },
+      "group": "izan"
+    },
+    {
+      "id": "zuek-zarete",
+      "basque": "Zuek zarete",
+      "translations": {
+        "es": [
+          "vosotros sois"
+        ],
+        "ru": [
+          "вы являетесь"
+        ]
+      },
+      "group": "izan"
+    },
+    {
+      "id": "haiek-dira",
+      "basque": "Haiek dira",
+      "translations": {
+        "es": [
+          "ellos son",
+          "ellas son"
+        ],
+        "ru": [
+          "они являются"
+        ]
+      },
+      "group": "izan"
+    },
+    {
+      "id": "letra-larria",
+      "basque": "Letra larria",
+      "translations": {
+        "es": [
+          "letra mayúscula"
+        ],
+        "ru": [
+          "заглавная буква"
+        ]
+      },
+      "group": "letra-larria",
+      "note": "Se usa al principio de una oración y en nombres propios."
+    },
+    {
+      "id": "esaldiaren-hasieran",
+      "basque": "Esaldiaren hasieran",
+      "translations": {
+        "es": [
+          "al principio de la oración"
+        ],
+        "ru": [
+          "в начале предложения"
+        ]
+      },
+      "group": "letra-larria",
+      "note": "La primera palabra de una oración empieza con mayúscula."
+    },
+    {
+      "id": "izen-bereziak",
+      "basque": "Izen bereziak",
+      "translations": {
+        "es": [
+          "nombres propios"
+        ],
+        "ru": [
+          "имена собственные"
+        ]
+      },
+      "group": "letra-larria",
+      "note": "Los nombres propios llevan mayúscula. El nombre común que los acompaña va en minúscula: Maialen, pero Ibaizabal ibaia."
+    }
+  ]
+}

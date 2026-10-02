@@ -356,3 +356,36 @@ export function OrderQuestionView({ question, answered, onAnswer }: Props<OrderQ
     </div>
   );
 }
+
+export function WordBuildQuestionView({ question, lang, answered, onAnswer }: Props<Extract<WordQuestion, { kind: 'word-build' }>>) {
+  const [chosen, setChosen] = useState<number | null>(null);
+  const formation = question.item.entry.formation!;
+  const choose = (n: number) => {
+    if (answered || !question.options[n]) return;
+    setChosen(n);
+    onAnswer({ verdict: question.options[n].correct ? 'exact' : 'wrong', given: question.options[n].label });
+  };
+  return (
+    <div onKeyDown={(e) => { const n = Number(e.key); if (n >= 1 && n <= question.options.length) choose(n - 1); }}>
+      <Prompt title="Construye la palabra">
+        <Meaning item={question.item} lang={lang} />
+        <p>{formation.kind === 'compound' ? 'Hitz elkartuak: une dos palabras.' : 'Hitz eratorriak: añade un sufijo a la raíz.'}</p>
+        <Basque text={`${formation.parts[0]} + ${answered ? formation.parts[1] : '…'}`} />
+      </Prompt>
+      <div className="options" role="group" aria-label="Elige la pieza que falta">
+        {question.options.map((option, n) => (
+          <button key={option.label} className={`option ${answered ? option.correct ? 'is-correct' : n === chosen ? 'is-wrong' : 'is-dim' : ''}`} onClick={() => choose(n)} disabled={answered} lang="eu">
+            <span className="option-key" aria-hidden="true">{n + 1}</span>
+            <span className="option-label">{option.label}</span>
+            {answered && option.correct && <span aria-label="correcta">✓</span>}
+          </button>
+        ))}
+      </div>
+      {!answered && <button className="btn btn-link" onClick={() => onAnswer({ verdict: 'wrong', skipped: true })}>{t('dontKnow')}</button>}
+      {answered && <div className="center-note">
+        <p lang="eu"><strong>{formation.parts.join(' + ')} → {question.item.entry.basque}</strong></p>
+        {question.item.entry.note && <p>{question.item.entry.note}</p>}
+      </div>}
+    </div>
+  );
+}

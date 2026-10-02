@@ -1,4 +1,4 @@
-import type { Group, SetKind } from '../types';
+import type { Formation, Group, SetKind } from '../types';
 
 export interface Issue {
   path: string;
@@ -7,6 +7,7 @@ export interface Issue {
 }
 
 export interface AdminEntry {
+  formation?: Formation | null;
   id: string | null;
   basque: string;
   translations: { es: string[]; ru?: string[] };

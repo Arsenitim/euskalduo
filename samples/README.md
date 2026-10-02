@@ -36,3 +36,9 @@ Editorial additions made by the developer and worth a human check:
 * `emoji` and `imageHint` on a few clearly picturable handout words. They are
   illustrations only, not answers; most words (verbs, adjectives, abstract
   words, calendar words) have no picture and every exercise works without one.
+
+- `weeks/2026-10-05-hitz-motak.json`: October 5, 2026 school materials:
+  compounds and derived words, time vocabulary, pronouns, *izan*, and capitals.
+- `topics/hitz-motak.json`: permanent word-formation practice, using the same
+  word-building metadata. New category files also reach existing installations;
+  edited or deleted categories are never recreated.

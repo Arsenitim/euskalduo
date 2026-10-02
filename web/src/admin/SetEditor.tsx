@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import type { Group, SetKind } from '../types';
+import type { Formation, Group, SetKind } from '../types';
 import { adminApi, type AdminEntry, type Draft, type Issue } from './api';
 
 export interface Row {
+  formation: Formation | null;
   uid: string;
   id: string | null;
   basque: string;
@@ -47,6 +48,7 @@ export function modelFromDraft(draft: Draft): EditorModel {
     groups: draft.groups,
     rows: draft.entries.map((e) => ({
       uid: uid(),
+      formation: e.formation ?? null,
       id: e.id,
       basque: e.basque,
       es: e.translations.es.join('; '),
@@ -73,6 +75,7 @@ export function draftFromModel(model: EditorModel): Draft {
       const ru = splitAlternatives(r.ru);
       return {
         id: r.id,
+        formation: r.formation,
         basque: r.basque,
         translations: ru.length > 0 ? { es: splitAlternatives(r.es), ru } : { es: splitAlternatives(r.es) },
         note: nullIfEmpty(r.note),
@@ -87,7 +90,7 @@ export function draftFromModel(model: EditorModel): Draft {
 }
 
 function emptyRow(): Row {
-  return { uid: uid(), id: null, basque: '', es: '', ru: '', note: '', group: '', emoji: '', imageHint: '', needsReview: false, reviewNote: '', image: null };
+  return { formation: null, uid: uid(), id: null, basque: '', es: '', ru: '', note: '', group: '', emoji: '', imageHint: '', needsReview: false, reviewNote: '', image: null };
 }
 
 interface Props {
@@ -172,6 +175,24 @@ export function SetEditor({ model, onChange, errors, warnings, setId, onImageCha
                   Russian (optional)
                   <input lang="ru" value={row.ru} onChange={(e) => setRow(index, { ru: e.target.value })} />
                 </label>
+                <label>
+                  Word formation
+                  <select value={row.formation?.kind ?? ''} onChange={(e) => setRow(index, { formation: e.target.value ? { kind: e.target.value as Formation['kind'], parts: row.formation?.parts ?? ['', ''] } : null })}>
+                    <option value="">None</option>
+                    <option value="compound">Compound: two words</option>
+                    <option value="derived">Derived: stem + suffix</option>
+                  </select>
+                </label>
+                {row.formation && row.formation.parts.map((part, n) => (
+                  <label key={n}>
+                    {n === 0 ? 'First word / stem' : 'Second word / suffix (e.g. -lari)'}
+                    <input lang="eu" value={part} maxLength={40} onChange={(e) => {
+                      const parts: [string, string] = [...row.formation!.parts];
+                      parts[n] = e.target.value;
+                      setRow(index, { formation: { ...row.formation!, parts } });
+                    }} />
+                  </label>
+                ))}
                 <label>
                   Note (optional)
                   <input value={row.note} maxLength={300} onChange={(e) => setRow(index, { note: e.target.value })} />

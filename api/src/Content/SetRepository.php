@@ -192,7 +192,7 @@ final class SetRepository
      */
     private function insertEntries(string $setId, array $entries, array $existingImages): array
     {
-        $stmt = $this->db->pdo()->prepare('INSERT INTO entries (set_id, id, position, basque, translations_json, note, group_key, emoji, image_hint, image_file, needs_review, review_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt = $this->db->pdo()->prepare('INSERT INTO entries (set_id, id, position, basque, translations_json, note, group_key, emoji, image_hint, image_file, needs_review, review_note, formation_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $ids = [];
         foreach ($entries as $position => $entry) {
             $entryId = $entry['id'] ?? null;
@@ -215,6 +215,7 @@ final class SetRepository
                 $existingImages[$entryId] ?? null,
                 (int) $entry['needsReview'],
                 $entry['reviewNote'],
+                null !== ($entry['formation'] ?? null) ? self::json($entry['formation']) : null,
             ]);
         }
 
@@ -264,6 +265,7 @@ final class SetRepository
             'basque' => $row['basque'],
             'translations' => json_decode($row['translations_json'], true, 8, \JSON_THROW_ON_ERROR),
             'note' => $row['note'],
+            'formation' => null !== $row['formation_json'] ? json_decode($row['formation_json'], true, 8, \JSON_THROW_ON_ERROR) : null,
             'group' => $row['group_key'],
             'emoji' => $row['emoji'],
             'image' => null !== $row['image_file'] ? ImageStore::PUBLIC_PREFIX.$row['image_file'] : null,

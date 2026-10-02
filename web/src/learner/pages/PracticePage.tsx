@@ -5,7 +5,7 @@ import { t } from '../../i18n';
 import type { HomeworkSet, Lang } from '../../types';
 import { ProgressBar, Stars } from '../components/bits';
 import { Mascot } from '../components/Mascot';
-import { ChoiceQuestionView, OrderQuestionView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
+import { WordBuildQuestionView, ChoiceQuestionView, OrderQuestionView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
 import { useLearner } from '../LearnerContext';
 import { newMascotTracker, nextMascot, type MascotShow, type MascotTracker } from '../mascot';
 import { buildRound, meaningsOf, pointsFor, retryQuestion, starsFor, type Item, type Mode, type Question } from '../questions';
@@ -150,6 +150,8 @@ export function PracticePage() {
         {question.kind !== 'order' && question.retry && <span className="badge badge-retry">{t('retryBadge')}</span>}
         {question.kind === 'meaning-choice' || question.kind === 'basque-choice' ? (
           <ChoiceQuestionView question={question} {...common} />
+        ) : question.kind === 'word-build' ? (
+          <WordBuildQuestionView question={question} {...common} />
         ) : question.kind === 'spell' ? (
           <SpellQuestionView question={question} {...common} />
         ) : question.kind === 'type-meaning' ? (
@@ -171,6 +173,7 @@ function correctAnswer(question: Question, lang: Lang): string {
     case 'type-meaning':
       return meaningsOf(question.item.entry, lang).join(' / ');
     case 'basque-choice':
+    case 'word-build':
     case 'spell':
       return question.item.entry.basque;
     case 'order':

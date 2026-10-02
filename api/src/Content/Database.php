@@ -11,7 +11,7 @@ namespace App\Content;
  */
 final class Database
 {
-    public const SCHEMA_VERSION = 4;
+    public const SCHEMA_VERSION = 5;
 
     private ?\PDO $pdo = null;
 
@@ -102,6 +102,10 @@ final class Database
         $columns = array_column($pdo->query('PRAGMA table_info(homework_sets)')->fetchAll(), 'name');
         if (!\in_array('kind', $columns, true)) {
             $pdo->exec("ALTER TABLE homework_sets ADD COLUMN kind TEXT NOT NULL DEFAULT 'week' CHECK (kind IN ('week', 'topic'))");
+        }
+        $entryColumns = array_column($pdo->query('PRAGMA table_info(entries)')->fetchAll(), 'name');
+        if (!\in_array('formation_json', $entryColumns, true)) {
+            $pdo->exec('ALTER TABLE entries ADD COLUMN formation_json TEXT');
         }
         // v4: anonymous usage counters, one row per day (see App\Stats\UsageStats).
         $pdo->exec('CREATE TABLE IF NOT EXISTS usage_daily (day TEXT PRIMARY KEY, new_devices INTEGER NOT NULL DEFAULT 0, active_devices INTEGER NOT NULL DEFAULT 0, answers INTEGER NOT NULL DEFAULT 0, correct INTEGER NOT NULL DEFAULT 0, hinted INTEGER NOT NULL DEFAULT 0, wrong INTEGER NOT NULL DEFAULT 0, skipped INTEGER NOT NULL DEFAULT 0, rounds INTEGER NOT NULL DEFAULT 0)');

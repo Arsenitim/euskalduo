@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 1,
+  "kind": "topic",
+  "title": "Formación de palabras · Hitz motak",
+  "weekStart": null,
+  "description": "Une dos palabras (hitz elkartuak) o añade un sufijo (hitz eratorriak). Ejemplos de la ficha del 5 de octubre de 2026.",
+  "groups": [
+    {
+      "key": "elkartuak",
+      "title": "Hitz elkartuak · Palabras compuestas",
+      "ordered": false
+    },
+    {
+      "key": "eratorriak",
+      "title": "Hitz eratorriak · Palabras derivadas",
+      "ordered": false
+    }
+  ],
+  "entries": [
+    {
+      "id": "loreontzi",
+      "basque": "loreontzi",
+      "translations": {
+        "es": [
+          "maceta"
+        ],
+        "ru": [
+          "цветочный горшок"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "lore",
+          "ontzi"
+        ]
+      }
+    },
+    {
+      "id": "zaborrontzi",
+      "basque": "zaborrontzi",
+      "translations": {
+        "es": [
+          "cubo de basura"
+        ],
+        "ru": [
+          "мусорное ведро"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "zabor",
+          "ontzi"
+        ]
+      },
+      "note": "zabor + ontzi → zaborrontzi: la r se duplica entre vocales."
+    },
+    {
+      "id": "eskulana",
+      "basque": "eskulana",
+      "translations": {
+        "es": [
+          "trabajo manual"
+        ],
+        "ru": [
+          "поделка"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "esku",
+          "lan"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "bizkar-zorroa",
+      "basque": "bizkar-zorroa",
+      "translations": {
+        "es": [
+          "mochila"
+        ],
+        "ru": [
+          "рюкзак"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "bizkar",
+          "zorro"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "ikastetxea",
+      "basque": "ikastetxea",
+      "translations": {
+        "es": [
+          "centro escolar"
+        ],
+        "ru": [
+          "школа"
+        ]
+      },
+      "group": "elkartuak",
+      "note": "Palabra compuesta de la ficha. Su forma cambia al unir las raíces; no se construye pegando letras sin más."
+    },
+    {
+      "id": "jolastokia",
+      "basque": "jolastokia",
+      "translations": {
+        "es": [
+          "patio de juegos"
+        ],
+        "ru": [
+          "игровая площадка"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "jolas",
+          "toki"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "jantokia",
+      "basque": "jantokia",
+      "translations": {
+        "es": [
+          "comedor"
+        ],
+        "ru": [
+          "столовая"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "jan",
+          "toki"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "aldagela",
+      "basque": "aldagela",
+      "translations": {
+        "es": [
+          "vestuario"
+        ],
+        "ru": [
+          "раздевалка"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "alda",
+          "gela"
+        ]
+      }
+    },
+    {
+      "id": "pilotalekua",
+      "basque": "pilotalekua",
+      "translations": {
+        "es": [
+          "frontón"
+        ],
+        "ru": [
+          "площадка для пелоты"
+        ]
+      },
+      "group": "elkartuak",
+      "formation": {
+        "kind": "compound",
+        "parts": [
+          "pilota",
+          "leku"
+        ]
+      },
+      "note": "Al unir las piezas, añadimos -a (el artículo) para obtener la forma de la ficha."
+    },
+    {
+      "id": "margolari",
+      "basque": "margolari",
+      "translations": {
+        "es": [
+          "pintor"
+        ],
+        "ru": [
+          "художник"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "margo",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "ordularia",
+      "basque": "ordularia",
+      "translations": {
+        "es": [
+          "reloj"
+        ],
+        "ru": [
+          "часы"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ordu",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. La ficha añade -a (el artículo)."
+    },
+    {
+      "id": "ordenagailua",
+      "basque": "ordenagailua",
+      "translations": {
+        "es": [
+          "ordenador"
+        ],
+        "ru": [
+          "компьютер"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ordena",
+          "-gailu"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. La ficha añade -a (el artículo)."
+    },
+    {
+      "id": "ordutegia",
+      "basque": "ordutegia",
+      "translations": {
+        "es": [
+          "horario"
+        ],
+        "ru": [
+          "расписание"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ordu",
+          "-tegi"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. La ficha añade -a (el artículo)."
+    },
+    {
+      "id": "txapelketa",
+      "basque": "txapelketa",
+      "translations": {
+        "es": [
+          "campeonato"
+        ],
+        "ru": [
+          "чемпионат"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "txapel",
+          "-keta"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final. txapel + -keta → txapelketa: las dos k se escriben como una."
+    },
+    {
+      "id": "ikasle",
+      "basque": "ikasle",
+      "translations": {
+        "es": [
+          "alumno"
+        ],
+        "ru": [
+          "ученик"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ikas",
+          "-le"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "irakasle",
+      "basque": "irakasle",
+      "translations": {
+        "es": [
+          "profesor"
+        ],
+        "ru": [
+          "учитель"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "irakas",
+          "-le"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "liburutegi",
+      "basque": "liburutegi",
+      "translations": {
+        "es": [
+          "biblioteca"
+        ],
+        "ru": [
+          "библиотека"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "liburu",
+          "-tegi"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "aurrelari",
+      "basque": "aurrelari",
+      "translations": {
+        "es": [
+          "delantero"
+        ],
+        "ru": [
+          "нападающий"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "aurre",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    },
+    {
+      "id": "atzelari",
+      "basque": "atzelari",
+      "translations": {
+        "es": [
+          "defensa"
+        ],
+        "ru": [
+          "защитник"
+        ]
+      },
+      "group": "eratorriak",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "atze",
+          "-lari"
+        ]
+      },
+      "note": "El guion indica un sufijo; no se escribe en la palabra final."
+    }
+  ]
+}

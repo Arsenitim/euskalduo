@@ -76,3 +76,20 @@ the file contents; SVG, GIF, HTML and anything else is rejected. Every image is
 decoded and re-encoded to WebP (max 800 px), which strips metadata such as
 camera GPS data. Files are stored under random names in the `uploads` volume
 and served only by nginx from `/uploads/<32 hex>.webp`.
+
+### Word formation (optional)
+
+An entry can add `formation: { "kind": "compound", "parts": ["lore", "ontzi"] }`
+or `formation: { "kind": "derived", "parts": ["margo", "-lari"] }`.
+There must be exactly two nonempty parts; a derived suffix starts with `-`.
+These are curated word/stem and word/suffix pairs, not automatically inferred
+letter splits. `basque` remains the complete correct spelling. Use `note` to
+explain article endings and spelling changes, for example
+`zabor + ontzi → zaborrontzi` or `ordu + -tegi → ordutegia` (with article `-a`).
+
+When suitable parts exist, a round includes one compound and one derived-word
+activity. Children choose the missing second piece from parts of the same type,
+then see the complete construction and explanation. Existing feedback, retry,
+score and local progress apply. The admin editor can add or edit the parts.
+The permanent **Formación de palabras · Hitz motak** category uses the same
+activity without requiring children to remember the homework date.

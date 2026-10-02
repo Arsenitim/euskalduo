@@ -6,7 +6,13 @@ export interface Group {
   ordered: boolean;
 }
 
+export interface Formation {
+  kind: 'compound' | 'derived';
+  parts: [string, string];
+}
+
 export interface Entry {
+  formation?: Formation | null;
   id: string;
   basque: string;
   translations: { es: string[]; ru?: string[] };

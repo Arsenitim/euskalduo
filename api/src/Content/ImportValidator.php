@@ -23,7 +23,7 @@ final class ImportValidator
     private const ID_PATTERN = '/^[a-z0-9][a-z0-9_-]{0,39}$/';
 
     private const TOP_KEYS = ['schemaVersion', 'kind', 'title', 'weekStart', 'description', 'groups', 'entries'];
-    private const ENTRY_KEYS = ['id', 'basque', 'translations', 'note', 'imageHint', 'emoji', 'group', 'needsReview', 'reviewNote'];
+    private const ENTRY_KEYS = ['id', 'basque', 'translations', 'note', 'imageHint', 'emoji', 'group', 'needsReview', 'reviewNote', 'formation'];
 
     /** @var list<array{path: string, entry: ?int, message: string}> */
     private array $errors = [];
@@ -238,6 +238,7 @@ final class ImportValidator
             $entry = [
                 'id' => $id,
                 'basque' => $basque ?? '',
+                'formation' => $this->formation($raw['formation'] ?? null, "$path.formation", $i),
                 'translations' => $translations,
                 'note' => $this->text($raw['note'] ?? null, "$path.note", $i, 300),
                 'imageHint' => $this->text($raw['imageHint'] ?? null, "$path.imageHint", $i, 200),
@@ -330,6 +331,30 @@ final class ImportValidator
         }
 
         return $result;
+    }
+
+    /** Curated word/stem + word/suffix; never infer morphology from spelling. */
+    private function formation(mixed $value, string $path, int $entry): ?array
+    {
+        if (null === $value) {
+            return null;
+        }
+        if (!\is_array($value) || !\in_array($value['kind'] ?? null, ['compound', 'derived'], true)
+            || !\is_array($value['parts'] ?? null) || !array_is_list($value['parts']) || 2 !== \count($value['parts'])) {
+            $this->error($path, $entry, 'formation needs kind compound/derived and exactly two parts.');
+            return null;
+        }
+        $parts = [];
+        foreach ($value['parts'] as $i => $part) {
+            $parts[] = $this->text($part, "$path.parts[$i]", $entry, 40, required: true);
+        }
+        if (\in_array(null, $parts, true)) {
+            return null;
+        }
+        if ('derived' === $value['kind'] && !str_starts_with($parts[1], '-')) {
+            $this->error($path, $entry, 'A derived suffix must start with a hyphen, for example -lari.');
+        }
+        return ['kind' => $value['kind'], 'parts' => $parts];
     }
 
     private function emoji(mixed $value, string $path, int $entry): ?string
