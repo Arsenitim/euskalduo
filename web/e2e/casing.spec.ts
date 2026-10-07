@@ -16,14 +16,17 @@ test('standardizes lists, prompts, feedback and replay labels without changing a
   await page.addInitScript(() => { Math.random = () => 0.01; });
   await page.goto('/#/semana/case');
   await expect(page.locator('.word-basque')).toHaveText(['Gaur', 'Gu', 'Joan den astean']);
+  await expect(page.locator('.word-meaning')).toHaveText(['Hoy', 'Nosotros', 'La semana pasada']);
   await expect(page.getByRole('button', { name: 'Escuchar: Gaur', exact: true })).toBeVisible();
   const request = page.waitForRequest((r) => r.url().endsWith(audio));
   await page.getByRole('button', { name: 'Escuchar: Gaur', exact: true }).click();
   expect((await request).url()).toContain(audio);
   await page.getByRole('link', { name: '¡A practicar!', exact: true }).click();
   await expect(page.locator('.prompt-basque')).toHaveText('Gu');
-  await page.locator('.option').first().click();
+  expect((await page.locator('.option-label').allTextContents()).sort()).toEqual(['Hoy', 'Nosotros', 'La semana pasada'].sort());
+  await page.locator('.option').filter({ hasText: 'Hoy' }).click();
   await expect(page.locator('.feedback [lang="eu"]')).toContainText('Gu');
+  await expect(page.locator('.feedback-answer')).toHaveText('Nosotros');
 });
 
 test('Basque answer choices use the same casing as word lists', async ({ page }) => {
@@ -31,7 +34,7 @@ test('Basque answer choices use the same casing as word lists', async ({ page })
   await page.route('**/api/public/stats', r => r.fulfill({ json: {} }));
   await page.addInitScript(() => { Math.random = () => 0.6; });
   await page.goto('/#/practicar?modo=semana&id=case');
-  await expect(page.locator('.prompt-meaning')).toBeVisible();
+  await expect(page.locator('.prompt-meaning')).toHaveText('Nosotros');
   await expect(page.locator('.option-label')).toHaveCount(3);
   expect((await page.locator('.option-label').allTextContents()).sort()).toEqual(['Gaur', 'Gu', 'Joan den astean'].sort());
 });

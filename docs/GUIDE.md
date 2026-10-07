@@ -18,7 +18,7 @@ with no accounts, ads, leaderboards or streak penalties.
   fixed on its retry, a second miss in a row, or a 10% surprise, never twice
   within 3 answers. Both mascots appear on the round summary.
   The child-facing UI is simple Spanish; meanings can be shown in Spanish or
-  Russian. Basque vocabulary labels use sentence case consistently; imported
+  Russian. Basque vocabulary labels and Spanish translations use sentence case; imported
   spelling and existing audio files are preserved.
 * **Admin:** log in, paste/upload JSON (or quick `Basque — Spanish` lines),
   review with per-entry errors and warnings, assign the week, add pictures,
