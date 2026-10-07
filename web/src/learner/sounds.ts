@@ -7,6 +7,11 @@
 type Wave = OscillatorType;
 
 let context: AudioContext | null = null;
+const playing = new Set<OscillatorNode>();
+export function stopSounds(): void {
+  for (const node of playing) { try { node.stop(); } catch { /* already ended */ } }
+  playing.clear();
+}
 
 function audio(): AudioContext | null {
   if (typeof window === 'undefined') return null;
@@ -24,6 +29,8 @@ function audio(): AudioContext | null {
 /** One note with a quick attack and exponential "bell" decay. */
 function note(ctx: AudioContext, frequency: number, start: number, duration: number, volume: number, wave: Wave, glideTo?: number) {
   const osc = ctx.createOscillator();
+  playing.add(osc);
+  osc.onended = () => { playing.delete(osc); osc.disconnect(); gain.disconnect(); };
   const gain = ctx.createGain();
   osc.type = wave;
   osc.frequency.setValueAtTime(frequency, start);

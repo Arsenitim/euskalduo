@@ -9,3 +9,5 @@ data/
 feedback-inbox/
 *.log
 *.tsbuildinfo
+
+__pycache__/

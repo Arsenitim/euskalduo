@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { t, weekLabel } from '../../i18n';
 import type { Entry, HomeworkSet, Lang } from '../../types';
+import { VoiceButton } from '../components/Voice';
 import { ProgressBar, SampleBadge, WordVisual } from '../components/bits';
 import { useLearner } from '../LearnerContext';
 import { meaningsOf } from '../questions';
@@ -91,6 +92,7 @@ function WordCard({ entry, lang }: { entry: Entry; lang: Lang }) {
       <span className="word-basque" lang="eu">
         {entry.basque}
       </span>
+      <VoiceButton entries={[entry]} />
       <span className="word-meaning" lang={lang}>
         {meaningsOf(entry, lang).join(' / ')}
       </span>

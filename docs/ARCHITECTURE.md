@@ -104,3 +104,12 @@ server, so even the chosen week does not reach server logs.
 * **Stars.** Each question's first answer scores 1 point, ½ if the hint was
   used, 0 if wrong or skipped. Points / questions ≥ 90 % → 3 stars, ≥ 60 % → 2,
   otherwise 1. Finishing always earns at least one star.
+
+## Pre-generated speech
+
+A CPU-limited Python/Piper worker reads the public catalogue over the internal
+Compose network and writes
+content-addressed MP3s into an `audio` volume. PHP adds an optional nullable
+`audio` URL to catalogue entries only for completed clips. nginx serves the
+volume read-only at `/audio/`, without access logging. Synthesis never runs in
+a web request. See [VOICE.md](VOICE.md) for setup, playback rules and credits.

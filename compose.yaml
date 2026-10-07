@@ -23,6 +23,7 @@ services:
     volumes:
       - content:/data
       - uploads:/uploads
+      - audio:/audio:ro
 
   web:
     build:
@@ -38,11 +39,24 @@ services:
       - "${EUSKALDUO_BIND6:-[::1]}:${EUSKALDUO_PORT:-8765}:8080"
     volumes:
       - uploads:/srv/uploads:ro
+      - audio:/srv/audio:ro
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/health"]
       interval: 30s
       timeout: 5s
       start_period: 10s
+
+  # Run setup once before starting: docker compose run --rm tts setup
+  tts:
+    build:
+      context: .
+      dockerfile: tts/Dockerfile
+    restart: unless-stopped
+    cpus: 1.0
+    mem_limit: 1g
+    volumes:
+      - audio:/audio
+      - speech-models:/models
 
   # Test runners (not started by default):
   #   docker compose --profile test run --rm api-test
@@ -64,3 +78,5 @@ services:
 volumes:
   content:
   uploads:
+  audio:
+  speech-models:

@@ -14,6 +14,10 @@ FROM build AS test
 CMD ["sh", "-c", "npm run lint && npm run typecheck && npm test"]
 
 FROM nginxinc/nginx-unprivileged:stable-alpine AS prod
+# Shared volume ownership is consistent whichever service initializes it first.
+USER root
+RUN mkdir -p /srv/audio && chown 10001:10001 /srv/audio
+USER 101
 COPY web/docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY web/docker/security-headers.conf /etc/nginx/security-headers.conf
 COPY --from=build /build/web/dist /usr/share/nginx/html

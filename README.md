@@ -11,7 +11,7 @@ leaderboards, and no pressure.
 - **Six exercises:** choose the meaning, choose the Basque word, spell it
   with letter tiles, type the meaning, put months/weekdays in order, and build words from words or suffixes.
   Everything works without pictures.
-- **Gentle feedback:** instant feedback with sounds, missed words come back
+- **Gentle feedback:** instant feedback with sounds and Basque voice, missed words come back
   later, and stars at the end of a round. Now and then a mascot (a hedgehog or
   a sheep in a txapela) cheers or sulks along.
 - **This week, any week, or a mix of earlier weeks.**
@@ -50,3 +50,5 @@ Docker Compose.
 ## License
 
 [MIT](LICENSE)
+
+Basque speech setup and model credits: [docs/VOICE.md](docs/VOICE.md).

@@ -1,0 +1,10 @@
+{
+  "revision": "84c7a405a9c1be1c5cdd41005a278f25a13494c5",
+  "files": {
+    "eu-maider-medium.onnx": "a36ac807ad130dc192b74d738e39552f9be704f069c405dbf4abd358b014a39a",
+    "eu-maider-medium.onnx.json": "13a42c6ef638a00c858d7fb13c438069d11c01ad9739e288b24d6ee6218d5f94"
+  },
+  "piper": "1.8.0",
+  "synthesis": "model-defaults-normalized-v1",
+  "encoding": "mp3-mono-22050-64k-v1"
+}

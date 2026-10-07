@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { fetchAudio } from '../../api/audio';
 import { reportAnswer, reportRound } from '../../api/stats';
 import { t } from '../../i18n';
 import type { HomeworkSet, Lang } from '../../types';
@@ -11,7 +12,10 @@ import { newMascotTracker, nextMascot, type MascotShow, type MascotTracker } fro
 import { buildRound, meaningsOf, pointsFor, retryQuestion, starsFor, type Item, type Mode, type Question } from '../questions';
 import type { LearnerState } from '../progress';
 import { recordAnswer, todayIso } from '../scheduler';
-import { playCorrect, playRoundDone, playWrong } from '../sounds';
+import { VoiceButton } from '../components/Voice';
+import { promptVoiceEntries, answerVoiceEntries } from '../voicePolicy';
+import { playVoice, setVoiceEnabled, stopVoice } from '../voice';
+import { playCorrect, playRoundDone, playWrong, stopSounds } from '../sounds';
 
 const MAX_RETRIES = 4;
 const RETRY_GAP = 3;
@@ -68,7 +72,13 @@ export function PracticePage() {
   const onAnswer = (outcome: Outcome) => {
     if (!question || session.outcome) return;
     const correct = outcome.verdict !== 'wrong';
-    if (state.sound) (correct ? playCorrect : playWrong)();
+    stopVoice();
+    stopSounds();
+    if (state.sound) {
+      setVoiceEnabled(true);
+      (correct ? playCorrect : playWrong)();
+      playVoice(answerVoiceEntries(question).map((entry) => entry.audio), 550);
+    }
     reportAnswer(correct ? (outcome.hinted ? 'hinted' : 'correct') : outcome.skipped ? 'skipped' : 'wrong', todayIso());
     const retry = question.kind !== 'order' && question.retry;
     const mascot = nextMascot(session.mascot, { correct, hinted: outcome.hinted, almost: outcome.verdict === 'almost', skipped: outcome.skipped, retry }, Math.random);
@@ -100,6 +110,8 @@ export function PracticePage() {
   };
 
   const goNext = () => {
+    stopVoice();
+    stopSounds();
     const index = session.index + 1;
     if (index < session.questions.length) {
       setSession({ ...session, index, outcome: null, shown: null });
@@ -138,7 +150,7 @@ export function PracticePage() {
           aria-pressed={state.sound}
           aria-label={state.sound ? t('soundOn') : t('soundOff')}
           title={state.sound ? t('soundOn') : t('soundOff')}
-          onClick={() => update((s) => ({ ...s, sound: !s.sound }))}
+          onClick={() => { setVoiceEnabled(!state.sound); stopSounds(); update((s) => ({ ...s, sound: !s.sound })); }}
         >
           <span aria-hidden="true">{state.sound ? '🔊' : '🔇'}</span>
         </button>
@@ -147,6 +159,7 @@ export function PracticePage() {
         </Link>
       </div>
       <div className="card question-card" key={`${session.round}-${question.id}`}>
+        <QuestionVoice question={question} round={session.round} />
         {question.kind !== 'order' && question.retry && <span className="badge badge-retry">{t('retryBadge')}</span>}
         {question.kind === 'meaning-choice' || question.kind === 'basque-choice' ? (
           <ChoiceQuestionView question={question} {...common} />
@@ -163,6 +176,23 @@ export function PracticePage() {
       {session.outcome && <Feedback question={question} outcome={session.outcome} mascot={session.shown} lang={state.lang} willRetry={session.questions.some((q) => q.id === `${question.id}-retry`)} onNext={goNext} />}
     </div>
   );
+}
+
+function QuestionVoice({ question, round }: { question: Question; round: number }) {
+  const { state } = useLearner();
+  const entries = promptVoiceEntries(question);
+  const url = entries[0]?.audio;
+  // A zero-delay task prevents the discarded Strict Mode mount from speaking.
+  useEffect(() => {
+    if (state.sound && url) void fetchAudio(url).catch(() => {});
+    const timer = setTimeout(() => {
+      if (state.sound && url) playVoice([url]);
+    }, 0);
+    return () => { clearTimeout(timer); stopVoice(); };
+    // Changing mute does not replay a prompt; only a fresh question does.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [question.id, round]);
+  return entries.length > 0 ? <VoiceButton entries={entries} /> : null;
 }
 
 const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
@@ -209,6 +239,10 @@ function Feedback({ question, outcome, mascot, lang, willRetry, onNext }: { ques
           </>
         )}
       </div>
+      <span lang="eu">
+        {question.kind !== 'order' && (outcome.verdict === 'exact' || answerLang !== 'eu') && <strong>{question.item.entry.basque}</strong>}
+        <VoiceButton entries={answerVoiceEntries(question)} />
+      </span>
       <button ref={nextRef} className="btn btn-primary" onClick={onNext}>
         {t('next')} →
       </button>
@@ -248,7 +282,7 @@ function RoundSummary({ session, lang, sound, onAgain }: { session: Session; lan
                 <span lang="eu">
                   <strong>{item.entry.basque}</strong>
                 </span>{' '}
-                — <span lang={lang}>{meaningsOf(item.entry, lang).join(' / ')}</span>
+                <VoiceButton entries={[item.entry]} /> — <span lang={lang}>{meaningsOf(item.entry, lang).join(' / ')}</span>
               </li>
             ))}
           </ul>

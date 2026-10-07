@@ -13,7 +13,8 @@ COPY api/docker/fpm.conf /usr/local/etc/php-fpm.d/zz-euskalduo.conf
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 ENV APP_ENV=prod APP_DEBUG=0 DATA_DIR=/data UPLOAD_DIR=/uploads SAMPLE_DIR=/app/samples FPM_MAX_CHILDREN=8
-RUN mkdir -p /data /uploads && chown www-data:www-data /data /uploads
+RUN mkdir -p /data /uploads /audio && chown www-data:www-data /data /uploads \
+ && chown 10001:10001 /audio
 
 FROM base AS dev
 # Used for running the test suite: docker compose run --rm api-test
@@ -22,6 +23,7 @@ COPY api/composer.json api/composer.lock ./
 RUN composer install --no-interaction --no-progress --no-scripts
 COPY api/ ./
 COPY samples/ ./samples/
+COPY tts/profile.json ./tts/profile.json
 CMD ["vendor/bin/phpunit"]
 
 FROM base AS prod
@@ -32,6 +34,7 @@ COPY api/public ./public
 COPY api/src ./src
 COPY --chmod=755 api/docker/entrypoint.sh /usr/local/bin/euskalduo-entrypoint
 COPY samples/ ./samples/
+COPY tts/profile.json ./tts/profile.json
 RUN composer dump-autoload --no-dev --classmap-authoritative \
  && APP_SECRET=build php -r 'require "vendor/autoload.php"; (new App\Kernel("prod", false))->boot();' \
  && chown -R www-data:www-data var

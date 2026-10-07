@@ -15,6 +15,7 @@ export interface Entry {
   formation?: Formation | null;
   id: string;
   basque: string;
+  audio?: string | null;
   translations: { es: string[]; ru?: string[] };
   note: string | null;
   group: string | null;

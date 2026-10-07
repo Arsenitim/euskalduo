@@ -11,6 +11,7 @@ export default defineConfig({
     proxy: {
       '/api': backend,
       '/uploads': backend,
+      '/audio': backend,
     },
   },
   build: {

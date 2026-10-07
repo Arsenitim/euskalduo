@@ -6,7 +6,7 @@ namespace App\Content;
 
 final class SetRepository
 {
-    public function __construct(private readonly Database $db)
+    public function __construct(private readonly Database $db, private readonly ?AudioStore $audio = null)
     {
     }
 
@@ -263,6 +263,7 @@ final class SetRepository
         return [
             'id' => $row['id'],
             'basque' => $row['basque'],
+            'audio' => $this->audio?->url($row['basque']),
             'translations' => json_decode($row['translations_json'], true, 8, \JSON_THROW_ON_ERROR),
             'note' => $row['note'],
             'formation' => null !== $row['formation_json'] ? json_decode($row['formation_json'], true, 8, \JSON_THROW_ON_ERROR) : null,

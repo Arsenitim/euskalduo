@@ -1,5 +1,6 @@
 import { HashRouter, Link, NavLink, Route, Routes } from 'react-router-dom';
 import { t } from '../i18n';
+import { VoiceLifecycle } from './components/Voice';
 import { FeedbackButton } from './components/FeedbackDialog';
 import { LearnerProvider, useLearner } from './LearnerContext';
 import { CategoriesPage } from './pages/CategoriesPage';
@@ -20,6 +21,7 @@ export function LearnerApp() {
   return (
     <LearnerProvider>
       <HashRouter>
+        <VoiceLifecycle />
         <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
           Saltar al contenido
         </a>

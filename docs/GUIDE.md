@@ -12,8 +12,8 @@ with no accounts, ads, leaderboards or streak penalties.
   tiles, type the meaning, put months/weekdays in order); spelling has a
   💡 hint (half credit) and "No lo sé" to skip; immediate feedback;
   missed words come back later; stars at the end of a round; progress per week;
-  short synthesised sound effects for right/wrong answers (mute with 🔊 or in
-  Ajustes); an animated mascot, Triku the hedgehog or Txapi the sheep, reacts
+  pre-generated Basque voice and short sound effects (mute both with 🔊 or in
+  Ajustes; see [VOICE.md](VOICE.md) for setup); an animated mascot, Triku the hedgehog or Txapi the sheep, reacts
   only occasionally: on streaks (3, 7, 12 in a row, then every 5), a word
   fixed on its retry, a second miss in a row, or a 10% surprise, never twice
   within 3 answers. Both mascots appear on the round summary.
@@ -289,7 +289,7 @@ browser-only state, the practice algorithm).
 
 * Progress is per browser. There is no sync between devices except manual
   export/import.
-* No spoken audio or pronunciation (only synthesised effect sounds). Only the typed-meaning exercise accepts
+* Voice clips require initial model setup and background generation. There is no pronunciation scoring. Only the typed-meaning exercise accepts
   accent-less answers ("almost"); Basque spelling must be exact.
 * The ordering exercise uses runs of up to 5 items from an ordered group, not
   the full 12-month sequence.

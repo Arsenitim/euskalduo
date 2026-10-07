@@ -18,7 +18,7 @@ export interface LearnerState {
   version: 1;
   displayName: string;
   lang: Lang;
-  /** Sound effects for answers (on by default). */
+  /** Voice and sound effects (on by default). */
   sound: boolean;
   /** Set id chosen manually as "this week", or null for the newest week. */
   pinnedWeek: string | null;

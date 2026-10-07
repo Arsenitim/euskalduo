@@ -54,6 +54,7 @@ export const es = {
 
   questionOf: 'Pregunta {n} de {total}',
   exit: 'Salir',
+  listenTo: 'Escuchar: {word}',
   soundOn: 'Sonido activado',
   soundOff: 'Sonido desactivado',
   exitConfirm: '¿Salir de la ronda? Lo que ya has respondido está guardado.',
@@ -103,7 +104,7 @@ export const es = {
   save: 'Guardar',
   saved: 'Guardado',
   meaningLang: 'Idioma de las traducciones',
-  soundSetting: 'Sonidos al responder',
+  soundSetting: 'Voz y sonidos',
   soundYes: 'Sí',
   soundNo: 'No',
   langEs: 'Español',
