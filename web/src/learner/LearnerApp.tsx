@@ -63,6 +63,11 @@ export function LearnerApp() {
         <footer className="app-footer">
           <Link to="/privacidad">{t('navPrivacy')}</Link>
           <span>{t('progressLocal')}</span>
+          <small className="voice-credit">
+            <a href="https://huggingface.co/itzune/maider-tts" target="_blank" rel="noopener noreferrer">
+              {t('voiceCredit')}
+            </a>
+          </small>
         </footer>
       </HashRouter>
     </LearnerProvider>

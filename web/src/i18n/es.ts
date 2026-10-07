@@ -55,6 +55,7 @@ export const es = {
   questionOf: 'Pregunta {n} de {total}',
   exit: 'Salir',
   listenTo: 'Escuchar: {word}',
+  voiceCredit: 'Voz: Maider',
   soundOn: 'Sonido activado',
   soundOff: 'Sonido desactivado',
   exitConfirm: '¿Salir de la ronda? Lo que ya has respondido está guardado.',

@@ -70,6 +70,8 @@ or downloads matters. No automatic pruning is performed in this version.
 Voice: Maider, Basque, one female speaker. Piper conversion by itzune:
 https://huggingface.co/itzune/maider-tts
 
+The learner footer includes a small “Voz: Maider” link to this model card.
+
 Original voice/model: HiTZ Basque Center for Language Technology / Aholab,
 University of the Basque Country EHU, funded by Project ILENIA:
 https://huggingface.co/HiTZ/TTS-eu_maider
