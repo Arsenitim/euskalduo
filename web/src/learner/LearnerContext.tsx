@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { fetchContent } from '../api/public';
 import { isWeek, type HomeworkSet, type WeekSet } from '../types';
+import { learnerSets } from './display';
 import { clearState, emptyState, loadState, saveState, type LearnerState } from './progress';
 
 interface LearnerContextValue {
@@ -33,7 +34,7 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
     fetchContent()
       .then((content) => {
         if (cancelled) return;
-        setSets(content.sets);
+        setSets(learnerSets(content.sets));
         setError(false);
       })
       .catch(() => !cancelled && setError(true));

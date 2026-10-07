@@ -103,3 +103,8 @@ The worker reads `/api/public/content` instead of mounting SQLite: a WAL-mode
 database can need writable journal metadata even for a read-only connection.
 Using the existing catalogue also means draft content stays outside generation
 until publication and avoids coupling the worker to the database schema.
+
+Learner labels use sentence case independently of the stored text. For example,
+`ARRATSALDEAN` is shown as `Arratsaldean` while its existing audio URL remains
+unchanged. Replay labels follow the displayed spelling. See IMPORT_FORMAT.md
+for capitalization rules and proper names.

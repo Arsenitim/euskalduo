@@ -1,6 +1,6 @@
 /**
- * Answer comparison. Stored/displayed text is never modified; these keys are
- * only used to compare what a child typed with the accepted answers.
+ * Answer comparison. These keys only compare answers; stored text is preserved
+ * and learner labels are formatted separately in display.ts.
  */
 
 /** Case- and whitespace-insensitive; keeps accents and letters exactly. */

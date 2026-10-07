@@ -46,6 +46,18 @@ JSON is the canonical, reliable format. The server validator
 | `group` | Optional key of a declared group. |
 | `needsReview` / `reviewNote` | Flag for unclear items. A set with flagged entries cannot be published. |
 
+Learner-facing Basque words and phrases use sentence case (`GAUR` → `Gaur`,
+`gu` → `Gu`, `JOAN DEN ASTEAN` → `Joan den astean`). This applies to lists,
+questions, choices, spelling targets/hints, feedback, review and replay labels.
+Stored/imported text and the admin editor retain the source capitalization;
+audio URLs still refer to the original text, so this presentation change does
+not regenerate speech. Existing internal capitals in mixed-case text are
+preserved for names (`gaur Bilbon` → `Gaur Bilbon`). Uppercase words are lowercased
+before the label’s first letter is capitalized; enter proper names with
+intentional mixed case if their capitalization must be preserved. Formation
+pieces/suffixes remain fragments in their original case, and translations are
+not reformatted. Answer checking continues to ignore capitalization.
+
 Text rules for every field: valid UTF-8; normalised to NFC; whitespace
 collapsed; control characters, bidi overrides and `<` `>` are rejected. Unknown
 fields are ignored with a warning. Duplicate Basque terms, repeated
