@@ -3,6 +3,7 @@ import { fetchContent } from '../api/public';
 import { isWeek, type HomeworkSet, type WeekSet } from '../types';
 import { learnerSets } from './display';
 import { clearState, emptyState, loadState, saveState, type LearnerState } from './progress';
+import { todayIso } from './scheduler';
 
 interface LearnerContextValue {
   /** Every published set (weeks and categories), for practice and progress. */
@@ -11,6 +12,8 @@ interface LearnerContextValue {
   weeks: WeekSet[];
   /** Categories (days of the week, months…), by title. */
   topics: HomeworkSet[];
+  /** Sets with an exam today or later, soonest first: shown as an exam section until the exam day. */
+  examSets: HomeworkSet[];
   error: boolean;
   reload: () => void;
   state: LearnerState;
@@ -60,11 +63,16 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
     // Newest week first; the server already orders, this keeps it explicit.
     const weeks = (sets ?? []).filter(isWeek).sort((a, b) => b.weekStart.localeCompare(a.weekStart));
     const topics = (sets ?? []).filter((s) => s.kind === 'topic').sort((a, b) => a.title.localeCompare(b.title, 'eu'));
+    const today = todayIso();
+    const examSets = (sets ?? [])
+      .filter((s) => s.examDate !== null && s.examDate >= today)
+      .sort((a, b) => a.examDate!.localeCompare(b.examDate!));
     const pinned = weeks.find((s) => s.id === state.pinnedWeek);
     return {
       sets,
       weeks,
       topics,
+      examSets,
       error,
       reload: () => {
         setError(false);

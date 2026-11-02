@@ -6,7 +6,7 @@ const entries = ['Kaixo', 'Agur', 'Txakurra'].map((basque, i) => ({
   note: null, group: null, emoji: null, image: null,
   audio: `/audio/${String(i + 1).repeat(64)}.mp3`,
 }));
-const set: HomeworkSet = { id: 'voice', kind: 'week', title: 'Voice test', weekStart: '2026-10-05', description: null, sample: false, groups: [], entries };
+const set: HomeworkSet = { id: 'voice', kind: 'week', title: 'Voice test', weekStart: '2026-10-05', examDate: null, description: null, sample: false, groups: [], entries };
 
 async function prepare(page: Page, rng = 0.01) {
   await page.route('**/api/public/content', (route) => route.fulfill({ json: { schemaVersion: 1, sets: [set] } }));

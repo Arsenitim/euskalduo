@@ -37,9 +37,10 @@ interface Session {
 }
 
 function parseMode(params: URLSearchParams, sets: HomeworkSet[]): Mode | null {
-  if (params.get('modo') === 'semana' || params.get('modo') === 'categoria') {
+  const modo = params.get('modo');
+  if (modo === 'semana' || modo === 'categoria' || modo === 'examen') {
     const id = params.get('id');
-    return id && sets.some((s) => s.id === id) ? { kind: 'week', setId: id } : null;
+    return id && sets.some((s) => s.id === id) ? { kind: modo === 'examen' ? 'exam' : 'week', setId: id } : null;
   }
   if (params.get('modo') === 'mezcla') {
     const ids = (params.get('ids') ?? '').split(',').filter((id) => sets.some((s) => s.id === id));
@@ -121,7 +122,7 @@ export function PracticePage() {
     const stars = starsFor(sum(scored), scored.length);
     const today = todayIso();
     reportRound(today);
-    const setIds = mode.kind === 'week' ? [mode.setId] : mode.setIds;
+    const setIds = mode.kind === 'mix' ? mode.setIds : [mode.setId];
     update((s) => {
       const updated = { ...s.sets };
       for (const id of setIds) {

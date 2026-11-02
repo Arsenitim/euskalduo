@@ -12,6 +12,13 @@ export function weekLabel(isoDate: string): string {
   return t('weekOf', { date: dateFormat.format(new Date(`${isoDate}T00:00:00Z`)) });
 }
 
+const examDateFormat = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+
+/** "Examen: lunes, 3 de noviembre" — or "¡El examen es hoy!" on the day itself. */
+export function examLabel(isoDate: string, todayIso: string): string {
+  return isoDate === todayIso ? t('examToday') : t('examOn', { date: examDateFormat.format(new Date(`${isoDate}T00:00:00Z`)) });
+}
+
 export function wordCount(n: number): string {
   return n === 1 ? t('oneWord') : t('words', { count: n });
 }

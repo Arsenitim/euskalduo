@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isDue, recordAnswer, selectionWeight } from './scheduler';
+import { examWeight, isDue, recordAnswer, selectionWeight } from './scheduler';
 
 describe('scheduler', () => {
   it('moves words up one box on success and back to 0 on a mistake', () => {
@@ -24,6 +24,17 @@ describe('scheduler', () => {
     const due = { ...recordAnswer(undefined, 'correct', '2026-09-20') };
     const resting = recordAnswer(recordAnswer(recordAnswer(undefined, 'correct', today), 'correct', today), 'correct', today);
     const weights = [selectionWeight(missed, today), selectionWeight(undefined, today), selectionWeight(due, today), selectionWeight(resting, today)];
+    expect([...weights].sort((a, b) => b - a)).toEqual(weights);
+  });
+
+  it('keeps every word in play for an exam, weakest first, ignoring due dates', () => {
+    const today = '2026-11-02';
+    const missed = recordAnswer(undefined, 'wrong', today);
+    const learned = [1, 2, 3].reduce((s: ReturnType<typeof recordAnswer> | undefined) => recordAnswer(s, 'correct', today), undefined);
+    // Just answered correctly, so not due for days — but an exam still practises it.
+    expect(selectionWeight(learned, today)).toBe(0.4);
+    expect(examWeight(learned)).toBeGreaterThanOrEqual(1);
+    const weights = [examWeight(missed), examWeight(undefined), examWeight(learned)];
     expect([...weights].sort((a, b) => b - a)).toEqual(weights);
   });
 

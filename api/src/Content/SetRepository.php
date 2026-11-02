@@ -61,6 +61,7 @@ final class SetRepository
                 'kind' => $header['kind'],
                 'title' => $header['title'],
                 'weekStart' => $header['weekStart'],
+                'examDate' => $header['examDate'],
                 'description' => $header['description'],
                 'sample' => $header['sample'],
                 'groups' => $header['groups'],
@@ -79,8 +80,8 @@ final class SetRepository
         $now = self::now();
         $pdo->beginTransaction();
         try {
-            $pdo->prepare('INSERT INTO homework_sets (id, kind, title, week_start, description, groups_json, status, is_sample, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                ->execute([$id, $draft['kind'], $draft['title'], $draft['weekStart'], $draft['description'], self::json($draft['groups']), 'draft', (int) $isSample, $now, $now]);
+            $pdo->prepare('INSERT INTO homework_sets (id, kind, title, week_start, exam_date, description, groups_json, status, is_sample, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                ->execute([$id, $draft['kind'], $draft['title'], $draft['weekStart'], $draft['examDate'], $draft['description'], self::json($draft['groups']), 'draft', (int) $isSample, $now, $now]);
             $this->insertEntries($id, $draft['entries'], []);
             $pdo->commit();
         } catch (\Throwable $e) {
@@ -109,8 +110,8 @@ final class SetRepository
 
         $pdo->beginTransaction();
         try {
-            $pdo->prepare('UPDATE homework_sets SET kind = ?, title = ?, week_start = ?, description = ?, groups_json = ?, updated_at = ? WHERE id = ?')
-                ->execute([$draft['kind'], $draft['title'], $draft['weekStart'], $draft['description'], self::json($draft['groups']), self::now(), $id]);
+            $pdo->prepare('UPDATE homework_sets SET kind = ?, title = ?, week_start = ?, exam_date = ?, description = ?, groups_json = ?, updated_at = ? WHERE id = ?')
+                ->execute([$draft['kind'], $draft['title'], $draft['weekStart'], $draft['examDate'], $draft['description'], self::json($draft['groups']), self::now(), $id]);
             $pdo->prepare('DELETE FROM entries WHERE set_id = ?')->execute([$id]);
             $kept = $this->insertEntries($id, $draft['entries'], $existing);
             $pdo->commit();
@@ -243,6 +244,7 @@ final class SetRepository
             'kind' => $row['kind'],
             'title' => $row['title'],
             'weekStart' => $row['week_start'],
+            'examDate' => $row['exam_date'],
             'description' => $row['description'],
             'groups' => json_decode($row['groups_json'], true, 8, \JSON_THROW_ON_ERROR),
             'status' => $row['status'],

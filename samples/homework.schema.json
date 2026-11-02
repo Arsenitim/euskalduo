@@ -18,6 +18,11 @@
       "type": ["string", "null"],
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
     },
+    "examDate": {
+      "description": "Date of a school exam on exactly this set (ISO date) or null. Until that day, learners see an exam-preparation section that practises every word of the set, ignoring the usual review schedule.",
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
     "description": { "type": ["string", "null"], "maxLength": 500 },
     "groups": {
       "description": "Optional named sections. ordered=true means the entries of the group have a meaningful sequence (months, weekdays) and enables the ordering exercise.",

@@ -22,6 +22,7 @@ export interface EditorModel {
   kind: SetKind;
   title: string;
   weekStart: string;
+  examDate: string;
   description: string;
   groups: Group[];
   rows: Row[];
@@ -44,6 +45,7 @@ export function modelFromDraft(draft: Draft): EditorModel {
     kind: draft.kind,
     title: draft.title,
     weekStart: draft.weekStart ?? '',
+    examDate: draft.examDate ?? '',
     description: draft.description ?? '',
     groups: draft.groups,
     rows: draft.entries.map((e) => ({
@@ -69,6 +71,7 @@ export function draftFromModel(model: EditorModel): Draft {
     kind: model.kind,
     title: model.title,
     weekStart: model.kind === 'week' ? model.weekStart || null : null,
+    examDate: model.examDate || null,
     description: nullIfEmpty(model.description),
     groups: model.groups,
     entries: model.rows.map((r): AdminEntry => {
@@ -144,6 +147,10 @@ export function SetEditor({ model, onChange, errors, warnings, setId, onImageCha
             <input type="date" value={model.weekStart} onChange={(e) => setField('weekStart', e.target.value)} />
           </label>
         )}
+        <label>
+          Exam date (optional) — learners get an exam section until that day
+          <input type="date" value={model.examDate} onChange={(e) => setField('examDate', e.target.value)} />
+        </label>
         <label className="wide">
           Description / theme (optional)
           <input value={model.description} maxLength={500} onChange={(e) => setField('description', e.target.value)} />

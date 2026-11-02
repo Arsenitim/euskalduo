@@ -63,3 +63,14 @@ export function selectionWeight(stats: EntryStats | undefined, today: string): n
   if (isDue(stats, today)) return 2 + (MAX_BOX - stats.box) * 0.2;
   return 0.4;
 }
+
+/**
+ * Exam preparation ignores the review calendar: every word of the exam set
+ * keeps circulating (weakest first) until the exam day, including words that
+ * would otherwise not be due yet.
+ */
+export function examWeight(stats: EntryStats | undefined): number {
+  if (!stats || stats.seen === 0) return 3;
+  if (stats.box === 0) return 4;
+  return 1 + (MAX_BOX - stats.box) * 0.2;
+}

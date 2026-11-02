@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
-import { t, weekLabel, wordCount } from '../../i18n';
+import { examLabel, t, weekLabel, wordCount } from '../../i18n';
 import { SampleBadge } from '../components/bits';
 import { useLearner } from '../LearnerContext';
-import { practicePath } from '../routes';
+import { examPath, practicePath } from '../routes';
+import { todayIso } from '../scheduler';
 
 export function HomePage() {
-  const { weeks, topics, state, currentSet } = useLearner();
+  const { weeks, topics, examSets, state, currentSet } = useLearner();
   const name = state.displayName.trim();
   const hasPrevious = weeks.length > 1;
 
@@ -13,10 +14,22 @@ export function HomePage() {
     <div className="home">
       <h1 className="greeting">{name ? t('helloName', { name }) : t('hello')}</h1>
       <p className="lead">{t('homeQuestion')}</p>
-      {!currentSet && topics.length === 0 ? (
+      {!currentSet && topics.length === 0 && examSets.length === 0 ? (
         <p className="card center-note">{t('noContent')}</p>
       ) : (
         <div className="home-actions">
+          {examSets.map((set) => (
+            <Link key={set.id} className="action-card action-exam" to={examPath(set)}>
+              <span className="action-icon" aria-hidden="true">📝</span>
+              <span className="action-title">{t('examPrepare')}</span>
+              <span className="action-sub">
+                {examLabel(set.examDate!, todayIso())} · {set.title} {set.sample && <SampleBadge />}
+              </span>
+              <span className="action-sub">
+                {t('examPrepareHint')} · {wordCount(set.entries.length)}
+              </span>
+            </Link>
+          ))}
           {currentSet && (
             <>
               <Link className="action-card action-week" to={practicePath(currentSet)}>

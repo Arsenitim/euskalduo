@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { basqueLabel, spanishLabel } from '../src/learner/display';
 import type { Content } from '../src/types';
 
 for (const kind of ['week', 'topic'] as const) {
@@ -18,7 +19,8 @@ for (const kind of ['week', 'topic'] as const) {
       if (title === 'Construye la palabra') {
         const stem = (await card.locator('.prompt-basque').innerText()).split(' + ')[0];
         const meaning = await card.locator('.prompt-meaning').innerText();
-        const entry = set.entries.find((e) => e.formation?.parts[0] === stem && e.translations.es.join(' / ') === meaning)!;
+        // The learner app shows sentence-cased Spanish; the API keeps the stored spelling.
+        const entry = set.entries.find((e) => e.formation?.parts[0] === stem && e.translations.es.map(spanishLabel).join(' / ') === meaning)!;
         expect(entry).toBeTruthy();
         built.push(entry.formation!.kind);
         if (built.length === 1) {
@@ -27,7 +29,7 @@ for (const kind of ['week', 'topic'] as const) {
         } else {
           await card.getByRole('button', { name: entry.formation!.parts[1], exact: false }).click();
         }
-        await expect(card.getByText(`${entry.formation!.parts.join(' + ')} → ${entry.basque}`, { exact: true })).toBeVisible();
+        await expect(card.getByText(`${entry.formation!.parts.join(' + ')} → ${basqueLabel(entry.basque)}`, { exact: true })).toBeVisible();
         expect(await card.locator('.option:disabled').count()).toBeGreaterThanOrEqual(2);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
         await page.screenshot({ path: `test-results/word-build-${kind}.png`, fullPage: true });

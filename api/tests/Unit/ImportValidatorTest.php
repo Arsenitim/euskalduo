@@ -38,6 +38,36 @@ final class ImportValidatorTest extends TestCase
         self::assertSame($document['entries'][0]['formation'], $sets->publishedContent()[0]['entries'][0]['formation']);
     }
 
+    public function testExamDateSurvivesStorageAndEditorUpdates(): void
+    {
+        $document = $this->sample('weeks/hiztegia-denborazkoak.json');
+        self::assertSame('2026-11-03', $document['examDate']);
+        $result = $this->validator->validate($document);
+        self::assertTrue($result->isValid(), json_encode($result->errors));
+        self::assertSame('2026-11-03', $result->draft['examDate']);
+
+        $sets = new SetRepository(new \App\Content\Database($this->tempDir()));
+        $id = $sets->create($result->draft);
+        $sets->setStatus($id, 'published');
+        self::assertSame('2026-11-03', $sets->publishedContent()[0]['examDate']);
+
+        $draft = $this->validator->validate($sets->find($id), false);
+        self::assertTrue($draft->isValid());
+        $sets->update($id, $draft->draft);
+        self::assertSame('2026-11-03', $sets->publishedContent()[0]['examDate']);
+    }
+
+    public function testExamDateIsOptionalAndMustBeARealDate(): void
+    {
+        $doc = $this->doc([['basque' => 'gaur', 'translations' => ['es' => ['hoy']]]]);
+        self::assertNull($this->validator->validate($doc)->draft['examDate']);
+        self::assertFalse($this->validator->validate($doc + ['examDate' => '03/11/2026'])->isValid());
+        self::assertFalse($this->validator->validate($doc + ['examDate' => '2026-11-31'])->isValid());
+        $monday = $this->validator->validate($doc + ['examDate' => '2026-11-03']);
+        self::assertTrue($monday->isValid());
+        self::assertSame([], $monday->warnings, 'an exam date needs no Monday warning');
+    }
+
     public function testMalformedFormationIsRejected(): void
     {
         foreach ([['kind' => 'unknown', 'parts' => ['lore', 'ontzi']], ['kind' => 'compound', 'parts' => ['lore']], ['kind' => 'derived', 'parts' => ['margo', 'lari']], ['kind' => 'compound', 'parts' => ['', 'ontzi']]] as $formation) {

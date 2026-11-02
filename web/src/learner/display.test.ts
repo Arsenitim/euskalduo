@@ -17,7 +17,7 @@ it('creates a learner copy without changing stored text, Russian translations, f
     note: null, image: null, emoji: null, group: null, audio: '/audio/existing.mp3',
     formation: { kind: 'derived' as const, parts: ['lora', '-tegi'] as [string, string] } };
   const source: HomeworkSet[] = [{ id: 's', kind: 'topic', title: 'Words', weekStart: null,
-    description: null, sample: false, groups: [], entries: [entry] }];
+    examDate: null, description: null, sample: false, groups: [], entries: [entry] }];
   const result = learnerSets(source)[0]!.entries[0]!;
   expect(result.basque).toBe('Lorategia');
   expect(source[0]!.entries[0]!.basque).toBe('LORATEGIA');

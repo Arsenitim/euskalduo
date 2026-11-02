@@ -8,3 +8,11 @@ export function setPath(set: HomeworkSet): string {
 export function practicePath(set: HomeworkSet): string {
   return `/practicar?modo=${set.kind === 'topic' ? 'categoria' : 'semana'}&id=${set.id}`;
 }
+
+export function examPath(set: HomeworkSet): string {
+  return `/examen/${set.id}`;
+}
+
+export function examPracticePath(set: HomeworkSet): string {
+  return `/practicar?modo=examen&id=${set.id}`;
+}

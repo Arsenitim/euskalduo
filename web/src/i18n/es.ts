@@ -46,6 +46,15 @@ export const es = {
   noCategories: 'Todavía no hay categorías.',
   category: 'Categoría',
 
+  examTitle: 'Examen',
+  examOn: 'Examen: {date}',
+  examToday: '¡El examen es hoy!',
+  examPrepare: 'Preparar el examen',
+  examPrepareHint: 'Repasa justo lo que entra en el examen',
+  examIntro: 'Aquí practicas todas las palabras que entran en el examen, también las que ya sabes bien.',
+  examPractice: '¡A preparar el examen!',
+  examGoodLuck: '¡Mucha suerte! Tú puedes.',
+
   mixTitle: 'Mezclar semanas',
   mixIntro: 'Elige una o más semanas para repasar.',
   allPrevious: 'Todas las semanas anteriores',

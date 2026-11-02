@@ -22,7 +22,7 @@ final class ImportValidator
     private const MAX_ALTERNATIVES = 8;
     private const ID_PATTERN = '/^[a-z0-9][a-z0-9_-]{0,39}$/';
 
-    private const TOP_KEYS = ['schemaVersion', 'kind', 'title', 'weekStart', 'description', 'groups', 'entries'];
+    private const TOP_KEYS = ['schemaVersion', 'kind', 'title', 'weekStart', 'examDate', 'description', 'groups', 'entries'];
     private const ENTRY_KEYS = ['id', 'basque', 'translations', 'note', 'imageHint', 'emoji', 'group', 'needsReview', 'reviewNote', 'formation'];
 
     /** @var list<array{path: string, entry: ?int, message: string}> */
@@ -63,6 +63,7 @@ final class ImportValidator
             $this->warning('weekStart', null, 'Categories have no homework week; weekStart was ignored.');
             $weekStart = null;
         }
+        $examDate = $this->isoDate($input['examDate'] ?? null, 'examDate');
         $groups = $this->groups($input['groups'] ?? []);
         $entries = $this->entries($input['entries'] ?? null, array_column($groups, 'key'));
 
@@ -70,6 +71,7 @@ final class ImportValidator
             'kind' => $kind,
             'title' => $title ?? '',
             'weekStart' => $weekStart,
+            'examDate' => $examDate,
             'description' => $description,
             'groups' => $groups,
             'entries' => $entries,
@@ -95,22 +97,29 @@ final class ImportValidator
 
     private function weekStart(mixed $value): ?string
     {
+        $date = $this->isoDate($value, 'weekStart');
+        if (null !== $date && '1' !== \DateTimeImmutable::createFromFormat('!Y-m-d', $date, new \DateTimeZone('UTC'))->format('N')) {
+            $this->warning('weekStart', null, 'weekStart is not a Monday; it will be shown as “week of” this date.');
+        }
+
+        return $date;
+    }
+
+    private function isoDate(mixed $value, string $path): ?string
+    {
         if (null === $value || '' === $value) {
             return null;
         }
         if (!\is_string($value) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
-            $this->error('weekStart', null, 'weekStart must be an ISO date (YYYY-MM-DD) or null.');
+            $this->error($path, null, $path.' must be an ISO date (YYYY-MM-DD) or null.');
 
             return null;
         }
         $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value, new \DateTimeZone('UTC'));
         if (false === $date || $date->format('Y-m-d') !== $value) {
-            $this->error('weekStart', null, 'weekStart is not a real calendar date.');
+            $this->error($path, null, $path.' is not a real calendar date.');
 
             return null;
-        }
-        if ('1' !== $date->format('N')) {
-            $this->warning('weekStart', null, 'weekStart is not a Monday; it will be shown as “week of” this date.');
         }
 
         return $value;

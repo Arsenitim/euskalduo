@@ -24,6 +24,7 @@ export interface Draft {
   kind: SetKind;
   title: string;
   weekStart: string | null;
+  examDate: string | null;
   description: string | null;
   groups: Group[];
   entries: AdminEntry[];

@@ -4,6 +4,7 @@ import { VoiceLifecycle } from './components/Voice';
 import { FeedbackButton } from './components/FeedbackDialog';
 import { LearnerProvider, useLearner } from './LearnerContext';
 import { CategoriesPage } from './pages/CategoriesPage';
+import { ExamPage } from './pages/ExamPage';
 import { HomePage } from './pages/HomePage';
 import { MixPage } from './pages/MixPage';
 import { PracticePage } from './pages/PracticePage';
@@ -51,6 +52,7 @@ export function LearnerApp() {
               <Route path="/semana/:setId" element={<WeekPage />} />
               <Route path="/categorias" element={<CategoriesPage />} />
               <Route path="/categoria/:setId" element={<WeekPage />} />
+              <Route path="/examen/:setId" element={<ExamPage />} />
               <Route path="/mezclar" element={<MixPage />} />
               <Route path="/practicar" element={<PracticePage />} />
               <Route path="/progreso" element={<ProgressPage />} />

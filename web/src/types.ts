@@ -31,6 +31,8 @@ export interface HomeworkSet {
   kind: SetKind;
   title: string;
   weekStart: string | null;
+  /** ISO date of a school exam on this set; learners get an exam section until that day. */
+  examDate: string | null;
   description: string | null;
   sample: boolean;
   groups: Group[];

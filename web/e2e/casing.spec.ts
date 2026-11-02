@@ -3,7 +3,7 @@ import type { HomeworkSet } from '../src/types';
 
 const audio = `/audio/${'a'.repeat(64)}.mp3`;
 const set: HomeworkSet = { id: 'case', kind: 'week', title: 'Casing test', weekStart: '2026-10-05',
-  description: null, sample: false, groups: [], entries: [
+  examDate: null, description: null, sample: false, groups: [], entries: [
     { id: 'e1', basque: 'GAUR', translations: { es: ['hoy'] }, note: null, group: null, emoji: null, image: null, audio },
     { id: 'e2', basque: 'gu', translations: { es: ['nosotros'] }, note: null, group: null, emoji: null, image: null },
     { id: 'e3', basque: 'JOAN DEN ASTEAN', translations: { es: ['la semana pasada'] }, note: null, group: null, emoji: null, image: null },

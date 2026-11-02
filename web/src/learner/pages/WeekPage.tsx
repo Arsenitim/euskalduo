@@ -1,11 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
-import { t, weekLabel } from '../../i18n';
+import { examLabel, t, weekLabel } from '../../i18n';
 import type { Entry, HomeworkSet, Lang } from '../../types';
 import { VoiceButton } from '../components/Voice';
 import { ProgressBar, SampleBadge, WordVisual } from '../components/bits';
 import { useLearner } from '../LearnerContext';
 import { meaningsOf } from '../questions';
-import { practicePath } from '../routes';
+import { examPath, practicePath } from '../routes';
+import { todayIso } from '../scheduler';
 import { setProgress } from '../setProgress';
 
 /** A homework week or a category: word list, progress and "practise". */
@@ -34,6 +35,13 @@ export function WeekPage() {
       </h1>
       <p className="lead">{set.weekStart !== null && set.kind === 'week' ? weekLabel(set.weekStart) : t('category')}</p>
       {set.description && <p>{set.description}</p>}
+      {set.examDate !== null && set.examDate >= todayIso() && (
+        <p>
+          <Link className="badge badge-exam" to={examPath(set)}>
+            <span aria-hidden="true">📝</span> {examLabel(set.examDate, todayIso())}
+          </Link>
+        </p>
+      )}
       <ProgressBar value={p.learned} max={p.total} label={t('learned', { n: p.learned, total: p.total })} />
       <div className="button-row">
         <Link className="btn btn-primary btn-big" to={practicePath(set)}>
@@ -55,7 +63,7 @@ export function WeekPage() {
 }
 
 /** Words in their stored order; ordered groups are shown as numbered lists. */
-function WordList({ set, lang }: { set: HomeworkSet; lang: Lang }) {
+export function WordList({ set, lang }: { set: HomeworkSet; lang: Lang }) {
   const ungrouped = set.entries.filter((e) => !e.group || !set.groups.some((g) => g.key === e.group));
   return (
     <>

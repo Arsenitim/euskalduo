@@ -173,6 +173,31 @@ describe('week mode', () => {
   });
 });
 
+describe('exam mode', () => {
+  it('draws only from the exam set, even when old words from other sets are due', () => {
+    const allDue: Record<string, EntryStats> = Object.fromEntries(
+      itemsOf(calendar).map((i) => [i.key, recordAnswer(recordAnswer(undefined, 'correct', '2026-09-01'), 'correct', '2026-09-02')]),
+    );
+    for (const seed of seeds.slice(0, 50)) {
+      const qs = words(round({ sets: [hiztegia, calendar], mode: { kind: 'exam', setId: 'hiztegia' }, stats: allDue }, seed));
+      expect(qs).toHaveLength(10);
+      expect(qs.every((q) => q.item.setId === 'hiztegia')).toBe(true);
+    }
+  });
+
+  it('keeps practising words that are learned and not yet due again', () => {
+    // Every word freshly answered right today: week mode would rest them, the exam must not.
+    const rested: Record<string, EntryStats> = Object.fromEntries(
+      itemsOf(hiztegia).map((i) => [i.key, [1, 2, 3].reduce((s: EntryStats | undefined) => recordAnswer(s, 'correct', TODAY), undefined)!]),
+    );
+    const asked = new Set<string>();
+    for (const seed of seeds.slice(0, 30)) {
+      for (const q of words(round({ sets: [hiztegia], mode: { kind: 'exam', setId: 'hiztegia' }, stats: rested }, seed))) asked.add(q.item.key);
+    }
+    expect(asked.size).toBeGreaterThan(itemsOf(hiztegia).length / 2);
+  });
+});
+
 describe('mix mode', () => {
   const third = tinySet('third', '2026-09-07', [
     ['Etxea', ['casa']],

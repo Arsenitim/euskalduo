@@ -2,7 +2,7 @@ import type { Entry, Group, HomeworkSet, Lang } from '../types';
 import { answerKey, looseKey } from './normalize';
 import { entryKey } from './progress';
 import { pick, shuffle, weightedSample, type Rng } from './random';
-import { isDue, selectionWeight, type EntryStats } from './scheduler';
+import { examWeight, isDue, selectionWeight, type EntryStats } from './scheduler';
 
 export interface Item {
   setId: string;
@@ -40,7 +40,7 @@ export interface OrderQuestion {
 export type Question = WordQuestion | OrderQuestion;
 export type WordKind = WordQuestion['kind'];
 
-export type Mode = { kind: 'week'; setId: string } | { kind: 'mix'; setIds: string[] };
+export type Mode = { kind: 'week'; setId: string } | { kind: 'exam'; setId: string } | { kind: 'mix'; setIds: string[] };
 
 export const ROUND_MAX = 10;
 export const MAX_REVIEW_IN_WEEK = 2;
@@ -78,6 +78,8 @@ export function roundLength(wordCount: number): number {
  * Week mode: the chosen set supplies every word question except at most
  * MAX_REVIEW_IN_WEEK (and ≤ 20 %) slots, which go to *due* words from other
  * weeks the learner has already practised.
+ * Exam mode: like week mode, but only exam words (no review slots) and the
+ * review calendar is ignored, so every word keeps coming back until the exam.
  * Mix mode: every selected set gets at least one word (when the round is
  * long enough); remaining slots are sampled so each set has an equal share.
  * A set with an ordered group (months, weekdays…) may add one ordering task.
@@ -85,12 +87,12 @@ export function roundLength(wordCount: number): number {
 export function buildRound(input: RoundInput): Question[] {
   const { sets, mode, stats, today, rng } = input;
   const allItems = sets.flatMap(itemsOf);
-  const weight = (item: Item) => selectionWeight(stats[item.key], today);
+  const weight = (item: Item) => (mode.kind === 'exam' ? examWeight(stats[item.key]) : selectionWeight(stats[item.key], today));
 
   const sourceSets =
-    mode.kind === 'week'
-      ? sets.filter((s) => s.id === mode.setId)
-      : sets.filter((s) => mode.setIds.includes(s.id));
+    mode.kind === 'mix'
+      ? sets.filter((s) => mode.setIds.includes(s.id))
+      : sets.filter((s) => s.id === mode.setId);
   const sourceItems = sourceSets.flatMap(itemsOf);
   const length = roundLength(sourceItems.length);
   if (length === 0) return [];
@@ -110,8 +112,9 @@ export function buildRound(input: RoundInput): Question[] {
   let slots = available - builders.length;
 
   let picks: Item[];
-  if (mode.kind === 'week') {
-    const reviewPool = allItems.filter((i) => i.setId !== mode.setId && (stats[i.key]?.seen ?? 0) > 0 && isDue(stats[i.key], today));
+  if (mode.kind === 'week' || mode.kind === 'exam') {
+    const reviewPool =
+      mode.kind === 'week' ? allItems.filter((i) => i.setId !== mode.setId && (stats[i.key]?.seen ?? 0) > 0 && isDue(stats[i.key], today)) : [];
     const reviewCount = Math.min(MAX_REVIEW_IN_WEEK, Math.floor(length * 0.2), reviewPool.length);
     slots -= reviewCount;
     picks = [...pickWords(sourceItems, slots, weight, rng), ...weightedSample(reviewPool, weight, reviewCount, rng)];

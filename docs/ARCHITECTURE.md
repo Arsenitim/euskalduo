@@ -16,8 +16,10 @@ Only `web` publishes a port. PHP-FPM listens only on the compose network.
 SQLite holds **homework content only**, plus a login-throttle counter and a
 little metadata:
 
-* `homework_sets` — id, title, week_start (ISO date or NULL), description,
-  groups JSON, status (`draft`/`published`), sample flag, timestamps.
+* `homework_sets` — id, title, week_start (ISO date or NULL), exam_date
+  (ISO date or NULL: a school exam on this set, announced to learners),
+  description, groups JSON, status (`draft`/`published`), sample flag,
+  timestamps.
 * `entries` — (set_id, id) primary key, position (explicit order), basque,
   translations JSON (`{"es": [...], "ru": [...]}`), note, group key, emoji,
   image hint, image file name, needs_review, review note.
@@ -81,6 +83,12 @@ server, so even the chosen week does not reach server logs.
   2 (and ≤ 20 %) slots for *due, already practised* words from other weeks.
 * **Mix.** Each selected week gets at least one word; remaining slots are
   weighted so every week gets an equal share regardless of size.
+* **Exam.** A set with an `exam_date` today or later appears as a *Preparar
+  el examen* section (home card + `#/examen/…` page) until the exam day.
+  Its rounds draw only from that set and ignore the review calendar: every
+  word keeps circulating, weakest first (wrong 4 › unseen 3 › box-weighted
+  ≥ 1), so nothing on the sheet rests before the exam. Boxes and stars are
+  recorded as usual.
 * **Exercise types.** Basque → choose meaning; meaning (or picture) → choose
   Basque; spell with letter tiles (typed for terms > 14 letters); type the
   meaning (for words in box ≥ 2); order a run of up to 5 items from an ordered

@@ -33,6 +33,7 @@ JSON is the canonical, reliable format. The server validator
 | `kind` | Optional. `"week"` (default): homework for one school week. `"topic"`: a **category** (months, weekdays, animals…) with no week. Categories are listed under **Categorías**, never become "Esta semana" and are not part of "Mezclar semanas". A `weekStart` on a topic is ignored with a warning. The editor has a *Type* switch for the same thing. |
 | `title` | Required, ≤ 120 characters. Keep the sheet's heading, e.g. `1.Gaia`. |
 | `weekStart` | `YYYY-MM-DD` or `null`. The admin assigns it during review; required to publish a week (not a category). Non-Mondays are allowed with a warning. The week is **independent of the content** (a word meaning "Monday" says nothing about the homework week). |
+| `examDate` | Optional, `YYYY-MM-DD` or `null`, allowed on weeks and categories. A school exam on exactly this set: until that day the learner home shows a **Preparar el examen** section whose practice covers every word of the set, ignoring the usual review schedule. Usually set from the editor's *Exam date* field rather than at import time. |
 | `description` | Optional, ≤ 500. |
 | `groups` | Optional sections. `ordered: true` = meaningful sequence (months, weekdays) → shown as numbered lists and used by the ordering exercise. |
 | `entries[]` | 1–300, stored in the given order. |

@@ -307,6 +307,12 @@ a {
   color: #394150;
 }
 
+.badge-exam {
+  background: #ffe7c2;
+  color: #8a5300;
+  text-decoration: none;
+}
+
 .badge-review,
 .badge-retry {
   background: var(--wrong-soft);
@@ -343,6 +349,13 @@ a {
 .action-card:hover {
   transform: translateY(-3px);
   border-color: var(--primary);
+}
+
+.action-exam {
+  background: linear-gradient(160deg, #ffe7c2, #ffffff 70%);
+  border-color: #f2b04a;
+  grid-column: 1 / -1;
+  min-height: 0;
 }
 
 .action-week {
