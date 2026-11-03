@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "title": "HIZTEGIA (2. Maila)",
+  "weekStart": "2026-11-02",
+  "examDate": null,
+  "description": "Vocabulario de la hoja Hiztegia (2. maila).",
+  "entries": [
+    {
+      "basque": "Iletsu",
+      "translations": { "es": ["peludo"] }
+    },
+    {
+      "basque": "Zaporetsu",
+      "translations": { "es": ["sabroso"] }
+    },
+    {
+      "basque": "Mamitsu",
+      "translations": { "es": ["significativo"] }
+    },
+    {
+      "basque": "Basati",
+      "translations": { "es": ["salvaje"] }
+    },
+    {
+      "basque": "Ugaztun",
+      "translations": { "es": ["mamífero"] }
+    },
+    {
+      "basque": "Txokolatedun",
+      "translations": { "es": ["que tiene chocolate"] }
+    },
+    {
+      "basque": "Errua",
+      "translations": { "es": ["culpa"] }
+    },
+    {
+      "basque": "Bizarra",
+      "translations": { "es": ["barba"] }
+    },
+    {
+      "basque": "Ospetsu",
+      "translations": { "es": ["famoso"] }
+    },
+    {
+      "basque": "Negarti",
+      "translations": { "es": ["llorón"] }
+    },
+    {
+      "basque": "Adurtia",
+      "translations": { "es": ["baboso"] }
+    },
+    {
+      "basque": "Arduratsu",
+      "translations": { "es": ["cuidadoso"] }
+    },
+    {
+      "basque": "Beldurti",
+      "translations": { "es": ["miedoso"] }
+    },
+    {
+      "basque": "Lotsati",
+      "translations": { "es": ["vergonzoso"] }
+    },
+    {
+      "basque": "Betaurrekodun",
+      "translations": { "es": ["que usa gafas"] }
+    },
+    {
+      "basque": "Zaletasun",
+      "translations": { "es": ["afición"] }
+    },
+    {
+      "basque": "Egunerokoa",
+      "translations": { "es": ["diario"] }
+    },
+    {
+      "basque": "Urruti",
+      "translations": { "es": ["lejos"] }
+    },
+    {
+      "basque": "Etzanda",
+      "translations": { "es": ["tumbado"] }
+    },
+    {
+      "basque": "Ahaztezin",
+      "translations": { "es": ["inolvidable"] }
+    },
+    {
+      "basque": "Baratze",
+      "translations": { "es": ["huerto"] }
+    },
+    {
+      "basque": "Sumatu",
+      "translations": { "es": ["darse cuenta"] }
+    },
+    {
+      "basque": "Irrikaz",
+      "translations": { "es": ["deseando"] }
+    },
+    {
+      "basque": "Maiz",
+      "translations": { "es": ["frecuentemente", "a menudo"] }
+    },
+    {
+      "basque": "Hurbildu",
+      "translations": { "es": ["acercarse"] }
+    },
+    {
+      "basque": "Egunkaria",
+      "translations": { "es": ["periódico"] }
+    },
+    {
+      "basque": "Albistegia",
+      "translations": { "es": ["noticiario"] }
+    },
+    {
+      "basque": "Albaitari",
+      "translations": { "es": ["veterinario"] }
+    }
+  ]
+}
