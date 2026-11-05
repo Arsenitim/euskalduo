@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "title": "Lexikoa: Denborazkoak",
+  "weekStart": "2026-11-02",
+  "examDate": null,
+  "description": "Vocabulario de expresiones de tiempo (Lexikoa: Denborazkoak).",
+  "entries": [
+    {
+      "basque": "Goizean",
+      "translations": { "es": ["a la mañana"] }
+    },
+    {
+      "basque": "Arratsaldean",
+      "translations": { "es": ["a la tarde"] }
+    },
+    {
+      "basque": "Eguerdian",
+      "translations": { "es": ["al mediodía"] }
+    },
+    {
+      "basque": "Gauean",
+      "translations": { "es": ["a la noche"] }
+    },
+    {
+      "basque": "Eguna",
+      "translations": { "es": ["día"] }
+    },
+    {
+      "basque": "Astea",
+      "translations": { "es": ["semana"] }
+    },
+    {
+      "basque": "Hilabetea",
+      "translations": { "es": ["mes"] }
+    },
+    {
+      "basque": "Urtea",
+      "translations": { "es": ["año"] }
+    },
+    {
+      "basque": "Gaur",
+      "translations": { "es": ["hoy"] }
+    },
+    {
+      "basque": "Bihar",
+      "translations": { "es": ["mañana"] }
+    },
+    {
+      "basque": "Herenegun",
+      "translations": { "es": ["antes de ayer"] }
+    },
+    {
+      "basque": "Etzi",
+      "translations": { "es": ["pasado mañana"] }
+    },
+    {
+      "basque": "Iaz",
+      "translations": { "es": ["el año pasado"] }
+    },
+    {
+      "basque": "Aspaldi",
+      "translations": { "es": ["hace mucho tiempo"] }
+    },
+    {
+      "basque": "Pasa den hilabetean",
+      "translations": { "es": ["el mes pasado"] }
+    },
+    {
+      "basque": "Duela 3 aste",
+      "translations": { "es": ["hace 3 semanas"] }
+    },
+    {
+      "basque": "Orain dela 2 urte",
+      "translations": { "es": ["hace 2 años"] }
+    },
+    {
+      "basque": "Joan den astean",
+      "translations": { "es": ["la semana pasada"] }
+    },
+    {
+      "basque": "Datorren urtean",
+      "translations": { "es": ["el año que viene"] }
+    },
+    {
+      "basque": "Hurrengo hilabetean",
+      "translations": { "es": ["el mes que viene"] }
+    },
+    {
+      "basque": "Lehen",
+      "translations": { "es": ["antes"] }
+    },
+    {
+      "basque": "Atzo",
+      "translations": { "es": ["ayer"] }
+    },
+    {
+      "basque": "Aurten",
+      "translations": { "es": ["este año"] }
+    }
+  ]
+}

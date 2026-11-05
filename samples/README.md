@@ -42,3 +42,6 @@ Editorial additions made by the developer and worth a human check:
 - `topics/hitz-motak.json`: permanent word-formation practice, using the same
   word-building metadata. New category files also reach existing installations;
   edited or deleted categories are never recreated.
+- `weeks/2026-11-02-lexikoa-denborazkoak.json`: the sheet `Lexikoa: Denborazkoak`
+  (same 23 time expressions as `hiztegia-denborazkoak.json`) repeated for the
+  week of 2026-11-02, with no exam date.

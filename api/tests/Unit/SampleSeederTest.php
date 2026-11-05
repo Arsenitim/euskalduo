@@ -66,17 +66,23 @@ final class SampleSeederTest extends TestCase
         $seeder = new SampleSeeder($db, $sets, new ImportValidator());
         $weekDir = \dirname(self::samplePath('hiztegia-1-gaia.json')).'/weeks';
 
-        self::assertSame(['Hitz motak, izan eta denborazkoak', 'HIZTEGIA (DENBORAZKOAK)'], $seeder->seedWeeksOnce($weekDir));
-        $published = $sets->publishedContent();
-        self::assertSame('week', $published[0]['kind']);
-        self::assertSame('2026-10-05', $published[0]['weekStart']);
-        self::assertSame('2026-09-28', $published[1]['weekStart']);
-        self::assertFalse($published[0]['sample']);
-        self::assertCount(57, $published[0]['entries']);
-        self::assertNotNull($published[0]['entries'][0]['formation']);
-        self::assertCount(23, $published[1]['entries']);
+        self::assertSame(
+            ['Hitz motak, izan eta denborazkoak', 'HIZTEGIA (2. Maila)', 'Lexikoa: Denborazkoak', 'HIZTEGIA (DENBORAZKOAK)'],
+            $seeder->seedWeeksOnce($weekDir),
+        );
+        $byTitle = array_column($sets->publishedContent(), null, 'title');
+        $hitzMotak = $byTitle['Hitz motak, izan eta denborazkoak'];
+        self::assertSame('week', $hitzMotak['kind']);
+        self::assertSame('2026-10-05', $hitzMotak['weekStart']);
+        self::assertFalse($hitzMotak['sample']);
+        self::assertCount(57, $hitzMotak['entries']);
+        self::assertNotNull($hitzMotak['entries'][0]['formation']);
+        self::assertSame('2026-09-28', $byTitle['HIZTEGIA (DENBORAZKOAK)']['weekStart']);
+        self::assertCount(23, $byTitle['HIZTEGIA (DENBORAZKOAK)']['entries']);
+        self::assertSame('2026-11-02', $byTitle['Lexikoa: Denborazkoak']['weekStart']);
+        self::assertCount(23, $byTitle['Lexikoa: Denborazkoak']['entries']);
 
-        $sets->delete($published[0]['id']);
+        $sets->delete($hitzMotak['id']);
         self::assertSame([], $seeder->seedWeeksOnce($weekDir), 'Deleted weeks must not come back on the next start.');
 
         $extra = $this->tempDir();
