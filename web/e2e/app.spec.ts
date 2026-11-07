@@ -85,7 +85,7 @@ test.describe('learner', () => {
       if (stats.includes(r)) {
         expect(r.method()).toBe('POST');
         const body = JSON.parse(r.postData() ?? '{}');
-        expect(['newDevice', 'activeToday', 'answers', 'rounds']).toEqual(expect.arrayContaining(Object.keys(body)));
+        expect(['day', 'newDevice', 'activeToday', 'answers', 'rounds']).toEqual(expect.arrayContaining(Object.keys(body)));
         expect(r.postData()).not.toContain('Ane');
       } else {
         expect(r.method(), r.url()).toBe('GET');

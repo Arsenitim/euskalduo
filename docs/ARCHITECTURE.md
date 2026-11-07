@@ -34,7 +34,7 @@ Endpoints:
 | --- | --- | --- |
 | `GET /api/public/content` | anyone | All published sets with entries, one response. No input, no cookies, no session. ETag for cheap revalidation. |
 | `POST /api/public/feedback` | anyone | Learner feedback (multipart: `message`, optional `name`, `page`, `viewport`, `screenshot`). Stored as files, rate-limited per IP, total size capped. The only learner request with a body, sent only from the feedback form. |
-| `POST /api/public/stats` | anyone | Anonymous usage counters (JSON: `newDevice`, `activeToday`, `answers`, `rounds`), added to one row of totals per day. No id, no IP; each counter capped per request. |
+| `POST /api/public/stats` | anyone | Anonymous usage counters (JSON: optional `day`, `newDevice`, `activeToday`, `answers`, `rounds`), added to one row of totals per day. `day` (device date, for counters queued offline) is used if within the last 30 days or tomorrow, otherwise today (UTC). No id, no IP; each counter capped at 500 per request. |
 | `GET /api/admin/stats` | admin | Totals and the last 30 days for **Admin → Usage**. |
 | `GET /api/health` | anyone | Health check. |
 | `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/session` | admin | Session login (JSON body required). |
@@ -59,11 +59,39 @@ per-set rounds/best stars. It is validated on load and on import; invalid
 records are dropped individually. Export/import is a local JSON file download
 and file read — nothing is uploaded.
 
-The learner app makes exactly one API call (`fetchContent` in
-`web/src/api/public.ts`) with `credentials: 'omit'` and no parameters. An
-ESLint rule forbids calling `fetch` anywhere else in learner code. Learner
+The learner app fetches content with one API call (`fetchContent` in
+`web/src/api/public.ts`) with `credentials: 'omit'` and no parameters; the
+other learner requests are the anonymous counters (`stats.ts`), feedback
+(`feedback.ts`), speech clips (`audio.ts`) and the offline download
+(`offline.ts`). An ESLint rule forbids calling `fetch` anywhere else in
+learner code. Learner
 routes use the URL fragment (`#/semana/…`), which browsers never send to the
 server, so even the chosen week does not reach server logs.
+
+## Offline mode
+
+`web/sw/sw.js` is a hand-written service worker. The `serviceWorker` plugin
+in `web/vite.config.ts` fills in the build's file list and a version hash and
+emits `/sw.js`; it is registered only by the learner app in production builds
+(`registerServiceWorker` in `web/src/api/offline.ts`).
+
+| Request | Strategy | Cache |
+| --- | --- | --- |
+| Page navigations | network first, saved `/` after 5 s or when offline | `euskalduo-shell-<version>` (precached on install, old versions deleted on activate) |
+| `/assets/*`, icons, manifest | cache first | same |
+| `GET /api/public/content` | network first (5 s), saved copy as fallback; also saved on install | `euskalduo-data-v1` |
+| `/uploads/*.webp`, `/audio/*.mp3` | cache first (names are content-addressed) | `euskalduo-media-v1` |
+| `/admin*`, `/api/admin/*`, other `/api/*`, POSTs | not handled | — |
+
+**Ajustes → Usar sin conexión** (`learner/components/Offline.tsx`) downloads
+the catalogue plus every picture and clip it refers to, asks for persistent
+storage, and shows whether everything is saved. Media no longer in the
+catalogue is pruned after each content load. Usage counters are queued per day
+in `localStorage` (`euskalduo.stats.pending.v1`) and flushed oldest first on
+each answer, at start-up and on the `online` event; a chunk is removed from
+the queue before it is sent and put back if sending fails. Playwright blocks
+service workers except in `e2e/offline.spec.ts`, because `page.route()` cannot
+see requests the worker answers.
 
 ## Practice logic
 

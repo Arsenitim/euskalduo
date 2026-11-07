@@ -61,8 +61,27 @@ final class StatsApiTest extends WebTestCase
 
         $pdo = (new Database($this->data))->pdo();
         $rows = $pdo->query('SELECT * FROM usage_daily')->fetchAll();
-        self::assertSame([['day' => gmdate('Y-m-d'), 'new_devices' => 0, 'active_devices' => 0, 'answers' => 50, 'correct' => 50, 'hinted' => 0, 'wrong' => 0, 'skipped' => 0, 'rounds' => 0]], $rows);
+        self::assertSame([['day' => gmdate('Y-m-d'), 'new_devices' => 0, 'active_devices' => 0, 'answers' => 500, 'correct' => 500, 'hinted' => 0, 'wrong' => 0, 'skipped' => 0, 'rounds' => 0]], $rows);
         self::assertSame(['day', ...UsageStats::COUNTERS], array_column($pdo->query('PRAGMA table_info(usage_daily)')->fetchAll(), 'name'), 'The table has no room for identifiers.');
+    }
+
+    public function testFilesOfflinePracticeUnderItsOwnRecentDay(): void
+    {
+        $day = static fn (string $modify): string => (new \DateTimeImmutable('today', new \DateTimeZone('UTC')))->modify($modify)->format('Y-m-d');
+        $this->post(['day' => $day('-3 days'), 'activeToday' => true, 'answers' => ['correct' => 40, 'wrong' => 2], 'rounds' => 4]);
+        self::assertResponseStatusCodeSame(204);
+        $this->post(['day' => $day('+1 day'), 'answers' => ['correct' => 1]]);
+        // Too old, too far ahead, impossible or malformed: counted today instead.
+        foreach ([$day('-31 days'), $day('+2 days'), '2026-02-30', '2026-9-1', 20260901] as $bad) {
+            $this->post(['day' => $bad, 'answers' => ['skipped' => 1]]);
+            self::assertResponseStatusCodeSame(204);
+        }
+
+        $rows = array_column((new Database($this->data))->pdo()->query('SELECT day, answers, correct, skipped, rounds, active_devices FROM usage_daily')->fetchAll(), null, 'day');
+        self::assertSame(['day' => $day('-3 days'), 'answers' => 42, 'correct' => 40, 'skipped' => 0, 'rounds' => 4, 'active_devices' => 1], $rows[$day('-3 days')]);
+        self::assertSame(1, $rows[$day('+1 day')]['correct']);
+        self::assertSame(5, $rows[$day('+0 days')]['skipped']);
+        self::assertCount(3, $rows);
     }
 
     public function testRequiresAJsonBody(): void

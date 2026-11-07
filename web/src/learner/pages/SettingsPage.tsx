@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { t } from '../../i18n';
+import { OfflineCard } from '../components/Offline';
 import { useLearner } from '../LearnerContext';
 import { exportProgress, importProgress } from '../progress';
 
@@ -79,6 +80,8 @@ export function SettingsPage() {
           </label>
         ))}
       </fieldset>
+
+      <OfflineCard />
 
       <div className="card">
         <p className="muted">

@@ -1284,6 +1284,44 @@ fieldset legend {
   font-weight: 700;
 }
 
+/* Offline mode */
+.offline-banner {
+  max-width: 880px;
+  margin: 12px auto 0;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  font-weight: 700;
+  width: calc(100% - 32px);
+}
+
+.offline-card h2 {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+
+.offline-status p {
+  margin: 8px 0;
+}
+
+.offline-status progress {
+  display: block;
+  width: 100%;
+  height: 12px;
+  margin-top: 6px;
+  accent-color: var(--primary);
+}
+
+.offline-ready {
+  color: var(--right);
+  font-weight: 700;
+}
+
+.warning-text {
+  color: var(--wrong);
+  font-weight: 700;
+}
+
 /* Feedback dialog */
 .feedback-dialog {
   width: min(560px, calc(100vw - 24px));

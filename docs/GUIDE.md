@@ -102,9 +102,20 @@ about 25 MB of RAM.
 **Home screen.** Learners can add the site to their home screen (Android:
 browser menu → *Add to Home screen* / *Install app*; iPhone: Safari → Share →
 *Add to Home Screen*). It then opens full screen with the EUSKALDUO icon. The
-app stays online-only on purpose: there is no service worker or offline cache,
-so updates arrive like any page reload. The icons are rendered from
-`web/icons/app-icon.svg` with `node web/icons/render.mjs`.
+icons are rendered from `web/icons/app-icon.svg` with `node web/icons/render.mjs`.
+
+**Offline (e.g. on a plane).** After one visit with a connection, the learner
+app opens and can be practised without one: a service worker (`web/sw/sw.js`)
+keeps the app and the last catalogue. Pictures and speech are kept once seen;
+**Ajustes → Usar sin conexión → Descargar** saves all of them at once and says
+when everything is ready. While offline a banner says so; progress is local
+anyway, and the anonymous usage counters wait on the device and are sent,
+filed under the day they happened, when the connection returns. When online,
+the page and catalogue always come from the network first, so updates still
+arrive on the next visit (after 5 s without an answer the saved copy is used).
+On iPhone/iPad, add the app to the Home Screen and open it from there:
+otherwise Safari may clear site data (including progress) after about a week
+without use. The admin UI is never cached.
 
 ## Import format
 
@@ -138,7 +149,10 @@ in [`docs/IMPORT_FORMAT.md`](IMPORT_FORMAT.md) and
   / skipped) or one finished round, plus two yes/no flags sent at most once:
   "new device" (ever) and "active today" (per day). The browser remembers in
   `localStorage` (`euskalduo.stats.v1`) that it already sent them; there is no
-  device id. The server adds them to one row of totals per day (no IP, no id,
+  device id. Counters wait in `localStorage` (`euskalduo.stats.pending.v1`)
+  until the server has them, so offline practice is sent later with the
+  device's date for that day (`"day"`; accepted up to 30 days back, otherwise
+  counted today). The server adds them to one row of totals per day (no IP, no id,
   capped per request) shown under **Admin → Usage**. Browsing without
   practising sends nothing. Clearing browser data makes a device count as new
   again, so "devices" is an upper bound.
@@ -300,5 +314,6 @@ browser-only state, the practice algorithm).
   Deleting a set is permanent (the UI asks for confirmation).
 * Emoji depend on the device's emoji font. Sample pictures are emoji only; no
   licensed image set is bundled.
-* Learner content is fetched on every visit (with ETag revalidation). There is
-  no offline/PWA mode.
+* Learner content is fetched on every visit (with ETag revalidation); offline,
+  the last saved copy is used. Offline mode needs one visit with a connection
+  first, and browsers may still clear saved data when storage is very low.

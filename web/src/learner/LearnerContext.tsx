@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { mediaUrls, pruneMedia } from '../api/offline';
 import { fetchContent } from '../api/public';
+import { startStatsSync } from '../api/stats';
 import { isWeek, type HomeworkSet, type WeekSet } from '../types';
 import { learnerSets } from './display';
 import { clearState, emptyState, loadState, saveState, type LearnerState } from './progress';
@@ -39,12 +41,17 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
         if (cancelled) return;
         setSets(learnerSets(content.sets));
         setError(false);
+        // Pictures and speech that left the catalogue need not stay on the device.
+        pruneMedia(mediaUrls(content.sets)).catch(() => undefined);
       })
       .catch(() => !cancelled && setError(true));
     return () => {
       cancelled = true;
     };
   }, [attempt]);
+
+  // Counters from practice without a connection are sent once it is back.
+  useEffect(() => startStatsSync(), []);
 
   const update = useCallback((fn: (s: LearnerState) => LearnerState) => {
     setState((previous) => {

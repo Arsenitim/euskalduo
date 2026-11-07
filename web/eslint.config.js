@@ -22,6 +22,12 @@ export default tseslint.config(
     },
   },
   {
+    // Offline service worker (plain JS; placeholders are filled in by vite.config.ts).
+    files: ['sw/**/*.js'],
+    extends: [js.configs.recommended],
+    languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.serviceworker, __VERSION__: 'readonly', __PRECACHE__: 'readonly' } },
+  },
+  {
     files: ['src/api/**/*.ts', 'src/admin/**/*.ts', 'src/admin/**/*.tsx', 'e2e/**/*.ts', 'src/**/*.test.ts'],
     rules: { 'no-restricted-syntax': 'off' },
   },

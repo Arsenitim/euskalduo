@@ -12,6 +12,9 @@ export default defineConfig({
     baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:8765',
     headless: true,
     trace: 'retain-on-failure',
+    // page.route() cannot see requests answered by the offline service worker,
+    // so it is off by default; e2e/offline.spec.ts turns it on.
+    serviceWorkers: 'block',
     // Optional: reuse an already-installed Chromium instead of downloading one.
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_PATH ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH } : {},
   },
