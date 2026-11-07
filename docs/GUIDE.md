@@ -108,7 +108,11 @@ icons are rendered from `web/icons/app-icon.svg` with `node web/icons/render.mjs
 app opens and can be practised without one: a service worker (`web/sw/sw.js`)
 keeps the app and the last catalogue. Pictures and speech are kept once seen;
 **Ajustes → Usar sin conexión → Descargar** saves all of them at once and says
-when everything is ready. While offline a banner says so; progress is local
+when everything is ready. While offline a ✈️ pill in the header (a badge on
+the logo on phones) says so, and the home screen explains it. On a device that
+has downloaded before, the home screen shows **⬇️ Novedades para descargar**
+(online only) when the catalogue has pictures or speech it has not saved yet,
+e.g. a new week or clips generated later; it opens Ajustes. Progress is local
 anyway, and the anonymous usage counters wait on the device and are sent,
 filed under the day they happened, when the connection returns. When online,
 the page and catalogue always come from the network first, so updates still

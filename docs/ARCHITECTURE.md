@@ -85,7 +85,10 @@ emits `/sw.js`; it is registered only by the learner app in production builds
 
 **Ajustes → Usar sin conexión** (`learner/components/Offline.tsx`) downloads
 the catalogue plus every picture and clip it refers to, asks for persistent
-storage, and shows whether everything is saved. Media no longer in the
+storage, and shows whether everything is saved. A successful download sets
+`euskalduo.offline.v1` in `localStorage`; only then does the home screen's
+"Novedades para descargar" pill appear (online, when media is missing). The
+header shows a ✈️ pill whenever the browser reports no connection. Media no longer in the
 catalogue is pruned after each content load. Usage counters are queued per day
 in `localStorage` (`euskalduo.stats.pending.v1`) and flushed oldest first on
 each answer, at start-up and on the `online` event; a chunk is removed from

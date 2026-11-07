@@ -14,6 +14,25 @@ export const MEDIA_CACHE = 'euskalduo-media-v1';
 const CONTENT_URL = '/api/public/content';
 const MEDIA_PATH = /^\/(uploads\/[a-f0-9]{32}\.webp|audio\/[a-f0-9]{64}\.mp3)$/;
 
+const DOWNLOADED_KEY = 'euskalduo.offline.v1';
+
+/** Whether this device ever used "Descargar" (so it wants offline mode). */
+export function hasDownloaded(): boolean {
+  try {
+    return localStorage.getItem(DOWNLOADED_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
+function markDownloaded(): void {
+  try {
+    localStorage.setItem(DOWNLOADED_KEY, JSON.stringify({ downloadedAt: new Date().toISOString() }));
+  } catch {
+    // Without storage the update hint just never shows.
+  }
+}
+
 export const offlineSupported = (): boolean => typeof window !== 'undefined' && 'serviceWorker' in navigator && 'caches' in window;
 
 /** Registers the service worker (production builds only; never in dev). */
@@ -93,5 +112,6 @@ export async function downloadForOffline(urls: string[], onProgress: (done: numb
   };
   await Promise.all(Array.from({ length: 4 }, worker));
   await pruneMedia(urls);
+  markDownloaded();
   return failed;
 }

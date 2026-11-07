@@ -139,6 +139,9 @@ export const es = {
   offlineFailed: 'No se pudo descargar todo. ¿Hay conexión? Prueba otra vez.',
   offlineUnsupported: 'Este navegador no puede guardar la app para usarla sin conexión.',
   offlineIos: 'En iPhone o iPad, añade la app a la pantalla de inicio (Compartir → Añadir a la pantalla de inicio) y ábrela desde allí. Si no, Safari puede borrar los datos tras unos días sin usarla.',
+  offlinePill: 'Sin conexión',
+  updatePill: 'Novedades para descargar',
+  updatePillLabel: 'Novedades para descargar: {n} dibujos o audios nuevos. Abre Ajustes para guardarlos sin conexión.',
   offlineBanner: 'Sin conexión. Puedes seguir practicando: tu progreso se guarda en este dispositivo.',
   storageUnavailable: 'Este navegador no deja guardar datos: el progreso se perderá al cerrar.',
 

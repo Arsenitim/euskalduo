@@ -53,8 +53,11 @@ test('downloads, practises on a plane, and reports the counters once back online
   // Airplane mode: the app still opens from the saved copy and can be played.
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByText(/Sin conexión\. Puedes seguir practicando/)).toBeVisible();
+  // Every page: the small header pill. Home: the sentence that explains it.
+  await expect(page.locator('.app-header').getByRole('status', { name: 'Sin conexión' })).toBeVisible();
   await page.getByRole('link', { name: /EUSKALDUO/ }).click();
+  await expect(page.getByText(/Sin conexión\. Puedes seguir practicando/)).toBeVisible();
+  await page.screenshot({ path: 'test-results/offline-home.png' });
   await page.getByRole('link', { name: /Esta semana/ }).click();
   await answerUntilDone(page);
   await page.screenshot({ path: 'test-results/offline-round.png' });
@@ -76,7 +79,7 @@ test('downloads, practises on a plane, and reports the counters once back online
   expect(delivered).toHaveLength(1);
   expect(delivered[0].day).toBe(day);
   expect(Object.values(delivered[0].answers as Record<string, number>).reduce((a, b) => a + b, 0)).toBe(answered);
-  await expect(page.getByText(/Sin conexión\. Puedes seguir practicando/)).toHaveCount(0);
+  await expect(page.getByRole('status', { name: 'Sin conexión' })).toHaveCount(0);
 });
 
 test('a plain visit is enough to open the app and practise offline (without pictures or speech)', async ({ page, context }) => {
@@ -129,4 +132,53 @@ test('pictures and speech are kept for offline use and the admin area is left al
   expect(adminCached).toEqual([]);
   const admin = await page.evaluate(() => fetch('/api/admin/session').then(() => 'answered', () => 'network error'));
   expect(admin).toBe('network error');
+});
+
+test('home shows "Novedades para descargar" after new pictures or speech appear, only for devices that downloaded', async ({ page, context }) => {
+  const clip = (c: string) => `/audio/${c.repeat(64)}.mp3`;
+  const entries = (audio: (string | null)[]) => ['Kaixo', 'Agur', 'Txakurra'].map((basque, i) => ({
+    id: `e${i}`, basque, translations: { es: [['hola'], ['adiós'], ['perro']][i]! }, note: null, group: null, emoji: null, image: null, audio: audio[i] ?? null,
+  }));
+  let catalogue = entries([clip('1'), null, null]);
+  await context.route('**/api/public/content', (r) => r.fulfill({ json: { schemaVersion: 1, sets: [{
+    id: 'update-week', kind: 'week', title: 'Update week', weekStart: '2026-10-05', description: null, sample: false, groups: [], entries: catalogue,
+  }] } }));
+  await context.route('**/audio/*.mp3', (r) => r.fulfill({ contentType: 'audio/mpeg', body: 'speech' }));
+  const pill = page.getByRole('link', { name: /Novedades para descargar/ });
+
+  await page.goto('/');
+  await waitForWorker(page);
+  await page.reload();
+  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(pill, 'never downloaded: no nagging').toHaveCount(0);
+
+  await page.goto('/#/ajustes');
+  await page.getByRole('button', { name: /Descargar para usar sin conexión/ }).click();
+  await expect(page.getByText('Listo para practicar sin conexión.')).toBeVisible();
+  await page.goto('/#/');
+  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(pill, 'everything saved').toHaveCount(0);
+
+  // The voice worker finished two more clips after the download.
+  catalogue = entries([clip('1'), clip('2'), clip('3')]);
+  await page.reload();
+  await expect(pill).toBeVisible();
+  await expect(pill).toHaveAttribute('aria-label', /2 dibujos o audios nuevos/);
+  await page.screenshot({ path: 'test-results/update-pill.png' });
+
+  // Offline the server cannot be asked: no update pill, only the offline pill.
+  await context.setOffline(true);
+  await expect(pill).toHaveCount(0);
+  await expect(page.getByRole('status', { name: 'Sin conexión' })).toBeVisible();
+  await context.setOffline(false);
+
+  await pill.click();
+  await expect(page.getByRole('heading', { name: 'Ajustes' })).toBeVisible();
+  await expect(page.locator('.offline-card')).toBeInViewport();
+  await expect(page.getByText('Faltan 2 dibujos o audios por descargar.')).toBeVisible();
+  await page.getByRole('button', { name: /Descargar para usar sin conexión/ }).click();
+  await expect(page.getByText('Listo para practicar sin conexión.')).toBeVisible();
+  await page.goto('/#/');
+  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(pill).toHaveCount(0);
 });

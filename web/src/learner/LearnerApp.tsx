@@ -2,7 +2,7 @@ import { HashRouter, Link, NavLink, Route, Routes } from 'react-router-dom';
 import { t } from '../i18n';
 import { VoiceLifecycle } from './components/Voice';
 import { FeedbackButton } from './components/FeedbackDialog';
-import { OfflineBanner } from './components/Offline';
+import { OfflinePill } from './components/Offline';
 import { LearnerProvider, useLearner } from './LearnerContext';
 import { CategoriesPage } from './pages/CategoriesPage';
 import { ExamPage } from './pages/ExamPage';
@@ -28,10 +28,13 @@ export function LearnerApp() {
           Saltar al contenido
         </a>
         <header className="app-header">
-          <Link to="/" className="logo" aria-label={`${t('appName')} — ${t('home')}`}>
-            <span className="logo-mark" aria-hidden="true">E</span>
-            <span className="logo-text">{t('appName')}</span>
-          </Link>
+          <div className="header-brand">
+            <Link to="/" className="logo" aria-label={`${t('appName')} — ${t('home')}`}>
+              <span className="logo-mark" aria-hidden="true">E</span>
+              <span className="logo-text">{t('appName')}</span>
+            </Link>
+            <OfflinePill />
+          </div>
           <nav className="app-nav" aria-label="Principal">
             <NavLink to="/semanas">
               <span aria-hidden="true">📅</span> {t('navWeeks')}
@@ -45,7 +48,6 @@ export function LearnerApp() {
             <FeedbackButton />
           </nav>
         </header>
-        <OfflineBanner />
         <main id="main" tabIndex={-1} className="app-main">
           <ContentGate>
             <Routes>

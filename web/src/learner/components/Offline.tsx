@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { downloadForOffline, mediaUrls, offlineStatus, offlineSupported, type OfflineStatus } from '../../api/offline';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { downloadForOffline, hasDownloaded, mediaUrls, offlineStatus, offlineSupported, type OfflineStatus } from '../../api/offline';
 import { t } from '../../i18n';
 import { useLearner } from '../LearnerContext';
 
@@ -18,13 +19,58 @@ export function useOnline(): boolean {
   return online;
 }
 
-export function OfflineBanner() {
+/** Small, always-visible header pill while there is no connection. */
+export function OfflinePill() {
   const online = useOnline();
   if (online) return null;
   return (
-    <p className="offline-banner" role="status">
+    <span className="status-pill status-offline" role="status" aria-label={t('offlinePill')} title={t('offlineBanner')}>
+      <span aria-hidden="true">✈️</span>
+      <span className="pill-text">{t('offlinePill')}</span>
+    </span>
+  );
+}
+
+/** What the offline pill means, said once on the home screen. */
+export function OfflineNotice() {
+  const online = useOnline();
+  if (online) return null;
+  return (
+    <p className="offline-notice">
       <span aria-hidden="true">✈️</span> {t('offlineBanner')}
     </p>
+  );
+}
+
+/** Router state that makes Ajustes bring the offline card into view. */
+export const OFFLINE_CARD_STATE = { focus: 'offline' } as const;
+
+/**
+ * Home-screen hint, online only: this device downloaded for offline use
+ * before, and the catalogue now has pictures or speech it has not saved
+ * (a new week, or clips generated after the download).
+ */
+export function UpdatePill() {
+  const { sets } = useLearner();
+  const online = useOnline();
+  const [missing, setMissing] = useState(0);
+  useEffect(() => {
+    // Offline the pill is hidden by the render below; nothing to look up.
+    if (!online || !sets || !offlineSupported() || !hasDownloaded()) return;
+    let cancelled = false;
+    offlineStatus(mediaUrls(sets)).then(
+      (status) => !cancelled && setMissing(status.missing),
+      () => undefined,
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [online, sets]);
+  if (!online || missing === 0) return null;
+  return (
+    <Link className="status-pill status-update" to="/ajustes" state={OFFLINE_CARD_STATE} aria-label={t('updatePillLabel', { n: missing })}>
+      <span aria-hidden="true">⬇️</span> {t('updatePill')}
+    </Link>
   );
 }
 
@@ -45,6 +91,12 @@ export function OfflineCard() {
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [failed, setFailed] = useState(false);
   const supported = offlineSupported();
+  const location = useLocation();
+  const cardRef = useRef<HTMLElement>(null);
+  const wantsFocus = (location.state as { focus?: string } | null)?.focus === OFFLINE_CARD_STATE.focus;
+  useEffect(() => {
+    if (wantsFocus) cardRef.current?.scrollIntoView({ block: 'start' });
+  }, [wantsFocus]);
 
   const refresh = useCallback(() => {
     if (supported) offlineStatus(urls).then(setStatus, () => setStatus(null));
@@ -72,7 +124,7 @@ export function OfflineCard() {
 
   if (!supported) {
     return (
-      <section className="card" aria-labelledby="offline-title">
+      <section className="card" aria-labelledby="offline-title" ref={cardRef}>
         <h2 id="offline-title">{t('offlineTitle')}</h2>
         <p className="muted">{t('offlineUnsupported')}</p>
       </section>
@@ -81,7 +133,7 @@ export function OfflineCard() {
 
   const ready = status !== null && status.app && status.savedAt !== null && status.missing === 0;
   return (
-    <section className="card offline-card" aria-labelledby="offline-title">
+    <section className={`card offline-card${wantsFocus ? ' offline-card-focus' : ''}`} aria-labelledby="offline-title" ref={cardRef}>
       <h2 id="offline-title">{t('offlineTitle')}</h2>
       <p className="muted">{t('offlineIntro')}</p>
       <div role="status" className="offline-status">

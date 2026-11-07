@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { examLabel, t, weekLabel, wordCount } from '../../i18n';
 import { SampleBadge } from '../components/bits';
+import { OfflineNotice, UpdatePill } from '../components/Offline';
 import { useLearner } from '../LearnerContext';
 import { examPath, practicePath } from '../routes';
 import { todayIso } from '../scheduler';
@@ -14,6 +15,8 @@ export function HomePage() {
     <div className="home">
       <h1 className="greeting">{name ? t('helloName', { name }) : t('hello')}</h1>
       <p className="lead">{t('homeQuestion')}</p>
+      <OfflineNotice />
+      <UpdatePill />
       {!currentSet && topics.length === 0 && examSets.length === 0 ? (
         <p className="card center-note">{t('noContent')}</p>
       ) : (
