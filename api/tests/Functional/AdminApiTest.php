@@ -19,12 +19,14 @@ final class AdminApiTest extends WebTestCase
 
     private KernelBrowser $client;
     private string $uploads;
+    private string $audio;
 
     protected function setUp(): void
     {
         $data = $this->tempDir();
         $this->uploads = $this->tempDir();
-        foreach (['DATA_DIR' => $data, 'UPLOAD_DIR' => $this->uploads, 'ADMIN_USERNAME' => 'admin', 'ADMIN_PASSWORD' => self::PASSWORD] as $k => $v) {
+        $this->audio = $this->tempDir();
+        foreach (['DATA_DIR' => $data, 'UPLOAD_DIR' => $this->uploads, 'AUDIO_DIR' => $this->audio, 'SPEECH_DIR' => $this->tempDir(), 'ADMIN_USERNAME' => 'admin', 'ADMIN_PASSWORD' => self::PASSWORD] as $k => $v) {
             $_SERVER[$k] = $_ENV[$k] = $v;
         }
         $this->client = static::createClient();
@@ -49,6 +51,12 @@ final class AdminApiTest extends WebTestCase
         yield 'unpublish' => ['POST', '/api/admin/sets/sabc/unpublish'];
         yield 'upload' => ['POST', '/api/admin/sets/sabc/entries/e1/image'];
         yield 'usage stats' => ['GET', '/api/admin/stats'];
+        yield 'stories' => ['GET', '/api/admin/stories'];
+        yield 'story create' => ['POST', '/api/admin/stories'];
+        yield 'story validate' => ['POST', '/api/admin/stories/validate'];
+        yield 'story publish' => ['POST', '/api/admin/stories/st1/publish'];
+        yield 'exams' => ['GET', '/api/admin/exams'];
+        yield 'exam create' => ['POST', '/api/admin/exams'];
         yield 'unknown admin path' => ['POST', '/api/admin/anything'];
     }
 
@@ -115,24 +123,18 @@ final class AdminApiTest extends WebTestCase
         self::assertSame('draft', $set['status']);
         self::assertSame([], $this->publicSets(), 'Drafts are not visible to learners.');
 
-        $publish = $this->json('POST', "/api/admin/sets/{$set['id']}/publish", [], $token);
-        self::assertResponseStatusCodeSame(409);
-        self::assertStringContainsString('week', $publish['error']);
-
         $entryId = $set['entries'][3]['id'];
         $upload = $this->upload($set['id'], $entryId, $token, $this->pngFile());
         self::assertResponseIsSuccessful();
         self::assertStringStartsWith('/uploads/', $upload['image']);
 
-        $set['weekStart'] = '2026-09-21';
-        $this->json('PUT', "/api/admin/sets/{$set['id']}", $set, $token);
-        self::assertResponseIsSuccessful();
+        // Publishing needs no date.
         $this->json('POST', "/api/admin/sets/{$set['id']}/publish", [], $token);
         self::assertResponseIsSuccessful();
 
         $public = $this->publicSets();
         self::assertCount(1, $public);
-        self::assertSame('2026-09-21', $public[0]['weekStart']);
+        self::assertSame(['sheet', null], [$public[0]['kind'], $public[0]['receivedOn']]);
         self::assertSame($upload['image'], $public[0]['entries'][3]['image']);
         self::assertArrayNotHasKey('imageHint', $public[0]['entries'][0], 'Editorial hints stay admin-only.');
 
@@ -145,8 +147,8 @@ final class AdminApiTest extends WebTestCase
         self::assertSame($upload['image'], $updated['entries'][3]['image'], 'Images survive edits.');
         self::assertSame(['cubo de la basura', 'papelera'], $updated['entries'][0]['translations']['es']);
 
-        // A published set may not lose its week.
-        $updated['weekStart'] = null;
+        // A published set may not gain an entry that needs review.
+        $updated['entries'][0]['needsReview'] = true;
         $this->json('PUT', "/api/admin/sets/{$set['id']}", $updated, $token);
         self::assertResponseStatusCodeSame(422);
 
@@ -160,7 +162,7 @@ final class AdminApiTest extends WebTestCase
     {
         $token = $this->login();
         $created = $this->json('POST', '/api/admin/sets', [
-            'title' => 'Unclear', 'weekStart' => '2026-09-21',
+            'title' => 'Unclear',
             'entries' => [['basque' => 'Loreontzi', 'translations' => ['es' => ['florero']], 'needsReview' => true, 'reviewNote' => 'blurry']],
         ], $token);
         $response = $this->json('POST', "/api/admin/sets/{$created['set']['id']}/publish", [], $token);
@@ -187,7 +189,113 @@ final class AdminApiTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSame([], $this->client->getResponse()->headers->getCookies());
-        self::assertSame(['schemaVersion', 'sets'], array_keys(json_decode((string) $this->client->getResponse()->getContent(), true)));
+        self::assertSame(['schemaVersion', 'sets', 'stories', 'exams'], array_keys(json_decode((string) $this->client->getResponse()->getContent(), true)));
+    }
+
+    public function testStoryNeedsMatchingAudioBeforePublishingAndAnEditTakesItOffline(): void
+    {
+        $token = $this->login();
+        $set = $this->json('POST', '/api/admin/sets', ['title' => 'Words', 'entries' => [['id' => 'eskola', 'basque' => 'eskola', 'translations' => ['es' => ['escuela']]]]], $token)['set'];
+        $this->json('POST', "/api/admin/sets/{$set['id']}/publish", [], $token);
+
+        $document = self::story() + ['links' => ['entries' => [$set['id'].'/eskola'], 'words' => ['eskola', 'hegazkina']]];
+        $review = $this->json('POST', '/api/admin/stories/validate', ['text' => json_encode($document)], $token);
+        self::assertTrue($review['valid'], json_encode($review['errors']));
+        self::assertStringContainsString('hegazkina', implode(' ', array_column($review['warnings'], 'message')), 'unknown words are pointed out');
+
+        $story = $this->json('POST', '/api/admin/stories', $review['draft'], $token)['story'];
+        self::assertResponseStatusCodeSame(201);
+        self::assertSame('pending', $story['audio']['state']);
+        $refused = $this->json('POST', "/api/admin/stories/{$story['id']}/publish", [], $token);
+        self::assertResponseStatusCodeSame(409);
+        self::assertStringContainsString('No audio', $refused['error']);
+
+        // The worker's output for exactly this transcript: a clip plus its measured duration.
+        $this->fakeClip($story['transcript'], 55000);
+        $refused = $this->json('POST', "/api/admin/stories/{$story['id']}/publish", [], $token);
+        self::assertResponseStatusCodeSame(409, 'a 55 s clip is too long for a short story');
+        $this->fakeClip($story['transcript'], 28000, overwrite: true);
+        $this->json('POST', "/api/admin/stories/{$story['id']}/publish", [], $token);
+        self::assertResponseIsSuccessful();
+
+        $content = $this->publicContent();
+        self::assertCount(1, $content['stories']);
+        self::assertSame(28000, $content['stories'][0]['durationMs']);
+        self::assertStringStartsWith('/audio/', $content['stories'][0]['audio']);
+        self::assertArrayNotHasKey('needsReview', $content['stories'][0]);
+
+        // Editing the spoken text: the old clip no longer matches, so the story leaves the catalogue.
+        $edited = $this->json('GET', "/api/admin/stories/{$story['id']}")['story'];
+        $edited['transcript'] .= ' Amaiera.';
+        $saved = $this->json('PUT', "/api/admin/stories/{$story['id']}", $edited, $token)['story'];
+        self::assertSame(['draft', 'pending'], [$saved['status'], $saved['audio']['state']]);
+        self::assertSame([], $this->publicContent()['stories']);
+    }
+
+    public function testStoryValidationRejectsInconsistentQuestions(): void
+    {
+        $token = $this->login();
+        $bad = self::story();
+        $bad['questions'][0]['correct'] = 3;
+        $bad['questions'][0]['options'][1]['es'] = $bad['questions'][0]['options'][0]['es'];
+        $review = $this->json('POST', '/api/admin/stories/validate', ['text' => json_encode($bad)], $token);
+        self::assertFalse($review['valid']);
+        self::assertEqualsCanonicalizing(['questions[0].options', 'questions[0].correct'], array_column($review['errors'], 'path'));
+
+        $tooMany = self::story();
+        $tooMany['questions'] = array_fill(0, 3, $tooMany['questions'][0]);
+        self::assertFalse($this->json('POST', '/api/admin/stories/validate', ['text' => json_encode($tooMany)], $token)['valid'], 'short stories have 1–2 questions');
+    }
+
+    public function testExamsSelectSetsAndHaveAnOptionalDate(): void
+    {
+        $token = $this->login();
+        $a = $this->json('POST', '/api/admin/sets', ['title' => 'A', 'entries' => [['basque' => 'a', 'translations' => ['es' => ['b']]]]], $token)['set'];
+        $b = $this->json('POST', '/api/admin/sets', ['title' => 'B', 'entries' => [['basque' => 'c', 'translations' => ['es' => ['d']]]]], $token)['set'];
+        $this->json('POST', "/api/admin/sets/{$a['id']}/publish", [], $token);
+
+        $this->json('POST', '/api/admin/exams', ['title' => 'Azterketa', 'setIds' => ['nope']], $token);
+        self::assertResponseStatusCodeSame(422);
+        $exam = $this->json('POST', '/api/admin/exams', ['title' => 'Azterketa', 'examDate' => null, 'setIds' => [$a['id'], $b['id']]], $token)['exam'];
+        self::assertResponseStatusCodeSame(201);
+        self::assertSame([], $this->publicContent()['exams'], 'drafts are hidden');
+        $this->json('POST', "/api/admin/exams/{$exam['id']}/publish", [], $token);
+        self::assertSame([['id' => $exam['id'], 'title' => 'Azterketa', 'examDate' => null, 'setIds' => [$a['id']]]], $this->publicContent()['exams'], 'only published sets are listed');
+        self::assertCount(1, $this->publicSets(), 'an exam never removes material from ordinary practice');
+    }
+
+    /** @return array<string, mixed> */
+    private static function story(): array
+    {
+        return [
+            'schemaVersion' => 2, 'type' => 'story', 'id' => 'triku-eskolan', 'title' => 'Triku eskolan',
+            'format' => 'short', 'difficulty' => 1,
+            'transcript' => 'Triku eskolara doa. Txapi ere eskolara doa.',
+            'translations' => ['es' => 'Triku va a la escuela. Txapi también va a la escuela.', 'ru' => 'Трику идёт в школу. Чапи тоже идёт в школу.'],
+            'questions' => [[
+                'id' => 'q1',
+                'prompt' => ['es' => '¿Adónde va Triku?', 'ru' => 'Куда идёт Трику?'],
+                'options' => [['es' => 'A la escuela', 'ru' => 'В школу'], ['es' => 'A casa', 'ru' => 'Домой'], ['es' => 'Al parque', 'ru' => 'В парк']],
+                'correct' => 0,
+            ]],
+        ];
+    }
+
+    private function fakeClip(string $text, int $durationMs, bool $overwrite = false): void
+    {
+        $store = static::getContainer()->get(\App\Content\AudioStore::class);
+        $key = $store->key($text);
+        file_put_contents($this->audio."/$key.mp3", 'clip');
+        file_put_contents($this->audio."/$key.json", json_encode(['durationMs' => $durationMs]));
+        clearstatcache();
+    }
+
+    /** @return array<string, mixed> */
+    private function publicContent(): array
+    {
+        $this->client->request('GET', '/api/public/content');
+
+        return json_decode((string) $this->client->getResponse()->getContent(), true);
     }
 
     private function login(): string

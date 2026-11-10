@@ -1,8 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "title": "Lexikoa: Denborazkoak",
-  "weekStart": "2026-11-02",
-  "examDate": null,
+  "receivedOn": "2026-11-02",
   "description": "Vocabulario de expresiones de tiempo (Lexikoa: Denborazkoak).",
   "entries": [
     {

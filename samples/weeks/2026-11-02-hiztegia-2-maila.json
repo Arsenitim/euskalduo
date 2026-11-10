@@ -1,8 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "title": "HIZTEGIA (2. Maila)",
-  "weekStart": "2026-11-02",
-  "examDate": null,
+  "receivedOn": "2026-11-02",
   "description": "Vocabulario de la hoja Hiztegia (2. maila).",
   "entries": [
     {

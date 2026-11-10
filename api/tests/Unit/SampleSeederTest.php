@@ -27,10 +27,10 @@ final class SampleSeederTest extends TestCase
         $seeder = new SampleSeeder($db, $sets, new ImportValidator());
         $sampleDir = \dirname(self::samplePath('hiztegia-1-gaia.json'));
 
-        $titles = $seeder->seedOnce($sampleDir, new \DateTimeImmutable('2026-09-24'));
+        $titles = $seeder->seedOnce($sampleDir);
         self::assertSame(['HIZTEGIA (1.Gaia)', 'HILABETEAK ETA ASTEGUNAK'], $titles);
         $published = $sets->publishedContent();
-        self::assertSame(['2026-09-21', '2026-09-14'], array_column($published, 'weekStart'));
+        self::assertSame([null, null], array_column($published, 'receivedOn'), 'Samples no longer get invented dates.');
         self::assertTrue($published[0]['sample']);
 
         foreach ($sets->listSummaries() as $summary) {
@@ -46,17 +46,18 @@ final class SampleSeederTest extends TestCase
         $sets = new SetRepository($db);
         $seeder = new SampleSeeder($db, $sets, new ImportValidator());
         $sampleDir = \dirname(self::samplePath('hiztegia-1-gaia.json'));
-        $seeder->seedOnce($sampleDir, new \DateTimeImmutable('2026-09-24'));
+        $seeder->seedOnce($sampleDir);
 
-        self::assertSame(['ASTEGUNAK', 'HILABETEAK', 'Formación de palabras · Hitz motak'], $seeder->seedTopicsOnce($sampleDir.'/topics'));
+        self::assertSame(['ASTEGUNAK', 'Esaldiak · Frases', 'Gramatika · Gramática', 'HILABETEAK', 'Formación de palabras · Hitz motak'], $seeder->seedTopicsOnce($sampleDir.'/topics'));
         $published = $sets->publishedContent();
-        self::assertSame(['week', 'week', 'topic', 'topic', 'topic'], array_column($published, 'kind'), 'Weeks first, then categories.');
-        self::assertSame([null, null, null], array_column(\array_slice($published, 2), 'weekStart'));
+        self::assertSame(['sheet', 'sheet', 'topic', 'topic', 'topic'], array_column($published, 'kind'), 'Sheets first, then topics.');
+        self::assertSame(['HILABETEAK ETA ASTEGUNAK', 'HIZTEGIA (1.Gaia)'], array_column(\array_slice($published, 0, 2), 'title'), 'By title, not by date.');
+        self::assertSame([null, null, null], array_column(\array_slice($published, 2), 'receivedOn'));
         self::assertFalse($published[2]['sample']);
         self::assertSame(['astelehena', 'asteartea'], \array_slice(array_column($published[2]['entries'], 'id'), 0, 2));
 
         self::assertSame([], $seeder->seedTopicsOnce($sampleDir.'/topics'));
-        self::assertCount(5, $sets->listSummaries());
+        self::assertCount(7, $sets->listSummaries(), 'the two structured topics wait as drafts');
     }
 
     public function testWeeksAreSeededOncePerFileWithTheirOwnDates(): void
@@ -72,14 +73,14 @@ final class SampleSeederTest extends TestCase
         );
         $byTitle = array_column($sets->publishedContent(), null, 'title');
         $hitzMotak = $byTitle['Hitz motak, izan eta denborazkoak'];
-        self::assertSame('week', $hitzMotak['kind']);
-        self::assertSame('2026-10-05', $hitzMotak['weekStart']);
+        self::assertSame('sheet', $hitzMotak['kind']);
+        self::assertSame('2026-10-05', $hitzMotak['receivedOn']);
         self::assertFalse($hitzMotak['sample']);
         self::assertCount(57, $hitzMotak['entries']);
         self::assertNotNull($hitzMotak['entries'][0]['formation']);
-        self::assertSame('2026-09-28', $byTitle['HIZTEGIA (DENBORAZKOAK)']['weekStart']);
+        self::assertSame('2026-09-28', $byTitle['HIZTEGIA (DENBORAZKOAK)']['receivedOn']);
         self::assertCount(23, $byTitle['HIZTEGIA (DENBORAZKOAK)']['entries']);
-        self::assertSame('2026-11-02', $byTitle['Lexikoa: Denborazkoak']['weekStart']);
+        self::assertSame('2026-11-02', $byTitle['Lexikoa: Denborazkoak']['receivedOn']);
         self::assertCount(23, $byTitle['Lexikoa: Denborazkoak']['entries']);
 
         $sets->delete($hitzMotak['id']);
@@ -89,7 +90,7 @@ final class SampleSeederTest extends TestCase
         copy($weekDir.'/hiztegia-denborazkoak.json', $extra.'/hiztegia-denborazkoak.json');
         $other = json_decode((string) file_get_contents($weekDir.'/hiztegia-denborazkoak.json'), true);
         $other['title'] = 'Later week';
-        $other['weekStart'] = '2026-10-05';
+        $other['receivedOn'] = '2026-10-05';
         file_put_contents($extra.'/later.json', json_encode($other));
         self::assertSame(['Later week'], $seeder->seedWeeksOnce($extra), 'A week added later still reaches this install.');
     }
@@ -101,7 +102,7 @@ final class SampleSeederTest extends TestCase
         $sets = new SetRepository($db);
         $seeder = new SampleSeeder($db, $sets, new ImportValidator());
         $dir = \dirname(self::samplePath('hiztegia-1-gaia.json')).'/topics';
-        self::assertSame(['Formación de palabras · Hitz motak'], $seeder->seedTopicsOnce($dir));
+        self::assertSame(['Esaldiak · Frases', 'Gramatika · Gramática', 'Formación de palabras · Hitz motak'], $seeder->seedTopicsOnce($dir));
         $sets->delete($sets->publishedContent()[0]['id']);
         self::assertSame([], $seeder->seedTopicsOnce($dir));
         self::assertSame([], $sets->publishedContent());
@@ -118,7 +119,74 @@ final class SampleSeederTest extends TestCase
         unset($pdo);
 
         $db = new Database($dir);
-        self::assertSame('week', (new SetRepository($db))->find('sold')['kind']);
+        self::assertSame('sheet', (new SetRepository($db))->find('sold')['kind']);
         self::assertSame((string) Database::SCHEMA_VERSION, $db->getMeta('schema_version'));
+    }
+
+    public function testVersion7DatabaseMigratesWithoutLosingContentAndKeepsExamLinks(): void
+    {
+        $dir = $this->tempDir();
+        $db = new Database($dir);
+        $sets = new SetRepository($db);
+        $validator = new ImportValidator();
+        $id = $sets->create($validator->validate(['schemaVersion' => 1, 'title' => 'Week', 'weekStart' => '2026-09-28', 'entries' => [['id' => 'gaur', 'basque' => 'gaur', 'translations' => ['es' => ['hoy']]]]])->draft);
+        $sets->setStatus($id, 'published');
+        // Turn it back into a version 7 database: no v8 columns or tables, an exam date on the set.
+        $pdo = $db->pdo();
+        $pdo->exec('DROP TABLE exams');
+        $pdo->exec('DROP TABLE stories');
+        $pdo->exec('ALTER TABLE entries DROP COLUMN entry_type');
+        $pdo->exec('ALTER TABLE entries DROP COLUMN exercise_json');
+        $pdo->prepare('UPDATE homework_sets SET exam_date = ? WHERE id = ?')->execute(['2026-12-01', $id]);
+        $pdo->exec("UPDATE meta SET value = '7' WHERE key = 'schema_version'");
+        unset($pdo, $db, $sets);
+
+        $db = new Database($dir);
+        $sets = new SetRepository($db);
+        $set = $sets->find($id);
+        self::assertSame('8', $db->getMeta('schema_version'));
+        self::assertSame(['sheet', '2026-09-28', 'gaur', 'word'], [$set['kind'], $set['receivedOn'], $set['entries'][0]['id'], $set['entries'][0]['type']]);
+        $exams = (new \App\Content\ExamRepository($db))->all();
+        self::assertSame([['id' => $id, 'title' => 'Week', 'examDate' => '2026-12-01', 'setIds' => [$id], 'status' => 'published']], $exams, 'the exam keeps the set id so old links work');
+
+        // Running the migration again changes nothing.
+        $db->pdo()->exec("UPDATE meta SET value = '7' WHERE key = 'schema_version'");
+        $again = new Database($dir);
+        self::assertCount(1, (new \App\Content\ExamRepository($again))->all());
+        self::assertCount(1, (new SetRepository($again))->find($id)['entries']);
+    }
+
+    public function testStoriesAreSeededOnceAsDraftsNeedingReview(): void
+    {
+        $db = new Database($this->tempDir());
+        $stories = new \App\Content\StoryRepository($db);
+        $seeder = new SampleSeeder($db, new SetRepository($db), new ImportValidator(), $stories, new \App\Content\StoryValidator());
+        $dir = \dirname(self::samplePath('hiztegia-1-gaia.json')).'/stories';
+        $titles = $seeder->seedStoriesOnce($dir);
+        self::assertGreaterThanOrEqual(6, \count($titles));
+        $all = $stories->all();
+        self::assertGreaterThanOrEqual(4, \count(array_filter($all, static fn (array $s): bool => 'short' === $s['format'])));
+        self::assertGreaterThanOrEqual(2, \count(array_filter($all, static fn (array $s): bool => 'extended' === $s['format'])));
+        foreach ($all as $story) {
+            self::assertSame('draft', $story['status']);
+            self::assertTrue($story['needsReview'], $story['id']);
+        }
+        self::assertSame([], $stories->publishedContent());
+        $stories->delete($all[0]['id']);
+        self::assertSame([], $seeder->seedStoriesOnce($dir), 'Deleted stories must not come back.');
+    }
+
+    public function testStructuredTopicsWaitForReviewAsDrafts(): void
+    {
+        $db = new Database($this->tempDir());
+        $sets = new SetRepository($db);
+        $seeder = new SampleSeeder($db, $sets, new ImportValidator());
+        $seeder->seedTopicsOnce(\dirname(self::samplePath('hiztegia-1-gaia.json')).'/topics');
+        $byTitle = array_column($sets->listSummaries(), null, 'title');
+        foreach (['Esaldiak · Frases', 'Gramatika · Gramática'] as $title) {
+            self::assertSame('draft', $byTitle[$title]['status'], $title);
+            self::assertGreaterThan(0, $byTitle[$title]['reviewCount']);
+        }
+        self::assertSame('published', $byTitle['ASTEGUNAK']['status']);
     }
 }

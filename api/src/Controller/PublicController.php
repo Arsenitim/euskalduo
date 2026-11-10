@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Content\ExamRepository;
 use App\Content\SetRepository;
+use App\Content\StoryRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +25,15 @@ final class PublicController
     }
 
     #[Route('/api/public/content', methods: ['GET'])]
-    public function content(Request $request, SetRepository $sets): Response
+    public function content(Request $request, SetRepository $sets, StoryRepository $stories, ExamRepository $exams): Response
     {
-        $response = new JsonResponse(['schemaVersion' => 1, 'sets' => $sets->publishedContent()]);
+        $published = $sets->publishedContent();
+        $response = new JsonResponse([
+            'schemaVersion' => 2,
+            'sets' => $published,
+            'stories' => $stories->publishedContent(),
+            'exams' => $exams->publishedContent(array_column($published, 'id')),
+        ]);
         $response->setEncodingOptions(JsonResponse::DEFAULT_ENCODING_OPTIONS | \JSON_UNESCAPED_UNICODE);
         $response->setEtag(hash('xxh128', (string) $response->getContent()));
         $response->headers->set('Cache-Control', 'no-cache, public');

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "type": "story",
+  "id": "txapi-ordularia",
+  "title": "Txapiren ordulari berria",
+  "format": "short",
+  "difficulty": 1,
+  "transcript": "Txapik ordulari berri bat du. Ordularia gorria eta koloretsua da. Goizean, zazpietan, ordulariak soinua egiten du: pi, pi, pi! Baina Txapi ez da esnatzen. Zortzietan, berriz: pi, pi, pi! Txapi ohean dago, etzanda. Azkenean, Triku etortzen da eta oso ozen esaten du: Txapi! Berandu goaz eskolara! Eta Txapi salto batean altxatzen da.",
+  "translations": {
+    "es": "Txapi tiene un reloj nuevo. El reloj es rojo y colorido. Por la mañana, a las siete, el reloj suena: ¡pi, pi, pi! Pero Txapi no se despierta. A las ocho, otra vez: ¡pi, pi, pi! Txapi sigue en la cama, tumbada. Al final llega Triku y dice muy alto: «¡Txapi! ¡Llegamos tarde a la escuela!». Y Txapi se levanta de un salto.",
+    "ru": "У Чапи новые часы. Часы красные и разноцветные. Утром, в семь часов, часы звенят: пи, пи, пи! Но Чапи не просыпается. В восемь снова: пи, пи, пи! Чапи лежит в кровати. Наконец приходит Трику и очень громко говорит: «Чапи! Мы опаздываем в школу!» И Чапи вскакивает одним прыжком."
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": {
+        "es": "¿Qué tiene Txapi de nuevo?",
+        "ru": "Что новое у Чапи?"
+      },
+      "options": [
+        {
+          "es": "Un reloj",
+          "ru": "Часы"
+        },
+        {
+          "es": "Una mochila",
+          "ru": "Рюкзак"
+        },
+        {
+          "es": "Una cama",
+          "ru": "Кровать"
+        }
+      ],
+      "correct": 0
+    },
+    {
+      "id": "q2",
+      "prompt": {
+        "es": "¿Quién despierta por fin a Txapi?",
+        "ru": "Кто в конце концов будит Чапи?"
+      },
+      "options": [
+        {
+          "es": "El reloj",
+          "ru": "Часы"
+        },
+        {
+          "es": "La profesora",
+          "ru": "Учительница"
+        },
+        {
+          "es": "Triku",
+          "ru": "Трику"
+        }
+      ],
+      "correct": 2
+    }
+  ],
+  "links": {
+    "words": [
+      "Ordularia",
+      "Koloretsua",
+      "Goizean",
+      "Etzanda"
+    ],
+    "topics": [
+      "etxea",
+      "denborazkoak"
+    ]
+  },
+  "needsReview": true,
+  "reviewNote": "Starter story written without review by a Basque speaker. Check the Basque text, the translations and the questions before publishing."
+}

@@ -109,7 +109,24 @@ final class StatsApiTest extends WebTestCase
         self::assertSame(['week'], array_keys($byKey('mode')));
         self::assertSame(1, $byKey('connection')['offline']['rounds']);
         self::assertSame(3, $byKey('display')['app']['answers']);
-        self::assertSame(['set', 'exercise', 'mode', 'connection', 'display'], array_keys($report['breakdown']));
+        self::assertSame(['set', 'story', 'exercise', 'mode', 'connection', 'display'], array_keys($report['breakdown']));
+    }
+
+    public function testAcceptsTheNewLessonListeningAndExerciseLabels(): void
+    {
+        $part = static fn (string $dimension, string $key): array => ['dimension' => $dimension, 'key' => $key, 'answers' => ['correct' => 1], 'rounds' => 0];
+        $this->post(['answers' => ['correct' => 1], 'breakdown' => [
+            $part('mode', 'lesson'), $part('mode', 'listening'), $part('mode', 'mix'),
+            $part('exercise', 'sentence-build'), $part('exercise', 'grammar-choice'), $part('exercise', 'listening'),
+            $part('story', 'no-such-story'),
+        ]]);
+        self::assertResponseStatusCodeSame(204);
+        $this->login();
+        $this->client->request('GET', '/api/admin/stats');
+        $report = json_decode((string) $this->client->getResponse()->getContent(), true);
+        self::assertEqualsCanonicalizing(['lesson', 'listening', 'mix'], array_column($report['breakdown']['mode'], 'key'), 'legacy "mix" from queued counters still counts');
+        self::assertEqualsCanonicalizing(['sentence-build', 'grammar-choice', 'listening'], array_column($report['breakdown']['exercise'], 'key'));
+        self::assertSame([], $report['breakdown']['story'], 'only ids of existing stories');
     }
 
     public function testFilesOfflinePracticeUnderItsOwnRecentDay(): void

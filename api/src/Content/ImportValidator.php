@@ -13,17 +13,24 @@ namespace App\Content;
  */
 final class ImportValidator
 {
-    public const SCHEMA_VERSION = 1;
+    /** Version 2 is current; version 1 (homework weeks) is still accepted and normalised. */
+    public const SCHEMA_VERSION = 2;
+    public const SCHEMA_VERSIONS = [1, 2];
     public const LANGUAGES = ['es', 'ru'];
-    public const KINDS = ['week', 'topic'];
+    /** "sheet": material from school (the old "week"). "topic": a category such as the months. */
+    public const KINDS = ['sheet', 'topic'];
+    public const ENTRY_TYPES = ['word', 'sentence', 'grammar'];
+    /** The gap in a grammar sentence. */
+    public const GAP = '___';
 
     private const MAX_ENTRIES = 300;
     private const MAX_GROUPS = 20;
     private const MAX_ALTERNATIVES = 8;
     private const ID_PATTERN = '/^[a-z0-9][a-z0-9_-]{0,39}$/';
 
-    private const TOP_KEYS = ['schemaVersion', 'kind', 'title', 'weekStart', 'examDate', 'description', 'groups', 'entries'];
-    private const ENTRY_KEYS = ['id', 'basque', 'translations', 'note', 'imageHint', 'emoji', 'group', 'needsReview', 'reviewNote', 'formation'];
+    private const MAX_TILES = 12;
+    private const TOP_KEYS = ['schemaVersion', 'type', 'kind', 'title', 'receivedOn', 'weekStart', 'examDate', 'description', 'groups', 'entries'];
+    private const ENTRY_KEYS = ['id', 'type', 'basque', 'translations', 'note', 'imageHint', 'emoji', 'group', 'needsReview', 'reviewNote', 'formation', 'sentence', 'grammar'];
 
     /** @var list<array{path: string, entry: ?int, message: string}> */
     private array $errors = [];
@@ -45,9 +52,12 @@ final class ImportValidator
         }
 
         if ($requireSchemaVersion || \array_key_exists('schemaVersion', $input)) {
-            if (($input['schemaVersion'] ?? null) !== self::SCHEMA_VERSION) {
-                $this->error('schemaVersion', null, \sprintf('schemaVersion must be %d.', self::SCHEMA_VERSION));
+            if (!\in_array($input['schemaVersion'] ?? null, self::SCHEMA_VERSIONS, true)) {
+                $this->error('schemaVersion', null, 'schemaVersion must be 2 (or 1 for older files).');
             }
+        }
+        if (isset($input['type']) && 'set' !== $input['type']) {
+            $this->error('type', null, 'This is not a word set (use the story importer for type "story").');
         }
         foreach (array_keys($input) as $key) {
             if (!\in_array($key, self::TOP_KEYS, true)) {
@@ -58,20 +68,26 @@ final class ImportValidator
         $title = $this->text($input['title'] ?? null, 'title', null, 120, required: true);
         $description = $this->text($input['description'] ?? null, 'description', null, 500);
         $kind = $this->kind($input['kind'] ?? null);
-        $weekStart = $this->weekStart($input['weekStart'] ?? null);
-        if ('topic' === $kind && null !== $weekStart) {
-            $this->warning('weekStart', null, 'Categories have no homework week; weekStart was ignored.');
-            $weekStart = null;
+        // Older files name the date "weekStart". It is only a record of when the
+        // sheet arrived: learning never depends on it.
+        $receivedOn = $this->isoDate($input['receivedOn'] ?? null, 'receivedOn');
+        if (null === $receivedOn && \array_key_exists('weekStart', $input)) {
+            $receivedOn = $this->isoDate($input['weekStart'], 'weekStart');
         }
-        $examDate = $this->isoDate($input['examDate'] ?? null, 'examDate');
+        if ('topic' === $kind && null !== $receivedOn) {
+            $this->warning('receivedOn', null, 'Topics have no date; it was ignored.');
+            $receivedOn = null;
+        }
+        if (null !== ($input['examDate'] ?? null)) {
+            $this->warning('examDate', null, 'examDate is no longer part of a set and was ignored. Create an exam under Admin → Exams instead.');
+        }
         $groups = $this->groups($input['groups'] ?? []);
         $entries = $this->entries($input['entries'] ?? null, array_column($groups, 'key'));
 
         $draft = [
             'kind' => $kind,
             'title' => $title ?? '',
-            'weekStart' => $weekStart,
-            'examDate' => $examDate,
+            'receivedOn' => $receivedOn,
             'description' => $description,
             'groups' => $groups,
             'entries' => $entries,
@@ -80,29 +96,19 @@ final class ImportValidator
         return new ValidationResult($draft, $this->errors, $this->warnings);
     }
 
-    /** "week" (homework for a given week, the default) or "topic" (a category such as the months). */
+    /** "sheet" (school material, the default; legacy "week") or "topic" (a category such as the months). */
     private function kind(mixed $value): string
     {
-        if (null === $value) {
-            return 'week';
+        if (null === $value || 'week' === $value) {
+            return 'sheet';
         }
         if (!\in_array($value, self::KINDS, true)) {
-            $this->error('kind', null, 'kind must be "week" or "topic".');
+            $this->error('kind', null, 'kind must be "sheet" or "topic".');
 
-            return 'week';
+            return 'sheet';
         }
 
         return $value;
-    }
-
-    private function weekStart(mixed $value): ?string
-    {
-        $date = $this->isoDate($value, 'weekStart');
-        if (null !== $date && '1' !== \DateTimeImmutable::createFromFormat('!Y-m-d', $date, new \DateTimeZone('UTC'))->format('N')) {
-            $this->warning('weekStart', null, 'weekStart is not a Monday; it will be shown as “week of” this date.');
-        }
-
-        return $date;
     }
 
     private function isoDate(mixed $value, string $path): ?string
@@ -224,7 +230,12 @@ final class ImportValidator
                 }
             }
 
-            $basque = $this->text($raw['basque'] ?? null, "$path.basque", $i, 80, required: true);
+            $type = $raw['type'] ?? 'word';
+            if (!\in_array($type, self::ENTRY_TYPES, true)) {
+                $this->error("$path.type", $i, 'type must be "word", "sentence" or "grammar".');
+                $type = 'word';
+            }
+            $basque = $this->text($raw['basque'] ?? null, "$path.basque", $i, 'word' === $type ? 80 : 160, required: true);
             $translations = $this->translations($raw['translations'] ?? null, "$path.translations", $i);
 
             $group = $raw['group'] ?? null;
@@ -244,8 +255,23 @@ final class ImportValidator
                 $needsReview = true;
             }
 
+            $sentence = 'sentence' === $type ? $this->sentence($raw['sentence'] ?? null, $basque, "$path.sentence", $i) : null;
+            $grammar = 'grammar' === $type ? $this->grammar($raw['grammar'] ?? null, $basque, "$path.grammar", $i) : null;
+            foreach (['sentence', 'grammar'] as $field) {
+                if ($field !== $type && null !== ($raw[$field] ?? null)) {
+                    $this->warning("$path.$field", $i, \sprintf('"%s" is only used when type is "%s"; it was ignored.', $field, $field));
+                }
+            }
+            if ('word' !== $type && null !== ($raw['formation'] ?? null)) {
+                $this->warning("$path.formation", $i, 'formation is only used for words; it was ignored.');
+                $raw['formation'] = null;
+            }
+
             $entry = [
                 'id' => $id,
+                'type' => $type,
+                'sentence' => $sentence,
+                'grammar' => $grammar,
                 'basque' => $basque ?? '',
                 'formation' => $this->formation($raw['formation'] ?? null, "$path.formation", $i),
                 'translations' => $translations,
@@ -340,6 +366,147 @@ final class ImportValidator
         }
 
         return $result;
+    }
+
+    /**
+     * Sentence building: curated tiles in the correct order (repeats allowed),
+     * optional other accepted orders and optional extra tiles that do not
+     * belong. Nothing is inferred: every accepted order is listed explicitly.
+     *
+     * @return array{tiles: list<string>, alternatives: list<list<string>>, distractors: list<string>}|null
+     */
+    private function sentence(mixed $value, ?string $basque, string $path, int $entry): ?array
+    {
+        if (!\is_array($value) || array_is_list($value)) {
+            $this->error($path, $entry, 'A sentence entry needs "sentence": {"tiles": [...]}.');
+
+            return null;
+        }
+        $tiles = $this->textList($value['tiles'] ?? null, "$path.tiles", $entry, 2, self::MAX_TILES, 40);
+        if (null === $tiles) {
+            return null;
+        }
+        if (null !== $basque && self::sentenceKey(implode(' ', $tiles)) !== self::sentenceKey($basque)) {
+            $this->error("$path.tiles", $entry, 'The tiles in order must spell the Basque sentence.');
+        }
+        $sorted = self::multiset($tiles);
+        $alternatives = [];
+        $raw = $value['alternatives'] ?? [];
+        if (!\is_array($raw) || !array_is_list($raw)) {
+            $this->error("$path.alternatives", $entry, 'alternatives must be a list of tile lists.');
+            $raw = [];
+        }
+        $seen = [self::sentenceKey(implode(' ', $tiles)) => true];
+        foreach ($raw as $j => $alternative) {
+            $list = $this->textList($alternative, "$path.alternatives[$j]", $entry, 2, self::MAX_TILES, 40);
+            if (null === $list) {
+                continue;
+            }
+            if (self::multiset($list) !== $sorted) {
+                $this->error("$path.alternatives[$j]", $entry, 'Each alternative must use exactly the same tiles as the sentence.');
+                continue;
+            }
+            $key = self::sentenceKey(implode(' ', $list));
+            if (isset($seen[$key])) {
+                $this->warning("$path.alternatives[$j]", $entry, 'Repeated order was merged.');
+                continue;
+            }
+            $seen[$key] = true;
+            $alternatives[] = $list;
+        }
+        $distractors = [];
+        if (null !== ($value['distractors'] ?? null)) {
+            $distractors = $this->textList($value['distractors'], "$path.distractors", $entry, 0, 4, 40) ?? [];
+            $tileKeys = array_map(TextNormalizer::matchKey(...), $tiles);
+            foreach ($distractors as $distractor) {
+                if (\in_array(TextNormalizer::matchKey($distractor), $tileKeys, true)) {
+                    $this->error("$path.distractors", $entry, \sprintf('“%s” is part of the sentence and cannot be an extra tile.', $distractor));
+                }
+            }
+        }
+
+        return ['tiles' => $tiles, 'alternatives' => $alternatives, 'distractors' => $distractors];
+    }
+
+    /**
+     * Grammar practice: a curated sentence with one gap ("___"), the accepted
+     * fillers and curated wrong ones. The complete sentence ("basque") must be
+     * the text with the first accepted answer filled in.
+     *
+     * @return array{text: string, answers: list<string>, distractors: list<string>}|null
+     */
+    private function grammar(mixed $value, ?string $basque, string $path, int $entry): ?array
+    {
+        if (!\is_array($value) || array_is_list($value)) {
+            $this->error($path, $entry, 'A grammar entry needs "grammar": {"text": "… ___ …", "answers": [...], "distractors": [...]}.');
+
+            return null;
+        }
+        $text = $this->text($value['text'] ?? null, "$path.text", $entry, 160, required: true);
+        $answers = $this->textList($value['answers'] ?? null, "$path.answers", $entry, 1, 4, 40);
+        $distractors = $this->textList($value['distractors'] ?? null, "$path.distractors", $entry, 1, 5, 40);
+        if (null === $text || null === $answers || null === $distractors) {
+            return null;
+        }
+        if (1 !== substr_count($text, self::GAP)) {
+            $this->error("$path.text", $entry, 'The text must contain exactly one gap written as ___.');
+
+            return null;
+        }
+        $answerKeys = array_map(TextNormalizer::matchKey(...), $answers);
+        foreach ($distractors as $distractor) {
+            if (\in_array(TextNormalizer::matchKey($distractor), $answerKeys, true)) {
+                $this->error("$path.distractors", $entry, \sprintf('“%s” is also an accepted answer.', $distractor));
+            }
+        }
+        if (\count(array_unique(array_map(TextNormalizer::matchKey(...), $distractors))) !== \count($distractors)) {
+            $this->error("$path.distractors", $entry, 'Wrong options must be different from each other.');
+        }
+        if (null !== $basque && self::sentenceKey(str_replace(self::GAP, $answers[0], $text)) !== self::sentenceKey($basque)) {
+            $this->error("$path.text", $entry, 'The text with the first answer filled in must equal the Basque sentence.');
+        }
+
+        return ['text' => $text, 'answers' => $answers, 'distractors' => $distractors];
+    }
+
+    /** @return list<string>|null */
+    private function textList(mixed $value, string $path, int $entry, int $min, int $max, int $maxLength): ?array
+    {
+        if (!\is_array($value) || !array_is_list($value)) {
+            $this->error($path, $entry, 'Must be a list of texts.');
+
+            return null;
+        }
+        if (\count($value) < $min || \count($value) > $max) {
+            $this->error($path, $entry, \sprintf('Needs %d to %d items.', $min, $max));
+
+            return null;
+        }
+        $result = [];
+        foreach ($value as $j => $item) {
+            $text = $this->text($item, "{$path}[$j]", $entry, $maxLength, required: true);
+            if (null === $text) {
+                return null;
+            }
+            $result[] = $text;
+        }
+
+        return $result;
+    }
+
+    /** Compares sentences ignoring case, accents and spaces before punctuation. */
+    public static function sentenceKey(string $value): string
+    {
+        return TextNormalizer::matchKey((string) preg_replace('/\s+([.,!?;:])/u', '$1', $value));
+    }
+
+    /** @param list<string> $tiles */
+    private static function multiset(array $tiles): array
+    {
+        $keys = array_map(TextNormalizer::matchKey(...), $tiles);
+        sort($keys);
+
+        return $keys;
     }
 
     /** Curated word/stem + word/suffix; never infer morphology from spelling. */

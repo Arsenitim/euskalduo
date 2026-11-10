@@ -24,6 +24,7 @@ services:
       - content:/data
       - uploads:/uploads
       - audio:/audio:ro
+      - speech-queue:/speech
 
   web:
     build:
@@ -57,6 +58,8 @@ services:
     volumes:
       - audio:/audio
       - speech-models:/models
+      # Texts the API wants clips for, drafts included (written by the API).
+      - speech-queue:/speech:ro
 
   # Test runners (not started by default):
   #   docker compose --profile test run --rm api-test
@@ -80,3 +83,4 @@ volumes:
   uploads:
   audio:
   speech-models:
+  speech-queue:

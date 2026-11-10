@@ -33,7 +33,7 @@ final class StatsController
      * Anonymous counters from the learner app, sent only while practising:
      * {"day": "YYYY-MM-DD", "newDevice": bool, "activeToday": bool, "activeWeek": bool,
      *  "answers": {"correct": n, …}, "rounds": n,
-     *  "breakdown": [{"dimension": "set|exercise|mode|connection|display", "key": "…", "answers": {…}, "rounds": n}, …]}.
+     *  "breakdown": [{"dimension": "set|story|exercise|mode|connection|display", "key": "…", "answers": {…}, "rounds": n}, …]}.
      * "day" is optional (the device's date when it practised, e.g. offline);
      * a missing, malformed or out-of-range day counts as today (UTC).
      * Breakdown keys are fixed labels or the id of an existing homework set;

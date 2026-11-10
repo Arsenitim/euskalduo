@@ -5,7 +5,8 @@ RUN pip install --no-cache-dir piper-tts==1.8.0
 WORKDIR /app
 COPY tts/worker.py tts/profile.json ./
 # Volumes must be writable by the unprivileged worker on their first creation.
-RUN mkdir /audio /models && chown -R 10001:10001 /audio /models
+# /speech is written by the API (www-data, uid 82) and only read here.
+RUN mkdir /audio /models /speech && chown -R 10001:10001 /audio /models && chown 82:82 /speech
 USER 10001:10001
 ENV OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 ENTRYPOINT ["python", "worker.py"]

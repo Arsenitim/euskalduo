@@ -1,8 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "title": "HIZTEGIA (DENBORAZKOAK)",
-  "weekStart": "2026-09-28",
-  "examDate": "2026-11-03",
+  "receivedOn": "2026-09-28",
   "description": "Vocabulario de expresiones de tiempo (denborazkoak).",
   "entries": [
     {

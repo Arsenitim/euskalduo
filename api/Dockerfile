@@ -13,7 +13,7 @@ COPY api/docker/fpm.conf /usr/local/etc/php-fpm.d/zz-euskalduo.conf
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 ENV APP_ENV=prod APP_DEBUG=0 DATA_DIR=/data UPLOAD_DIR=/uploads SAMPLE_DIR=/app/samples FPM_MAX_CHILDREN=8
-RUN mkdir -p /data /uploads /audio && chown www-data:www-data /data /uploads \
+RUN mkdir -p /data /uploads /audio /speech && chown www-data:www-data /data /uploads /speech \
  && chown 10001:10001 /audio
 
 FROM base AS dev

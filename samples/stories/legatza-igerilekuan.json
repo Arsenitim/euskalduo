@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "type": "story",
+  "id": "legatza-igerilekuan",
+  "title": "Legatz bat igerilekuan?",
+  "format": "short",
+  "difficulty": 2,
+  "transcript": "Larunbata da. Triku eta Txapi igerilekura doaz. Uretan, Txapik zerbait ikusten du. Begira, legatz bat! oihu egiten du. Triku, beldurti, hurbiltzen da. Baina ez da legatza. Irakaslearen betaurrekoak dira! Irakaslea ere igerilekuan dago, eta betaurrekoak ahaztu ditu. Txapik betaurrekoak ematen dizkio. Irakasleak barre egiten du: Eskerrik asko! Orain zuek ikusten zaituztet!",
+  "translations": {
+    "es": "Es sábado. Triku y Txapi van a la piscina. En el agua, Txapi ve algo. «¡Mira, una merluza!», grita. Triku, miedoso, se acerca. Pero no es una merluza. ¡Son las gafas de la profesora! La profesora también está en la piscina y se ha olvidado las gafas. Txapi se las da. La profesora se ríe: «¡Gracias! ¡Ahora os veo!».",
+    "ru": "Суббота. Трику и Чапи идут в бассейн. В воде Чапи что-то видит. «Смотри, хек!» — кричит она. Трику, трусишка, подплывает ближе. Но это не хек. Это очки учительницы! Учительница тоже в бассейне, и она забыла свои очки. Чапи отдаёт ей очки. Учительница смеётся: «Спасибо! Теперь я вас вижу!»"
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": {
+        "es": "¿Qué ve Txapi en el agua?",
+        "ru": "Что Чапи видит в воде?"
+      },
+      "options": [
+        {
+          "es": "Una merluza",
+          "ru": "Хека"
+        },
+        {
+          "es": "Las gafas de la profesora",
+          "ru": "Очки учительницы"
+        },
+        {
+          "es": "Una barca",
+          "ru": "Лодку"
+        }
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q2",
+      "prompt": {
+        "es": "¿Qué día es?",
+        "ru": "Какой сегодня день?"
+      },
+      "options": [
+        {
+          "es": "Lunes",
+          "ru": "Понедельник"
+        },
+        {
+          "es": "Domingo",
+          "ru": "Воскресенье"
+        },
+        {
+          "es": "Sábado",
+          "ru": "Суббота"
+        }
+      ],
+      "correct": 2
+    }
+  ],
+  "links": {
+    "words": [
+      "larunbata",
+      "Igerilekua",
+      "Legatza",
+      "Beldurti",
+      "Hurbildu",
+      "Ahaztu"
+    ],
+    "topics": [
+      "eskola",
+      "animaliak"
+    ]
+  },
+  "needsReview": true,
+  "reviewNote": "Starter story written without review by a Basque speaker. Check the Basque text, the translations and the questions before publishing."
+}

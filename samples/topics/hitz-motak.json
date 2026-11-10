@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "kind": "topic",
   "title": "Formación de palabras · Hitz motak",
-  "weekStart": null,
+  "receivedOn": null,
   "description": "Une dos palabras (hitz elkartuak) o añade un sufijo (hitz eratorriak). Ejemplos de la ficha del 5 de octubre de 2026.",
   "groups": [
     {

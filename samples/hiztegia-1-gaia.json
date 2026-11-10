@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "title": "HIZTEGIA (1.Gaia)",
-  "weekStart": null,
+  "receivedOn": null,
   "description": "Vocabulario del tema 1 (1.Gaia).",
   "entries": [
     {

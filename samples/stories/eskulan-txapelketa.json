@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 2,
+  "type": "story",
+  "id": "eskulan-txapelketa",
+  "title": "Eskulanen txapelketa",
+  "format": "extended",
+  "difficulty": 2,
+  "transcript": "Ostirala da, eta ikastetxean txapelketa bat dago: eskulanen txapelketa. Ikasle guztiek zerbait egin behar dute. Trikuk loreontzi koloretsu bat egiten du. Txapik, berriz, ordulari bat egiten du kartoiz. Irakaslea oso arduratsua da, eta lan guztiak mahai handi batean jartzen ditu. Eguerdian, jantokian, Txapi urduri dago. Nire ordulariak ez du funtzionatzen, esaten du. Ez dio axola, esaten du Trikuk. Oso polita da. Arratsaldean, irakasleak irabazlea esaten du. Txapelketaren irabazlea Txapi da! Txapi harrituta dago. Zergatik? galdetzen du. Irakasleak barre egiten du. Zure ordulariak ez du ordua ematen, baina oso bitxia eta dibertigarria da! Gauean, Txapi etxean dago, pozik. Bere ordularia ohe ondoan jartzen du. Ez du funtzionatzen, baina egun hau ahaztezina da.",
+  "translations": {
+    "es": "Es viernes y en el colegio hay un concurso: el concurso de manualidades. Todos los alumnos tienen que hacer algo. Triku hace un florero colorido. Txapi, en cambio, hace un reloj de cartón. La profesora es muy cuidadosa y pone todos los trabajos en una mesa grande. Al mediodía, en el comedor, Txapi está nerviosa. «Mi reloj no funciona», dice. «No importa», dice Triku. «Es muy bonito». Por la tarde, la profesora anuncia el ganador. «¡La ganadora del concurso es Txapi!». Txapi está sorprendida. «¿Por qué?», pregunta. La profesora se ríe: «Tu reloj no da la hora, ¡pero es muy curioso y divertido!». Por la noche, Txapi está en casa, contenta. Pone su reloj junto a la cama. No funciona, pero este día es inolvidable.",
+    "ru": "Пятница, и в школе проходит конкурс поделок. Все ученики должны что-то сделать. Трику делает разноцветную вазу для цветов. А Чапи делает часы из картона. Учительница очень аккуратная, она ставит все работы на большой стол. В полдень, в столовой, Чапи волнуется. «Мои часы не работают», — говорит она. «Неважно, — говорит Трику. — Они очень красивые». Днём учительница объявляет победителя: «Победитель конкурса — Чапи!» Чапи удивлена. «Почему?» — спрашивает она. Учительница смеётся: «Твои часы не показывают время, но они очень необычные и весёлые!» Вечером Чапи дома, довольная. Она ставит свои часы рядом с кроватью. Они не работают, но этот день незабываемый."
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": {
+        "es": "¿Qué día es el concurso?",
+        "ru": "В какой день проходит конкурс?"
+      },
+      "options": [
+        {
+          "es": "Viernes",
+          "ru": "В пятницу"
+        },
+        {
+          "es": "Lunes",
+          "ru": "В понедельник"
+        },
+        {
+          "es": "Sábado",
+          "ru": "В субботу"
+        }
+      ],
+      "correct": 0
+    },
+    {
+      "id": "q2",
+      "prompt": {
+        "es": "¿Qué hace Triku?",
+        "ru": "Что делает Трику?"
+      },
+      "options": [
+        {
+          "es": "Un reloj",
+          "ru": "Часы"
+        },
+        {
+          "es": "Un florero",
+          "ru": "Вазу для цветов"
+        },
+        {
+          "es": "Una barca",
+          "ru": "Лодку"
+        }
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q3",
+      "prompt": {
+        "es": "¿Por qué está nerviosa Txapi?",
+        "ru": "Почему Чапи волнуется?"
+      },
+      "options": [
+        {
+          "es": "Ha olvidado la mochila",
+          "ru": "Она забыла рюкзак"
+        },
+        {
+          "es": "No le gusta la comida",
+          "ru": "Ей не нравится еда"
+        },
+        {
+          "es": "Su reloj no funciona",
+          "ru": "Её часы не работают"
+        }
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q4",
+      "prompt": {
+        "es": "¿Quién gana el concurso?",
+        "ru": "Кто побеждает в конкурсе?"
+      },
+      "options": [
+        {
+          "es": "Txapi",
+          "ru": "Чапи"
+        },
+        {
+          "es": "Triku",
+          "ru": "Трику"
+        },
+        {
+          "es": "La profesora",
+          "ru": "Учительница"
+        }
+      ],
+      "correct": 0
+    }
+  ],
+  "links": {
+    "words": [
+      "ostirala",
+      "ikastetxea",
+      "Txapelketa",
+      "Eskulana",
+      "Loreontzi",
+      "Koloretsua",
+      "Ordularia",
+      "Arduratsu",
+      "jantokia",
+      "Urduri",
+      "Irabazle",
+      "Bitxia",
+      "Ahaztezin"
+    ],
+    "topics": [
+      "eskola"
+    ]
+  },
+  "needsReview": true,
+  "reviewNote": "Starter story written without review by a Basque speaker. Check the Basque text, the translations and the questions before publishing."
+}

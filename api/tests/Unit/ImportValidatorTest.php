@@ -38,34 +38,104 @@ final class ImportValidatorTest extends TestCase
         self::assertSame($document['entries'][0]['formation'], $sets->publishedContent()[0]['entries'][0]['formation']);
     }
 
-    public function testExamDateSurvivesStorageAndEditorUpdates(): void
+    public function testLegacyWeekImportIsNormalisedToASheetWithoutDateDependence(): void
     {
-        $document = $this->sample('weeks/hiztegia-denborazkoak.json');
-        self::assertSame('2026-11-03', $document['examDate']);
-        $result = $this->validator->validate($document);
+        $legacy = [
+            'schemaVersion' => 1,
+            'kind' => 'week',
+            'title' => 'HIZTEGIA',
+            'weekStart' => '2026-09-28',
+            'examDate' => '2026-11-03',
+            'entries' => [['basque' => 'gaur', 'translations' => ['es' => ['hoy']]]],
+        ];
+        $result = $this->validator->validate($legacy);
         self::assertTrue($result->isValid(), json_encode($result->errors));
-        self::assertSame('2026-11-03', $result->draft['examDate']);
+        self::assertSame('sheet', $result->draft['kind']);
+        self::assertSame('2026-09-28', $result->draft['receivedOn'], 'the old week is kept only as provenance');
+        self::assertArrayNotHasKey('weekStart', $result->draft);
+        self::assertArrayNotHasKey('examDate', $result->draft);
+        self::assertContains('examDate', array_column($result->warnings, 'path'));
 
         $sets = new SetRepository(new \App\Content\Database($this->tempDir()));
         $id = $sets->create($result->draft);
+        self::assertSame([], SetRepository::publishBlockers($sets->find($id)));
         $sets->setStatus($id, 'published');
-        self::assertSame('2026-11-03', $sets->publishedContent()[0]['examDate']);
+        $public = $sets->publishedContent()[0];
+        self::assertSame('sheet', $public['kind']);
+        self::assertSame('2026-09-28', $public['receivedOn']);
+        self::assertArrayNotHasKey('weekStart', $public);
 
-        $draft = $this->validator->validate($sets->find($id), false);
-        self::assertTrue($draft->isValid());
-        $sets->update($id, $draft->draft);
-        self::assertSame('2026-11-03', $sets->publishedContent()[0]['examDate']);
+        // Editor round trip keeps the date and the kind.
+        $again = $this->validator->validate($sets->find($id), false);
+        self::assertTrue($again->isValid(), json_encode($again->errors));
+        self::assertSame(['sheet', '2026-09-28'], [$again->draft['kind'], $again->draft['receivedOn']]);
     }
 
-    public function testExamDateIsOptionalAndMustBeARealDate(): void
+    public function testPublishingNeedsNoDate(): void
     {
-        $doc = $this->doc([['basque' => 'gaur', 'translations' => ['es' => ['hoy']]]]);
-        self::assertNull($this->validator->validate($doc)->draft['examDate']);
-        self::assertFalse($this->validator->validate($doc + ['examDate' => '03/11/2026'])->isValid());
-        self::assertFalse($this->validator->validate($doc + ['examDate' => '2026-11-31'])->isValid());
-        $monday = $this->validator->validate($doc + ['examDate' => '2026-11-03']);
-        self::assertTrue($monday->isValid());
-        self::assertSame([], $monday->warnings, 'an exam date needs no Monday warning');
+        $result = $this->validator->validate($this->doc([['basque' => 'gaur', 'translations' => ['es' => ['hoy']]]]));
+        self::assertTrue($result->isValid());
+        self::assertSame('sheet', $result->draft['kind'], 'Sets are school sheets unless marked as topics.');
+        self::assertNull($result->draft['receivedOn']);
+        self::assertSame([], SetRepository::publishBlockers($result->draft));
+        self::assertFalse($this->validator->validate($this->doc([['basque' => 'a', 'translations' => ['es' => ['b']]]]) + ['receivedOn' => '2026-11-31'])->isValid());
+    }
+
+    public function testSentenceEntriesNeedCuratedTilesAndExplicitAlternatives(): void
+    {
+        $entry = ['type' => 'sentence', 'basque' => 'Gaur eskolara noa.', 'translations' => ['es' => ['Hoy voy a la escuela.']],
+            'sentence' => ['tiles' => ['Gaur', 'eskolara', 'noa', '.'], 'alternatives' => [['Eskolara', 'noa', 'gaur', '.']], 'distractors' => ['etxera']]];
+        $result = $this->validator->validate($this->doc([$entry]));
+        self::assertTrue($result->isValid(), json_encode($result->errors));
+        self::assertSame(['Gaur', 'eskolara', 'noa', '.'], $result->draft['entries'][0]['sentence']['tiles']);
+
+        $bad = [
+            'tiles do not spell the sentence' => ['tiles' => ['Bihar', 'eskolara', 'noa', '.']],
+            'alternative uses other tiles' => ['tiles' => ['Gaur', 'eskolara', 'noa', '.'], 'alternatives' => [['Gaur', 'etxera', 'noa', '.']]],
+            'distractor is a tile' => ['tiles' => ['Gaur', 'eskolara', 'noa', '.'], 'distractors' => ['noa']],
+            'too few tiles' => ['tiles' => ['Gaur eskolara noa.']],
+        ];
+        foreach ($bad as $case => $sentence) {
+            self::assertFalse($this->validator->validate($this->doc([['sentence' => $sentence] + $entry]))->isValid(), $case);
+        }
+
+        // Repeated tiles are allowed and stored as given.
+        $repeated = ['type' => 'sentence', 'basque' => 'Bat, bi eta bat.', 'translations' => ['es' => ['Uno, dos y uno.']], 'sentence' => ['tiles' => ['Bat,', 'bi', 'eta', 'bat', '.']]];
+        self::assertTrue($this->validator->validate($this->doc([$repeated]))->isValid());
+    }
+
+    public function testGrammarEntriesHaveOneGapAndDisjointOptions(): void
+    {
+        $entry = ['type' => 'grammar', 'basque' => 'Nik ura edaten dut.', 'translations' => ['es' => ['Yo bebo agua.']],
+            'grammar' => ['text' => '___ ura edaten dut.', 'answers' => ['Nik'], 'distractors' => ['Ni', 'Niri']]];
+        $result = $this->validator->validate($this->doc([$entry]));
+        self::assertTrue($result->isValid(), json_encode($result->errors));
+
+        foreach ([
+            'no gap' => ['text' => 'Nik ura edaten dut.', 'answers' => ['Nik'], 'distractors' => ['Ni']],
+            'two gaps' => ['text' => '___ ura ___ dut.', 'answers' => ['Nik'], 'distractors' => ['Ni']],
+            'distractor is an answer' => ['text' => '___ ura edaten dut.', 'answers' => ['Nik'], 'distractors' => ['nik']],
+            'first answer does not give the sentence' => ['text' => '___ ura edaten dut.', 'answers' => ['Ni'], 'distractors' => ['Nik']],
+            'no distractors' => ['text' => '___ ura edaten dut.', 'answers' => ['Nik'], 'distractors' => []],
+        ] as $case => $grammar) {
+            self::assertFalse($this->validator->validate($this->doc([['grammar' => $grammar] + $entry]))->isValid(), $case);
+        }
+    }
+
+    public function testStructuredEntriesSurviveStorage(): void
+    {
+        $result = $this->validator->validate($this->doc([
+            ['type' => 'grammar', 'basque' => 'Nik ura edaten dut.', 'translations' => ['es' => ['Yo bebo agua.']], 'grammar' => ['text' => '___ ura edaten dut.', 'answers' => ['Nik'], 'distractors' => ['Ni']]],
+            ['basque' => 'ura', 'translations' => ['es' => ['agua']]],
+        ]));
+        $sets = new SetRepository(new \App\Content\Database($this->tempDir()));
+        $id = $sets->create($result->draft);
+        $saved = $sets->find($id);
+        self::assertSame('grammar', $saved['entries'][0]['type']);
+        self::assertSame(['Nik'], $saved['entries'][0]['grammar']['answers']);
+        self::assertSame('word', $saved['entries'][1]['type']);
+        self::assertNull($saved['entries'][1]['grammar']);
+        self::assertTrue($this->validator->validate($saved, false)->isValid());
     }
 
     public function testMalformedFormationIsRejected(): void
@@ -91,7 +161,7 @@ final class ImportValidatorTest extends TestCase
         self::assertSame(['campeonato', 'concurso'], $byTerm['Txapelketa']['translations']['es']);
         self::assertSame(['taller', 'fábrica'], $byTerm['Lantegi']['translations']['es']);
         self::assertSame(['cómodo'], $byTerm['Erosoa']['translations']['es']);
-        self::assertNull($result->draft['weekStart'], 'The handout has no date; the admin assigns it.');
+        self::assertNull($result->draft['receivedOn'], 'The handout has no date, and needs none.');
     }
 
     public function testCalendarSampleHasOrderedGroupsWithoutDates(): void
@@ -198,7 +268,7 @@ final class ImportValidatorTest extends TestCase
         );
     }
 
-    public function testTopicsHaveNoWeekAndPublishWithoutOne(): void
+    public function testTopicsHaveNoDate(): void
     {
         foreach (['astegunak.json' => 7, 'hilabeteak.json' => 12] as $file => $count) {
             $result = $this->validator->validate($this->sample("topics/$file"));
@@ -209,26 +279,11 @@ final class ImportValidatorTest extends TestCase
             self::assertSame([], SetRepository::publishBlockers($result->draft));
         }
 
-        $dated = $this->validator->validate(['kind' => 'topic', 'weekStart' => '2026-09-21'] + $this->doc([['basque' => 'etxea', 'translations' => ['es' => ['casa']]]]));
-        self::assertNull($dated->draft['weekStart']);
-        self::assertSame(['weekStart'], array_column($dated->warnings, 'path'));
-
-        $week = $this->validator->validate($this->doc([['basque' => 'etxea', 'translations' => ['es' => ['casa']]]]));
-        self::assertSame('week', $week->draft['kind'], 'Sets are homework weeks unless marked otherwise.');
-        self::assertNotSame([], SetRepository::publishBlockers($week->draft), 'A week still needs its date.');
+        $dated = $this->validator->validate(['kind' => 'topic', 'receivedOn' => '2026-09-21'] + $this->doc([['basque' => 'etxea', 'translations' => ['es' => ['casa']]]]));
+        self::assertNull($dated->draft['receivedOn']);
+        self::assertSame(['receivedOn'], array_column($dated->warnings, 'path'));
 
         self::assertFalse($this->validator->validate(['kind' => 'unit'] + $this->doc([['basque' => 'a', 'translations' => ['es' => ['b']]]]))->isValid());
-    }
-
-    public function testNonMondayWeekStartIsOnlyAWarning(): void
-    {
-        $doc = $this->doc([['basque' => 'a', 'translations' => ['es' => ['b']]]]);
-        $doc['weekStart'] = '2026-09-23';
-        $result = $this->validator->validate($doc);
-
-        self::assertTrue($result->isValid());
-        self::assertSame('2026-09-23', $result->draft['weekStart']);
-        self::assertSame('weekStart', $result->warnings[0]['path']);
     }
 
     public function testEmojiMustNotCarryText(): void

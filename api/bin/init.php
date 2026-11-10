@@ -9,6 +9,9 @@ use App\Content\Database;
 use App\Content\ImportValidator;
 use App\Content\SampleSeeder;
 use App\Content\SetRepository;
+use App\Content\SpeechQueue;
+use App\Content\StoryRepository;
+use App\Content\StoryValidator;
 use App\Security\AdminCredentials;
 
 require dirname(__DIR__).'/vendor/autoload.php';
@@ -40,7 +43,7 @@ if (null !== $generated) {
 
 if (filter_var(getenv('SEED_SAMPLE_CONTENT') ?: 'true', FILTER_VALIDATE_BOOL)) {
     $sampleDir = getenv('SAMPLE_DIR') ?: dirname(__DIR__).'/samples';
-    $seeder = new SampleSeeder($db, new SetRepository($db), new ImportValidator());
+    $seeder = new SampleSeeder($db, new SetRepository($db), new ImportValidator(), new StoryRepository($db), new StoryValidator());
     foreach ($seeder->seedOnce($sampleDir) as $title) {
         fwrite(STDOUT, "Seeded sample set: $title\n");
     }
@@ -48,6 +51,13 @@ if (filter_var(getenv('SEED_SAMPLE_CONTENT') ?: 'true', FILTER_VALIDATE_BOOL)) {
         fwrite(STDOUT, "Seeded category: $title\n");
     }
     foreach ($seeder->seedWeeksOnce($sampleDir.'/weeks') as $title) {
-        fwrite(STDOUT, "Seeded week: $title\n");
+        fwrite(STDOUT, "Seeded sheet: $title\n");
+    }
+    foreach ($seeder->seedStoriesOnce($sampleDir.'/stories') as $title) {
+        fwrite(STDOUT, "Seeded story (draft, needs review and audio): $title\n");
     }
 }
+
+// Tell the speech worker which texts need clips (drafts included).
+$queue = new SpeechQueue(getenv('SPEECH_DIR') ?: '/speech', new SetRepository($db), new StoryRepository($db));
+fwrite(STDOUT, $queue->refresh() ? "Speech queue updated.\n" : "Speech queue directory not available; only published texts get audio.\n");

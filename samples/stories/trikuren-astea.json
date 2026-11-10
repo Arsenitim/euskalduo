@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "type": "story",
+  "id": "trikuren-astea",
+  "title": "Trikuren astea",
+  "format": "extended",
+  "difficulty": 1,
+  "transcript": "Astelehenean, Triku eskolara doa. Asteartean, igerilekura doa. Asteazkenean, liburutegira doa, eta liburu bat hartzen du. Ostegunean, Txapirekin jolasten du jolastokian. Ostiralean, aitonaren baratzera doa. Larunbatean, pilotalekura doa, eta aurrelaria da. Eta igandean? Igandean Triku etxean dago, sofan etzanda. Oso nekatuta dago! Triku, gaur zer egingo dugu? galdetzen du Txapik. Gaur? Ezer ez! esaten du Trikuk. Gaur igandea da. Igandean lo egiten dut. Eta Triku lo geratzen da. Txapik ordularia begiratzen du: goizeko hamarrak dira.",
+  "translations": {
+    "es": "El lunes, Triku va a la escuela. El martes va a la piscina. El miércoles va a la biblioteca y coge un libro. El jueves juega con Txapi en el patio. El viernes va al huerto del abuelo. El sábado va al frontón y juega de delantero. ¿Y el domingo? El domingo Triku está en casa, tumbado en el sofá. ¡Está muy cansado! «Triku, ¿qué hacemos hoy?», pregunta Txapi. «¿Hoy? ¡Nada!», dice Triku. «Hoy es domingo. Los domingos duermo». Y Triku se queda dormido. Txapi mira el reloj: son las diez de la mañana.",
+    "ru": "В понедельник Трику идёт в школу. Во вторник — в бассейн. В среду он идёт в библиотеку и берёт книгу. В четверг он играет с Чапи на детской площадке. В пятницу идёт в дедушкин огород. В субботу идёт на фронтон и играет нападающим. А в воскресенье? В воскресенье Трику дома, лежит на диване. Он очень устал! «Трику, что будем делать сегодня?» — спрашивает Чапи. «Сегодня? Ничего! — говорит Трику. — Сегодня воскресенье. По воскресеньям я сплю». И Трику засыпает. Чапи смотрит на часы: десять часов утра."
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": {
+        "es": "¿Adónde va Triku el miércoles?",
+        "ru": "Куда Трику идёт в среду?"
+      },
+      "options": [
+        {
+          "es": "A la piscina",
+          "ru": "В бассейн"
+        },
+        {
+          "es": "A la biblioteca",
+          "ru": "В библиотеку"
+        },
+        {
+          "es": "Al frontón",
+          "ru": "На фронтон"
+        }
+      ],
+      "correct": 1
+    },
+    {
+      "id": "q2",
+      "prompt": {
+        "es": "¿Con quién juega Triku el jueves?",
+        "ru": "С кем Трику играет в четверг?"
+      },
+      "options": [
+        {
+          "es": "Con Txapi",
+          "ru": "С Чапи"
+        },
+        {
+          "es": "Con el abuelo",
+          "ru": "С дедушкой"
+        },
+        {
+          "es": "Con la profesora",
+          "ru": "С учительницей"
+        }
+      ],
+      "correct": 0
+    },
+    {
+      "id": "q3",
+      "prompt": {
+        "es": "¿Qué hace Triku el domingo?",
+        "ru": "Что Трику делает в воскресенье?"
+      },
+      "options": [
+        {
+          "es": "Va al huerto",
+          "ru": "Идёт в огород"
+        },
+        {
+          "es": "Juega en el patio",
+          "ru": "Играет на площадке"
+        },
+        {
+          "es": "Descansa y duerme en casa",
+          "ru": "Отдыхает и спит дома"
+        }
+      ],
+      "correct": 2
+    }
+  ],
+  "links": {
+    "words": [
+      "astelehena",
+      "asteartea",
+      "asteazkena",
+      "osteguna",
+      "ostirala",
+      "larunbata",
+      "igandea",
+      "Igerilekua",
+      "liburutegi",
+      "jolastokia",
+      "Baratze",
+      "pilotalekua",
+      "aurrelari",
+      "Etzanda",
+      "Gaur"
+    ],
+    "topics": [
+      "astegunak",
+      "eskola"
+    ]
+  },
+  "needsReview": true,
+  "reviewNote": "Starter story written without review by a Basque speaker. Check the Basque text, the translations and the questions before publishing."
+}

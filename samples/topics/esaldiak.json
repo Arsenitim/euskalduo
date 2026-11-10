@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 2,
+  "kind": "topic",
+  "title": "Esaldiak · Frases",
+  "description": "Ordena las piezas para formar la frase. Frases cortas con izan/egon y palabras de las hojas.",
+  "entries": [
+    {
+      "id": "gaur-astelehena",
+      "type": "sentence",
+      "basque": "Gaur astelehena da.",
+      "translations": {
+        "es": [
+          "Hoy es lunes."
+        ],
+        "ru": [
+          "Сегодня понедельник."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "gaur",
+          "astelehena",
+          "da",
+          "."
+        ],
+        "alternatives": [
+          [
+            "astelehena",
+            "da",
+            "gaur",
+            "."
+          ]
+        ],
+        "distractors": [
+          "naiz"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing."
+    },
+    {
+      "id": "bihar-ostirala",
+      "type": "sentence",
+      "basque": "Bihar ostirala da.",
+      "translations": {
+        "es": [
+          "Mañana es viernes."
+        ],
+        "ru": [
+          "Завтра пятница."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "bihar",
+          "ostirala",
+          "da",
+          "."
+        ],
+        "alternatives": [
+          [
+            "ostirala",
+            "da",
+            "bihar",
+            "."
+          ]
+        ],
+        "distractors": [
+          "gara"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing."
+    },
+    {
+      "id": "ni-ikaslea",
+      "type": "sentence",
+      "basque": "Ni ikaslea naiz.",
+      "translations": {
+        "es": [
+          "Yo soy alumno."
+        ],
+        "ru": [
+          "Я ученик."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "ni",
+          "ikaslea",
+          "naiz",
+          "."
+        ],
+        "distractors": [
+          "dira"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing."
+    },
+    {
+      "id": "gu-ikasleak",
+      "type": "sentence",
+      "basque": "Gu ikasleak gara.",
+      "translations": {
+        "es": [
+          "Nosotros somos alumnos."
+        ],
+        "ru": [
+          "Мы ученики."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "gu",
+          "ikasleak",
+          "gara",
+          "."
+        ],
+        "distractors": [
+          "naiz"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing."
+    },
+    {
+      "id": "irakaslea-urduri",
+      "type": "sentence",
+      "basque": "Irakaslea urduri dago.",
+      "translations": {
+        "es": [
+          "La profesora está nerviosa."
+        ],
+        "ru": [
+          "Учительница волнуется."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "irakaslea",
+          "urduri",
+          "dago",
+          "."
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "Para estados (nervioso, contento…) se usa egon: dago."
+    },
+    {
+      "id": "triku-lotsatia",
+      "type": "sentence",
+      "basque": "Triku oso lotsatia da.",
+      "translations": {
+        "es": [
+          "Triku es muy vergonzoso."
+        ],
+        "ru": [
+          "Трику очень застенчивый."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "Triku",
+          "oso",
+          "lotsatia",
+          "da",
+          "."
+        ],
+        "distractors": [
+          "dira"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing."
+    },
+    {
+      "id": "txapi-eta-triku",
+      "type": "sentence",
+      "basque": "Txapi eta Triku lagunak dira.",
+      "translations": {
+        "es": [
+          "Txapi y Triku son amigos."
+        ],
+        "ru": [
+          "Чапи и Трику — друзья."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "Txapi",
+          "eta",
+          "Triku",
+          "lagunak",
+          "dira",
+          "."
+        ],
+        "alternatives": [
+          [
+            "Triku",
+            "eta",
+            "Txapi",
+            "lagunak",
+            "dira",
+            "."
+          ]
+        ],
+        "distractors": [
+          "da"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing."
+    },
+    {
+      "id": "gu-ere-zuek-ere",
+      "type": "sentence",
+      "basque": "Gu ere ikasleak gara, eta zuek ere bai.",
+      "translations": {
+        "es": [
+          "Nosotros también somos alumnos, y vosotros también."
+        ],
+        "ru": [
+          "Мы тоже ученики, и вы тоже."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "gu",
+          "ere",
+          "ikasleak",
+          "gara,",
+          "eta",
+          "zuek",
+          "ere",
+          "bai",
+          "."
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "«ere» aparece dos veces."
+    }
+  ]
+}

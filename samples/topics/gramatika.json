@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 2,
+  "kind": "topic",
+  "title": "Gramatika · Gramática",
+  "description": "Elige la palabra que falta: el verbo izan (naiz, zara, da…) y palabras de tiempo.",
+  "entries": [
+    {
+      "id": "ni-naiz",
+      "type": "grammar",
+      "basque": "Ni ikaslea naiz.",
+      "translations": {
+        "es": [
+          "Yo soy alumno."
+        ],
+        "ru": [
+          "Я ученик."
+        ]
+      },
+      "grammar": {
+        "text": "Ni ikaslea ___.",
+        "answers": [
+          "naiz"
+        ],
+        "distractors": [
+          "da",
+          "gara"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "ni → naiz"
+    },
+    {
+      "id": "zu-zara",
+      "type": "grammar",
+      "basque": "Zu oso txukuna zara.",
+      "translations": {
+        "es": [
+          "Tú eres muy ordenado."
+        ],
+        "ru": [
+          "Ты очень аккуратный."
+        ]
+      },
+      "grammar": {
+        "text": "Zu oso txukuna ___.",
+        "answers": [
+          "zara"
+        ],
+        "distractors": [
+          "naiz",
+          "dira"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "zu → zara"
+    },
+    {
+      "id": "hura-da",
+      "type": "grammar",
+      "basque": "Hura idazlea da.",
+      "translations": {
+        "es": [
+          "Él es escritor."
+        ],
+        "ru": [
+          "Он писатель."
+        ]
+      },
+      "grammar": {
+        "text": "Hura idazlea ___.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "hura → da"
+    },
+    {
+      "id": "gu-gara",
+      "type": "grammar",
+      "basque": "Gu lagunak gara.",
+      "translations": {
+        "es": [
+          "Nosotros somos amigos."
+        ],
+        "ru": [
+          "Мы друзья."
+        ]
+      },
+      "grammar": {
+        "text": "Gu lagunak ___.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "dira",
+          "zarete"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "gu → gara"
+    },
+    {
+      "id": "zuek-zarete",
+      "type": "grammar",
+      "basque": "Zuek irakasleak zarete.",
+      "translations": {
+        "es": [
+          "Vosotros sois profesores."
+        ],
+        "ru": [
+          "Вы учителя."
+        ]
+      },
+      "grammar": {
+        "text": "Zuek irakasleak ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "dira"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "zuek → zarete"
+    },
+    {
+      "id": "haiek-dira",
+      "type": "grammar",
+      "basque": "Haiek arrantzaleak dira.",
+      "translations": {
+        "es": [
+          "Ellos son pescadores."
+        ],
+        "ru": [
+          "Они рыбаки."
+        ]
+      },
+      "grammar": {
+        "text": "Haiek arrantzaleak ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "gara"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "haiek → dira"
+    },
+    {
+      "id": "ni-irabazlea",
+      "type": "grammar",
+      "basque": "Ni irabazlea naiz!",
+      "translations": {
+        "es": [
+          "¡Yo soy el ganador!"
+        ],
+        "ru": [
+          "Я победитель!"
+        ]
+      },
+      "grammar": {
+        "text": "___ irabazlea naiz!",
+        "answers": [
+          "Ni"
+        ],
+        "distractors": [
+          "Gu",
+          "Haiek"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "naiz va con ni."
+    },
+    {
+      "id": "gaur-bihar",
+      "type": "grammar",
+      "basque": "Gaur astelehena da, eta bihar asteartea da.",
+      "translations": {
+        "es": [
+          "Hoy es lunes, y mañana es martes."
+        ],
+        "ru": [
+          "Сегодня понедельник, а завтра вторник."
+        ]
+      },
+      "grammar": {
+        "text": "Gaur astelehena da, eta ___ asteartea da.",
+        "answers": [
+          "bihar"
+        ],
+        "distractors": [
+          "atzo",
+          "herenegun"
+        ]
+      },
+      "needsReview": true,
+      "reviewNote": "Starter content written without review by a Basque speaker. Check the Basque before publishing.",
+      "note": "Después del lunes viene el martes: bihar."
+    }
+  ]
+}

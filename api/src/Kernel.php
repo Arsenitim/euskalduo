@@ -35,6 +35,7 @@ final class Kernel extends BaseKernel
             ->set('env(DATA_DIR)', '/data')
             ->set('env(UPLOAD_DIR)', '/uploads')
             ->set('env(AUDIO_DIR)', '/audio')
+            ->set('env(SPEECH_DIR)', '/speech')
             ->set('env(ADMIN_USERNAME)', 'admin')
             ->set('env(ADMIN_PASSWORD)', '')
             ->set('env(ADMIN_PASSWORD_HASH)', '')
@@ -82,6 +83,8 @@ final class Kernel extends BaseKernel
         $services->get(Content\AudioStore::class)
             ->arg('$audioDir', '%env(AUDIO_DIR)%')
             ->arg('$profilePath', (is_file($this->getProjectDir().'/tts/profile.json') ? $this->getProjectDir() : dirname($this->getProjectDir())).'/tts/profile.json');
+        $services->get(Content\SpeechQueue::class)
+            ->arg('$speechDir', '%env(SPEECH_DIR)%');
         $services->get(Content\ImageStore::class)
             ->arg('$uploadDir', '%env(UPLOAD_DIR)%');
         $services->get(Feedback\FeedbackStore::class)

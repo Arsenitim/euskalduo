@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "type": "story",
+  "id": "baratzeko-tomatea",
+  "title": "Baratzeko tomatea",
+  "format": "short",
+  "difficulty": 2,
+  "transcript": "Aitonak baratze txiki bat du. Udan, Trikuk eta aitonak tomate handi bat ikusten dute. Bihar jango dugu, esaten du aitonak. Baina gauean, norbait baratzera hurbiltzen da. Hurrengo goizean, tomatea ez dago! Triku urduri dago. Orduan Txapi agertzen da, aurpegia gorri-gorri. Barkatu, oso zaporetsua zen! dio Txapik. Eta denek barre egiten dute.",
+  "translations": {
+    "es": "El abuelo tiene un huerto pequeño. En verano, Triku y el abuelo ven un tomate grande. «Nos lo comeremos mañana», dice el abuelo. Pero por la noche alguien se acerca al huerto. A la mañana siguiente, ¡el tomate no está! Triku está nervioso. Entonces aparece Txapi, con la cara muy roja. «¡Perdón, estaba muy sabroso!», dice Txapi. Y todos se ríen.",
+    "ru": "У дедушки маленький огород. Летом Трику и дедушка видят большой помидор. «Съедим его завтра», — говорит дедушка. Но ночью кто-то подходит к огороду. На следующее утро помидора нет! Трику волнуется. Тут появляется Чапи, вся красная. «Простите, он был очень вкусный!» — говорит Чапи. И все смеются."
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": {
+        "es": "¿Quién se ha comido el tomate?",
+        "ru": "Кто съел помидор?"
+      },
+      "options": [
+        {
+          "es": "El abuelo",
+          "ru": "Дедушка"
+        },
+        {
+          "es": "Triku",
+          "ru": "Трику"
+        },
+        {
+          "es": "Txapi",
+          "ru": "Чапи"
+        }
+      ],
+      "correct": 2
+    },
+    {
+      "id": "q2",
+      "prompt": {
+        "es": "¿Cuándo querían comer el tomate?",
+        "ru": "Когда хотели съесть помидор?"
+      },
+      "options": [
+        {
+          "es": "Mañana",
+          "ru": "Завтра"
+        },
+        {
+          "es": "Esa noche",
+          "ru": "Этой ночью"
+        },
+        {
+          "es": "El año que viene",
+          "ru": "В следующем году"
+        }
+      ],
+      "correct": 0
+    }
+  ],
+  "links": {
+    "words": [
+      "Baratze",
+      "Bihar",
+      "Gauean",
+      "Hurbildu",
+      "Urduri",
+      "Zaporetsu"
+    ],
+    "topics": [
+      "etxea",
+      "denborazkoak"
+    ]
+  },
+  "needsReview": true,
+  "reviewNote": "Starter story written without review by a Basque speaker. Check the Basque text, the translations and the questions before publishing."
+}

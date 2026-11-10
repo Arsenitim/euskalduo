@@ -49,7 +49,7 @@ final class LineParser
             'document' => [
                 'schemaVersion' => ImportValidator::SCHEMA_VERSION,
                 'title' => $title,
-                'weekStart' => null,
+                'receivedOn' => null,
                 'entries' => $entries,
             ],
             'errors' => $errors,

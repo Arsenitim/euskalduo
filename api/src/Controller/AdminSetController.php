@@ -8,6 +8,7 @@ use App\Content\ImageStore;
 use App\Content\ImportValidator;
 use App\Content\LineParser;
 use App\Content\SetRepository;
+use App\Content\SpeechQueue;
 use App\Content\TextNormalizer;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +29,7 @@ final class AdminSetController
         private readonly SetRepository $sets,
         private readonly ImportValidator $validator,
         private readonly ImageStore $images,
+        private readonly SpeechQueue $speech,
     ) {
     }
 
@@ -87,6 +89,7 @@ final class AdminSetController
             return new JsonResponse($result->toArray(), 422);
         }
         $id = $this->sets->create($result->draft);
+        $this->speech->refresh();
 
         return new JsonResponse(['set' => $this->sets->find($id), 'warnings' => $result->warnings], 201);
     }
@@ -111,6 +114,7 @@ final class AdminSetController
         foreach ($this->sets->update($id, $result->draft) as $orphan) {
             $this->images->delete($orphan);
         }
+        $this->speech->refresh();
 
         return new JsonResponse(['set' => $this->sets->find($id), 'warnings' => $result->warnings]);
     }
@@ -122,6 +126,7 @@ final class AdminSetController
         foreach ($this->sets->delete($id) as $file) {
             $this->images->delete($file);
         }
+        $this->speech->refresh();
 
         return new JsonResponse(['deleted' => $id]);
     }
@@ -204,9 +209,6 @@ final class AdminSetController
         foreach ($this->sets->listSummaries() as $existing) {
             if ('' !== $title && TextNormalizer::matchKey($existing['title']) === $title) {
                 $warnings[] = ['path' => 'title', 'entry' => null, 'message' => \sprintf('A set titled “%s” already exists (%s). Importing creates a separate set.', $existing['title'], $existing['status'])];
-            }
-            if (null !== $draft['weekStart'] && $existing['weekStart'] === $draft['weekStart']) {
-                $warnings[] = ['path' => 'weekStart', 'entry' => null, 'message' => \sprintf('“%s” already uses the week %s.', $existing['title'], $existing['weekStart'])];
             }
         }
 

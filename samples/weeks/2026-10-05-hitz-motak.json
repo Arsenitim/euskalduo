@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
-  "kind": "week",
+  "schemaVersion": 2,
+  "kind": "sheet",
   "title": "Hitz motak, izan eta denborazkoak",
-  "weekStart": "2026-10-05",
+  "receivedOn": "2026-10-05",
   "description": "Material escolar: formación de palabras, pronombres y el verbo izan, expresiones de tiempo y reglas de mayúsculas. Construye palabras compuestas y derivadas.",
   "groups": [
     {

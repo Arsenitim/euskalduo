@@ -19,7 +19,7 @@ final class SetRepository
                    SUM(e.needs_review) AS review_count
             FROM homework_sets s LEFT JOIN entries e ON e.set_id = s.id
             GROUP BY s.id
-            ORDER BY s.kind = 'topic', s.week_start IS NULL DESC, s.week_start DESC, s.title
+            ORDER BY s.kind = 'topic', s.title COLLATE NOCASE, s.created_at
             SQL)->fetchAll();
 
         return array_map(fn (array $row): array => $this->setHeader($row) + [
@@ -43,15 +43,16 @@ final class SetRepository
     }
 
     /**
-     * All published sets with entries: weeks newest first, then topics by title. This is the only
-     * content learners download; they receive everything in one response so
-     * the server never learns which week a child chose to practise.
+     * All published sets with entries: school sheets, then topics, each by
+     * title (dates never decide order or relevance). Learners receive
+     * everything in one response so the server never learns what a child
+     * chose to practise.
      *
      * @return list<array<string, mixed>>
      */
     public function publishedContent(): array
     {
-        $rows = $this->db->pdo()->query("SELECT * FROM homework_sets WHERE status = 'published' ORDER BY kind = 'topic', week_start DESC, title, created_at DESC")->fetchAll();
+        $rows = $this->db->pdo()->query("SELECT * FROM homework_sets WHERE status = 'published' ORDER BY kind = 'topic', title COLLATE NOCASE, created_at")->fetchAll();
 
         return array_map(function (array $row): array {
             $header = $this->setHeader($row);
@@ -60,8 +61,7 @@ final class SetRepository
                 'id' => $header['id'],
                 'kind' => $header['kind'],
                 'title' => $header['title'],
-                'weekStart' => $header['weekStart'],
-                'examDate' => $header['examDate'],
+                'receivedOn' => $header['receivedOn'],
                 'description' => $header['description'],
                 'sample' => $header['sample'],
                 'groups' => $header['groups'],
@@ -80,8 +80,8 @@ final class SetRepository
         $now = self::now();
         $pdo->beginTransaction();
         try {
-            $pdo->prepare('INSERT INTO homework_sets (id, kind, title, week_start, exam_date, description, groups_json, status, is_sample, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                ->execute([$id, $draft['kind'], $draft['title'], $draft['weekStart'], $draft['examDate'], $draft['description'], self::json($draft['groups']), 'draft', (int) $isSample, $now, $now]);
+            $pdo->prepare('INSERT INTO homework_sets (id, kind, title, week_start, description, groups_json, status, is_sample, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                ->execute([$id, self::dbKind($draft['kind']), $draft['title'], $draft['receivedOn'], $draft['description'], self::json($draft['groups']), 'draft', (int) $isSample, $now, $now]);
             $this->insertEntries($id, $draft['entries'], []);
             $pdo->commit();
         } catch (\Throwable $e) {
@@ -110,8 +110,8 @@ final class SetRepository
 
         $pdo->beginTransaction();
         try {
-            $pdo->prepare('UPDATE homework_sets SET kind = ?, title = ?, week_start = ?, exam_date = ?, description = ?, groups_json = ?, updated_at = ? WHERE id = ?')
-                ->execute([$draft['kind'], $draft['title'], $draft['weekStart'], $draft['examDate'], $draft['description'], self::json($draft['groups']), self::now(), $id]);
+            $pdo->prepare('UPDATE homework_sets SET kind = ?, title = ?, week_start = ?, description = ?, groups_json = ?, updated_at = ? WHERE id = ?')
+                ->execute([self::dbKind($draft['kind']), $draft['title'], $draft['receivedOn'], $draft['description'], self::json($draft['groups']), self::now(), $id]);
             $pdo->prepare('DELETE FROM entries WHERE set_id = ?')->execute([$id]);
             $kept = $this->insertEntries($id, $draft['entries'], $existing);
             $pdo->commit();
@@ -171,9 +171,6 @@ final class SetRepository
     public static function publishBlockers(array $set): array
     {
         $blockers = [];
-        if ('week' === $set['kind'] && null === $set['weekStart']) {
-            $blockers[] = 'Assign the homework week (weekStart) before publishing.';
-        }
         if ([] === $set['entries']) {
             $blockers[] = 'The set has no entries.';
         }
@@ -193,7 +190,7 @@ final class SetRepository
      */
     private function insertEntries(string $setId, array $entries, array $existingImages): array
     {
-        $stmt = $this->db->pdo()->prepare('INSERT INTO entries (set_id, id, position, basque, translations_json, note, group_key, emoji, image_hint, image_file, needs_review, review_note, formation_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt = $this->db->pdo()->prepare('INSERT INTO entries (set_id, id, position, basque, translations_json, note, group_key, emoji, image_hint, image_file, needs_review, review_note, formation_json, entry_type, exercise_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $ids = [];
         foreach ($entries as $position => $entry) {
             $entryId = $entry['id'] ?? null;
@@ -217,6 +214,12 @@ final class SetRepository
                 (int) $entry['needsReview'],
                 $entry['reviewNote'],
                 null !== ($entry['formation'] ?? null) ? self::json($entry['formation']) : null,
+                $entry['type'] ?? 'word',
+                match ($entry['type'] ?? 'word') {
+                    'sentence' => self::json($entry['sentence']),
+                    'grammar' => self::json($entry['grammar']),
+                    default => null,
+                },
             ]);
         }
 
@@ -241,10 +244,9 @@ final class SetRepository
     {
         return [
             'id' => $row['id'],
-            'kind' => $row['kind'],
+            'kind' => 'topic' === $row['kind'] ? 'topic' : 'sheet',
             'title' => $row['title'],
-            'weekStart' => $row['week_start'],
-            'examDate' => $row['exam_date'],
+            'receivedOn' => $row['week_start'],
             'description' => $row['description'],
             'groups' => json_decode($row['groups_json'], true, 8, \JSON_THROW_ON_ERROR),
             'status' => $row['status'],
@@ -262,8 +264,14 @@ final class SetRepository
      */
     private function publicEntry(array $row): array
     {
+        $type = $row['entry_type'] ?? 'word';
+        $exercise = null !== ($row['exercise_json'] ?? null) ? json_decode($row['exercise_json'], true, 8, \JSON_THROW_ON_ERROR) : null;
+
         return [
             'id' => $row['id'],
+            'type' => $type,
+            'sentence' => 'sentence' === $type ? $exercise : null,
+            'grammar' => 'grammar' === $type ? $exercise : null,
             'basque' => $row['basque'],
             'audio' => $this->audio?->url($row['basque']),
             'translations' => json_decode($row['translations_json'], true, 8, \JSON_THROW_ON_ERROR),
@@ -287,6 +295,41 @@ final class SetRepository
             'needsReview' => (bool) $row['needs_review'],
             'reviewNote' => $row['review_note'],
         ];
+    }
+
+    /** The database keeps the historic value "week" for school sheets. */
+    private static function dbKind(string $kind): string
+    {
+        return 'topic' === $kind ? 'topic' : 'week';
+    }
+
+    /**
+     * Every text the speech worker should have a clip for: words and
+     * sentences of all sets, drafts included, so audio is ready before
+     * publishing.
+     *
+     * @return list<string>
+     */
+    public function speechTexts(): array
+    {
+        return array_map('strval', $this->db->pdo()->query('SELECT DISTINCT basque FROM entries ORDER BY basque')->fetchAll(\PDO::FETCH_COLUMN));
+    }
+
+    /** @return list<string> ids of all sets */
+    public function ids(): array
+    {
+        return array_map('strval', $this->db->pdo()->query('SELECT id FROM homework_sets')->fetchAll(\PDO::FETCH_COLUMN));
+    }
+
+    /** @return array<string, true> "setId/entryId" of every entry */
+    public function entryKeys(): array
+    {
+        $keys = [];
+        foreach ($this->db->pdo()->query('SELECT set_id, id FROM entries')->fetchAll() as $row) {
+            $keys[$row['set_id'].'/'.$row['id']] = true;
+        }
+
+        return $keys;
     }
 
     private static function newId(): string

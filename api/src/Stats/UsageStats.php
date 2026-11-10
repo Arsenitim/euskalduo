@@ -19,11 +19,17 @@ final class UsageStats
     public const COUNTERS = ['new_devices', 'active_devices', 'answers', 'correct', 'hinted', 'wrong', 'skipped', 'rounds', 'weekly_devices'];
     public const BREAKDOWN_COUNTERS = ['answers', 'correct', 'hinted', 'wrong', 'skipped', 'rounds'];
 
-    /** The only keys each dimension accepts ('set' takes ids of existing sets instead). */
+    /**
+     * The only keys each dimension accepts ('set' and 'story' take ids of
+     * existing sets or stories instead). "week" and "mix" are no longer sent
+     * by the app but stay accepted for counters queued offline by older
+     * versions.
+     */
     public const DIMENSIONS = [
         'set' => null,
-        'exercise' => ['meaning-choice', 'basque-choice', 'spell', 'type-meaning', 'word-build', 'order'],
-        'mode' => ['week', 'topic', 'exam', 'mix'],
+        'story' => null,
+        'exercise' => ['meaning-choice', 'basque-choice', 'spell', 'type-meaning', 'word-build', 'order', 'sentence-build', 'grammar-choice', 'listening'],
+        'mode' => ['lesson', 'topic', 'listening', 'exam', 'week', 'mix'],
         'connection' => ['online', 'offline'],
         'display' => ['app', 'browser'],
     ];
@@ -98,7 +104,7 @@ final class UsageStats
         if (null !== $keys) {
             return \in_array($key, $keys, true);
         }
-        $stmt = $this->db->pdo()->prepare('SELECT 1 FROM homework_sets WHERE id = ?');
+        $stmt = $this->db->pdo()->prepare('story' === $dimension ? 'SELECT 1 FROM stories WHERE id = ?' : 'SELECT 1 FROM homework_sets WHERE id = ?');
         $stmt->execute([$key]);
 
         return false !== $stmt->fetchColumn();
@@ -173,15 +179,16 @@ final class UsageStats
     {
         $sums = implode(', ', array_map(static fn (string $c): string => "SUM(b.$c) AS $c", self::BREAKDOWN_COUNTERS));
         $stmt = $this->db->pdo()->prepare(
-            "SELECT b.dimension, b.key, s.title, $sums FROM usage_breakdown b
+            "SELECT b.dimension, b.key, COALESCE(s.title, st.title) AS title, $sums FROM usage_breakdown b
              LEFT JOIN homework_sets s ON b.dimension = 'set' AND s.id = b.key
+             LEFT JOIN stories st ON b.dimension = 'story' AND st.id = b.key
              WHERE b.day >= ? GROUP BY b.dimension, b.key ORDER BY answers DESC, rounds DESC, b.key",
         );
         $stmt->execute([$start]);
         $out = array_fill_keys(array_keys(self::DIMENSIONS), []);
         foreach ($stmt->fetchAll() as $row) {
             $item = ['key' => $row['key']];
-            if ('set' === $row['dimension']) {
+            if ('set' === $row['dimension'] || 'story' === $row['dimension']) {
                 $item['title'] = $row['title'];
             }
             foreach (self::BREAKDOWN_COUNTERS as $c) {

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 2,
+  "type": "story",
+  "id": "triku-bizkar-zorroa",
+  "title": "Triku eta ogitartekoa",
+  "format": "short",
+  "difficulty": 1,
+  "transcript": "Gaur astelehena da. Triku goizean eskolara doa. Bere bizkar-zorroa oso handia da. Barruan liburuak, arkatzak eta sagar bat daude. Baina Trikuk ez du ogitartekorik. Ahaztu egin du! Eguerdian, jantokian, Txapik bere ogitartekoaren erdia ematen dio. Eskerrik asko, Txapi! esaten du Trikuk. Biak lagunak dira, eta biak pozik daude.",
+  "translations": {
+    "es": "Hoy es lunes. Triku va a la escuela por la mañana. Su mochila es muy grande. Dentro hay libros, lápices y una manzana. Pero Triku no tiene bocadillo. ¡Se le ha olvidado! Al mediodía, en el comedor, Txapi le da la mitad de su bocadillo. «¡Gracias, Txapi!», dice Triku. Los dos son amigos y los dos están contentos.",
+    "ru": "Сегодня понедельник. Утром Трику идёт в школу. Его рюкзак очень большой. Внутри книги, карандаши и яблоко. Но у Трику нет бутерброда. Он его забыл! В полдень, в столовой, Чапи даёт ему половину своего бутерброда. «Спасибо, Чапи!» — говорит Трику. Они друзья, и оба довольны."
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": {
+        "es": "¿Qué ha olvidado Triku?",
+        "ru": "Что забыл Трику?"
+      },
+      "options": [
+        {
+          "es": "El bocadillo",
+          "ru": "Бутерброд"
+        },
+        {
+          "es": "La mochila",
+          "ru": "Рюкзак"
+        },
+        {
+          "es": "Los lápices",
+          "ru": "Карандаши"
+        }
+      ],
+      "correct": 0
+    },
+    {
+      "id": "q2",
+      "prompt": {
+        "es": "¿Quién ayuda a Triku?",
+        "ru": "Кто помогает Трику?"
+      },
+      "options": [
+        {
+          "es": "La profesora",
+          "ru": "Учительница"
+        },
+        {
+          "es": "Txapi",
+          "ru": "Чапи"
+        },
+        {
+          "es": "Nadie",
+          "ru": "Никто"
+        }
+      ],
+      "correct": 1
+    }
+  ],
+  "links": {
+    "words": [
+      "Gaur",
+      "astelehena",
+      "Goizean",
+      "Bizkar-zorroa",
+      "Eguerdian",
+      "jantokia",
+      "Ahaztu"
+    ],
+    "topics": [
+      "eskola",
+      "denborazkoak"
+    ]
+  },
+  "needsReview": true,
+  "reviewNote": "Starter story written without review by a Basque speaker. Check the Basque text, the translations and the questions before publishing."
+}
