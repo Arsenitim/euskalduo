@@ -39,7 +39,9 @@ function useStoryPlayer(url: string) {
     try {
       const blob = await fetchAudio(url);
       objectUrl.current = URL.createObjectURL(blob);
-      const player = new Audio(objectUrl.current);
+      const player = new Audio();
+      player.preload = 'auto';
+      player.src = objectUrl.current;
       player.onended = () => setState('ended');
       player.onerror = () => setState('error');
       player.onpause = () => setState((s) => (s === 'playing' ? 'paused' : s));

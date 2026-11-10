@@ -1,40 +1,67 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://euskalduo.local/schema/homework-v1.json",
-  "title": "EUSKALDUO homework import, schemaVersion 1",
+  "$id": "https://euskalduo.local/schema/homework-v2.json",
+  "title": "EUSKALDUO sheet/topic import, schemaVersion 2 (version 1 still accepted)",
   "description": "Documentation of the import format. The server-side validator (api/src/Content/ImportValidator.php) is authoritative and additionally normalises Unicode (NFC), trims whitespace, rejects control characters and < >, and warns about duplicates.",
   "type": "object",
-  "required": ["schemaVersion", "title", "entries"],
+  "required": [
+    "schemaVersion",
+    "title",
+    "entries"
+  ],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": {
+      "description": "2 for new files. Version 1 files (with kind \"week\" and weekStart) are still accepted and normalised.",
+      "enum": [
+        1,
+        2
+      ]
+    },
     "kind": {
-      "description": "week (default): homework for one school week. topic: a category such as the months or animals; it has no weekStart, is listed under Categorías and never becomes the current week.",
-      "enum": ["week", "topic"],
-      "default": "week"
+      "description": "sheet (default): material from school. topic: a category such as the months or sentences. Legacy value \"week\" means sheet.",
+      "enum": [
+        "sheet",
+        "topic",
+        "week"
+      ],
+      "default": "sheet"
     },
-    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
-    "weekStart": {
-      "description": "Monday of the homework week (ISO date). May be null in an import; the admin assigns it during review. Required before publishing a week; ignored for a topic.",
-      "type": ["string", "null"],
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
     },
-    "examDate": {
-      "description": "Date of a school exam on exactly this set (ISO date) or null. Until that day, learners see an exam-preparation section that practises every word of the set, ignoring the usual review schedule.",
-      "type": ["string", "null"],
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500
     },
-    "description": { "type": ["string", "null"], "maxLength": 500 },
     "groups": {
       "description": "Optional named sections. ordered=true means the entries of the group have a meaningful sequence (months, weekdays) and enables the ordering exercise.",
       "type": "array",
       "maxItems": 20,
       "items": {
         "type": "object",
-        "required": ["key", "title"],
+        "required": [
+          "key",
+          "title"
+        ],
         "properties": {
-          "key": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$" },
-          "title": { "type": "string", "minLength": 1, "maxLength": 60 },
-          "ordered": { "type": "boolean", "default": false }
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "ordered": {
+            "type": "boolean",
+            "default": false
+          }
         },
         "additionalProperties": false
       }
@@ -46,20 +73,34 @@
       "maxItems": 300,
       "items": {
         "type": "object",
-        "required": ["basque", "translations"],
+        "required": [
+          "basque",
+          "translations"
+        ],
         "properties": {
           "id": {
             "description": "Optional stable id. Omit it and the server generates one.",
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$"
           },
-          "basque": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "basque": {
+            "description": "The word, or for sentence/grammar the complete correct sentence.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
           "translations": {
             "type": "object",
-            "required": ["es"],
+            "required": [
+              "es"
+            ],
             "properties": {
-              "es": { "$ref": "#/$defs/alternatives" },
-              "ru": { "$ref": "#/$defs/alternatives" }
+              "es": {
+                "$ref": "#/$defs/alternatives"
+              },
+              "ru": {
+                "$ref": "#/$defs/alternatives"
+              }
             },
             "additionalProperties": false
           },
@@ -93,23 +134,155 @@
             },
             "additionalProperties": false
           },
-          "note": { "type": ["string", "null"], "maxLength": 300 },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 300
+          },
           "imageHint": {
             "description": "Editorial suggestion for a picture the admin may upload. Never shown to learners, never a URL.",
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "maxLength": 200
           },
-          "emoji": { "type": ["string", "null"], "maxLength": 8 },
-          "group": { "description": "Key of a group declared in groups.", "type": ["string", "null"] },
+          "emoji": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 8
+          },
+          "group": {
+            "description": "Key of a group declared in groups.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "needsReview": {
             "description": "true when the source was unclear. Flagged sets cannot be published until a human clears the flag.",
             "type": "boolean",
             "default": false
           },
-          "reviewNote": { "type": ["string", "null"], "maxLength": 300 }
+          "reviewNote": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 300
+          },
+          "type": {
+            "description": "word (default), sentence (sentence building) or grammar (fill the gap).",
+            "enum": [
+              "word",
+              "sentence",
+              "grammar"
+            ],
+            "default": "word"
+          },
+          "sentence": {
+            "description": "For type sentence: curated tiles in the correct order (repeats allowed), other accepted orders listed explicitly, optional extra tiles that must not form another valid sentence. The tiles in order must spell basque.",
+            "type": "object",
+            "required": [
+              "tiles"
+            ],
+            "properties": {
+              "tiles": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 12,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              },
+              "alternatives": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "distractors": {
+                "type": "array",
+                "maxItems": 4,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "grammar": {
+            "description": "For type grammar: the sentence with exactly one gap written as ___, accepted answers (any of them is right) and curated wrong options. text with answers[0] filled in must equal basque.",
+            "type": "object",
+            "required": [
+              "text",
+              "answers",
+              "distractors"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "answers": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 4,
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                }
+              },
+              "distractors": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 5,
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                }
+              }
+            },
+            "additionalProperties": false
+          }
         },
         "additionalProperties": false
       }
+    },
+    "type": {
+      "description": "Optional: \"set\" (this format). Stories use a separate format with type \"story\" (docs/IMPORT_FORMAT.md).",
+      "const": "set"
+    },
+    "receivedOn": {
+      "description": "Optional date the sheet arrived (ISO date), shown only as information. It never decides availability or what is practised. Legacy files call it weekStart. Ignored for topics.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "weekStart": {
+      "description": "Legacy (schemaVersion 1) name of receivedOn.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "deprecated": true
+    },
+    "examDate": {
+      "description": "Legacy: ignored with a warning. Exams are created under Admin → Exams.",
+      "deprecated": true
     }
   },
   "additionalProperties": false,
@@ -119,7 +292,11 @@
       "type": "array",
       "minItems": 1,
       "maxItems": 8,
-      "items": { "type": "string", "minLength": 1, "maxLength": 120 }
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
     }
   }
 }

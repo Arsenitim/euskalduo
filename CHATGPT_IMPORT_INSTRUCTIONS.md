@@ -2,8 +2,8 @@
 
 Copy everything between the lines below into ChatGPT (or another assistant)
 together with the photo(s) of the homework sheet. Paste the JSON it returns into
-**Admin → Import → JSON**, check the review screen, assign the homework week,
-and only then save and publish. This is a manual template; EUSKALDUO does not
+**Admin → Import → JSON**, check the review screen, and only then save and
+publish. No date is needed. This is a manual template; EUSKALDUO does not
 call any AI service.
 
 ---
@@ -31,9 +31,8 @@ Rules:
    ambiguously or you are unsure of its meaning, still include your best
    reading, set `"needsReview": true`, and describe the problem in
    `reviewNote` (e.g. "second letter unreadable: Loreontzi or Laraontzi?").
-5. Do not invent dates. Leave `"weekStart": null` — the parent assigns the
-   week. Put the sheet's heading or theme (e.g. `HIZTEGIA (1.Gaia)`) in
-   `title`.
+5. Do not invent dates. Leave `"receivedOn": null`. Put the sheet's heading
+   or theme (e.g. `HIZTEGIA (1.Gaia)`) in `title`.
 6. If the sheet has headed sections with a natural order (months, weekdays,
    numbers), declare them in `groups` with `"ordered": true` and set `group` on
    each entry. Decorative drawings are not vocabulary pictures — ignore them.
@@ -44,9 +43,10 @@ Rules:
 9. Output must be valid UTF-8 JSON that follows this shape exactly:
 
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "kind": "sheet",
   "title": "HIZTEGIA (1.Gaia)",
-  "weekStart": null,
+  "receivedOn": null,
   "description": "Optional theme or notes about the sheet",
   "groups": [
     { "key": "hilabeteak", "title": "HILABETEAK", "ordered": true }
@@ -86,3 +86,40 @@ word/stem and word/suffix parts, keeping `basque` as the final correct spelling.
 A suffix starts with `-`. Explain article endings or spelling changes in
 `note`; do not invent decompositions when unsure. Ordinary vocabulary needs
 no formation metadata.
+
+### Sentences and grammar (optional)
+
+If the sheet has sentence exercises, an entry can be
+`"type": "sentence"` with the complete sentence in `basque` and
+`"sentence": {"tiles": [...], "alternatives": [[...]], "distractors": [...]}`:
+tiles in the correct order (lower case unless names; punctuation may be its
+own tile; repeats allowed), every other correct order listed explicitly, and
+optional wrong extra tiles that cannot form another correct sentence. A gap
+exercise is `"type": "grammar"` with `"grammar": {"text": "Ni ikaslea ___.",
+"answers": ["naiz"], "distractors": ["da", "gara"]}`. Copy what the sheet
+shows; mark anything you composed yourself with `needsReview`.
+
+## Second prompt: a listening story
+
+EUSKALDUO does not generate stories itself. To draft one with an assistant,
+ask for **only** JSON in this shape (see `docs/IMPORT_FORMAT.md`, "Stories"):
+
+```
+{"schemaVersion": 2, "type": "story", "id": "short-id", "title": "…",
+ "format": "short", "difficulty": 1,
+ "transcript": "Basque text, one narrator, short sentences",
+ "translations": {"es": "…", "ru": "…"},
+ "questions": [{"id": "q1", "prompt": {"es": "…", "ru": "…"},
+   "options": [{"es": "…", "ru": "…"}, {"es": "…", "ru": "…"}], "correct": 0}],
+ "links": {"words": ["Basque words from our sheets that the story uses"], "topics": ["eskola"]},
+ "needsReview": true, "reviewNote": "Draft by an assistant; check the Basque."}
+```
+
+Ask for: a funny, simple situation for children aged 8–11 (school, animals,
+harmless misunderstandings; Triku the hedgehog and Txapi the sheep may
+appear), mostly words from the sheets you paste, few new words and none that
+a question depends on, short sentences, no wordplay. *short*: about 50 words
+(≈ 25 s of audio), 1–2 questions; *extended*: 110–150 words (≈ 55–70 s),
+3–5 questions. Questions ask about the overall meaning or clearly stated
+facts. Always keep `needsReview: true`: a Basque speaker should check the
+text before you publish, and the app checks the real audio length.

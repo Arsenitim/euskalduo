@@ -430,7 +430,9 @@ export function SentenceBuildView({ question, lang, answered, onAnswer }: Props<
     <div>
       <Prompt title={t('buildSentence')}>
         <Meaning item={item} lang={lang} />
-        <p className="muted">{t('buildSentenceHint')}</p>
+        <p className="muted">
+          {t('buildSentenceHint')} {exercise.distractors.length > 0 && t('buildSentenceExtra')}
+        </p>
       </Prompt>
       <div className="sentence-slots" aria-label={t('yourAnswer')} aria-live="polite" lang="eu">
         {Array.from({ length: needed }, (_, i) => (

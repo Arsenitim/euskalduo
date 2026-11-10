@@ -1,31 +1,40 @@
 # EUSKALDUO — full guide
 
-A playful web app for practising Basque (Euskara) vocabulary from real school
-homework. A parent (the admin) imports each week's word list, checks it and
-publishes it. Children practise in short rounds on a tablet, phone or computer,
-with no accounts, ads, leaderboards or streak penalties.
+A playful web app for practising Basque (Euskara) from real school
+material. A parent (the admin) imports each sheet when it arrives, checks it
+and publishes it. Children practise in short rounds on a tablet, phone or
+computer, with no accounts, ads, leaderboards or streak penalties.
 
-* **Learners:** "Esta semana", "Elegir semana", "Mezclar semanas" and
-  "Categorías" (word groups without a week: days of the week and months are
-  built in; add more as sets of type *category*); five
-  exercise types (choose the meaning, choose the Basque word, spell with letter
-  tiles, type the meaning, put months/weekdays in order); spelling has a
-  💡 hint (half credit) and "No lo sé" to skip; immediate feedback;
-  missed words come back later; stars at the end of a round; progress per week;
-  pre-generated Basque voice and short sound effects (mute both with 🔊 or in
-  Ajustes; see [VOICE.md](VOICE.md) for setup); an animated mascot, Triku the hedgehog or Txapi the sheep, reacts
-  only occasionally: on streaks (3, 7, 12 in a row, then every 5), a word
-  fixed on its retry, a second miss in a row, or a 10% surprise, never twice
-  within 3 answers. Both mascots appear on the round summary.
-  The child-facing UI is simple Spanish; meanings can be shown in Spanish or
-  Russian. Basque vocabulary labels and Spanish translations use sentence case; imported
-  spelling and existing audio files are preserved.
+* **Learners:** one big **Empezar** button starts a lesson chosen for them
+  from everything published — words, varied topics and listening. Nothing to
+  pick first, no weeks or dates. **Temas** practises one topic or one school
+  sheet on its own (days of the week, months, word formation, sentences,
+  grammar and every sheet are there). **Escuchar** has short and longer
+  Basque stories with comprehension questions. An exam section appears when
+  the admin announces an exam.
+* **Exercises:** choose the meaning, choose the Basque word, spell with
+  letter tiles, type the meaning, put months/weekdays in order, build words
+  from words or suffixes, **build a sentence** from tiles, **fill a grammar
+  gap**, and **listening comprehension**. Spelling and sentences have a
+  💡 hint (half credit) and "No lo sé" to skip; immediate feedback; missed
+  items come back later; stars at the end of a round; progress per skill and
+  topic; pre-generated Basque voice and short sound effects (mute both with
+  🔊 or in Ajustes; see [VOICE.md](VOICE.md)). An animated mascot, Triku the
+  hedgehog or Txapi the sheep, reacts only occasionally: on streaks (3, 7, 12
+  in a row, then every 5), an item fixed on its retry, a second miss in a
+  row, or a 10% surprise, never twice within 3 answers. Both mascots appear
+  on the round summary. The child-facing UI is simple Spanish; meanings and
+  story questions can be shown in Spanish or Russian. Basque vocabulary
+  labels and Spanish translations use sentence case; imported spelling and
+  existing audio files are preserved.
 * **Admin:** log in, paste/upload JSON (or quick `Basque — Spanish` lines),
-  review with per-entry errors and warnings, assign the week, add pictures,
-  preview, publish/unpublish, edit and delete.
-* **Privacy:** the server stores only homework content, plus feedback that
-  someone deliberately sends. Names, answers and progress stay in the child's
-  browser.
+  review with per-entry errors and warnings, add pictures, preview,
+  publish/unpublish, edit and delete sheets and topics; manage **stories**
+  (text, translations, questions, links, audio status, preview) and
+  **exams** (a selection of sheets/topics with an optional date).
+* **Privacy:** the server stores only learning content, anonymous usage
+  totals, and feedback that someone deliberately sends. Names, answers and
+  progress stay in the child's browser.
 * **Feedback:** a *Comentarios* button opens a form (message, optional name
   and screenshot). Entries are stored as files for you to download.
 
@@ -50,21 +59,31 @@ docker compose up --build
   Missed it (logs are gone once the container is removed)? Set
   `ADMIN_PASSWORD` in `.env` and run `docker compose up -d`.
 
-On first start, two published **sample** sets are loaded (badge "Ejemplo").
-They come from the fixtures in `samples/` and have illustrative dates. Delete
-them in the admin whenever you like; they are never re-created.
+On first start, two published **sample** sheets are loaded (badge
+"Ejemplo"), plus the built-in topics and the real sheets in `samples/`.
+Starter **stories** and the **Esaldiak** (sentences) and **Gramatika** topics
+are loaded as drafts flagged *Needs review*: they were written without a
+Basque speaker's check, so children see them only after you (or a speaker)
+review and publish them. Deleted samples are never re-created.
 
 ### First steps as admin
 
-1. Photograph the homework sheet. Give the photo to ChatGPT with the prompt in
+1. Photograph the school sheet. Give the photo to ChatGPT with the prompt in
    [`CHATGPT_IMPORT_INSTRUCTIONS.md`](../CHATGPT_IMPORT_INSTRUCTIONS.md).
 2. **Admin → Import**: paste the JSON (or upload the `.json` file). To try
-   it out, press **Load example**.
-3. **Check & review**: fix errors, look at the warnings, set the **homework
-   week**, and clear any "Needs review" flags. Then **Save as draft**.
+   it out, press **Load example**. A story JSON (`"type": "story"`) is
+   recognised and saved as a draft story.
+3. **Check & review**: fix errors, look at the warnings, choose *School
+   sheet* or *Topic*, and clear any "Needs review" flags. A date is optional
+   ("Received on", for reference only). Then **Save as draft**.
 4. Optional: upload a picture for concrete words (PNG/JPEG/WebP ≤ 5 MB).
-5. **Preview**, then **Publish**. Learners see only published sets. The
-   newest week is the default "Esta semana".
+5. **Preview**, then **Publish**. Learners see only published sets, and every
+   published set is part of their lessons straight away.
+6. Stories: **Admin → Stories**. Check the text, translations and questions,
+   wait until the audio shows *ready* with its length (the speech worker
+   needs a few minutes), clear *Needs review*, then **Publish**.
+7. Exams: **Admin → Exams** → title, optional date, tick the sheets/topics
+   it covers, **Publish**.
 
 ## Configuration (`.env`)
 
@@ -106,13 +125,15 @@ icons are rendered from `web/icons/app-icon.svg` with `node web/icons/render.mjs
 
 **Offline (e.g. on a plane).** After one visit with a connection, the learner
 app opens and can be practised without one: a service worker (`web/sw/sw.js`)
-keeps the app and the last catalogue. Pictures and speech are kept once seen;
-**Ajustes → Usar sin conexión → Descargar** saves all of them at once and says
-when everything is ready. While offline a ✈️ pill in the header (a badge on
+keeps the app and the last catalogue. Pictures, speech and story recordings
+are kept once played; **Ajustes → Usar sin conexión → Descargar** saves all of
+them (stories included) at once and says when everything is ready. A story
+whose recording is not saved shows a short notice offline and the lesson
+simply continues. While offline a ✈️ pill in the header (a badge on
 the logo on phones) says so, and the home screen explains it. On a device that
 has downloaded before, the home screen shows **⬇️ Novedades para descargar**
 (online only) when the catalogue has pictures or speech it has not saved yet,
-e.g. a new week or clips generated later; it opens Ajustes. Progress is local
+e.g. a new sheet, a new story or clips generated later; it opens Ajustes. Progress is local
 anyway, and the anonymous usage counters wait on the device and are sent,
 filed under the day they happened, when the connection returns. When online,
 the page and catalogue always come from the network first, so updates still
@@ -129,8 +150,12 @@ in [`docs/IMPORT_FORMAT.md`](IMPORT_FORMAT.md) and
 
 * `translations.es` is a **list**. Each alternative (e.g. `campeonato`,
   `concurso`) is accepted on its own; commas are never split silently.
-* `weekStart` may be `null` in an import; the admin assigns it before
-  publishing. The homework week is independent of what the words mean.
+* Sets are *sheets* or *topics*; no date is needed. Old files with
+  `weekStart`/`"kind": "week"` are still accepted (the date is kept only as
+  "received on").
+* Entries can be words, **sentences** (curated tiles, explicit accepted
+  orders) or **grammar** gaps (curated answers and wrong options).
+* **Stories** have their own format (`"type": "story"`).
 * Optional `groups` with `ordered: true` (months, weekdays) keep the source
   order and enable the ordering exercise.
 * `needsReview` marks unclear items; flagged sets cannot be published.
@@ -142,8 +167,8 @@ in [`docs/IMPORT_FORMAT.md`](IMPORT_FORMAT.md) and
 * **No learner data on the server.** There are no learner accounts. Names,
   answers, scores and progress are stored in the browser's `localStorage`
   only. The learner app downloads content with one request, `GET /api/public/content`, with no
-  parameters, no body and no cookies. It downloads all published homework, so
-  the server does not even learn which week a child opens. Learner pages use
+  parameters, no body and no cookies. It downloads everything published, so
+  the server does not even learn which topic or story a child opens. Learner pages use
   `#` URLs, which browsers do not send to the server.
 * **No third parties.** No analytics, ads, trackers, external fonts, CDNs or
   external images. A Content-Security-Policy restricts everything to the same
@@ -154,10 +179,10 @@ in [`docs/IMPORT_FORMAT.md`](IMPORT_FORMAT.md) and
   "new device" (ever), "active today" (per day) and "active this week" (per
   Monday–Sunday week). The browser remembers in
   `localStorage` (`euskalduo.stats.v1`) that it already sent them; there is no
-  device id. Each answer and round is also counted per homework set (its
-  public id), exercise type, practice mode (week / categoría / exam / mix),
-  online or offline, and installed app or browser tab; the server accepts only
-  those fixed labels and ids of existing sets. A browser signed in to the admin
+  device id. Each answer and round is also counted per set or story (their
+  public ids), exercise type, practice mode (lesson / topic / listening /
+  exam), online or offline, and installed app or browser tab; the server
+  accepts only those fixed labels and ids of existing sets and stories. A browser signed in to the admin
   area stops counting (`euskalduo.stats.exclude.v1`), so our own testing is
   left out; **Admin → Usage** has a switch to count it again. Counters wait in `localStorage` (`euskalduo.stats.pending.v1`)
   until the server has them, so offline practice is sent later with the
@@ -254,8 +279,11 @@ When the box is full, learners see a message asking them to contact
 
 ## Backups and resetting
 
-All persistent state is in two named volumes: `euskalduo_content` (SQLite
-database, generated secret/credentials) and `euskalduo_uploads` (pictures).
+All persistent state is in named volumes: `euskalduo_content` (SQLite
+database, generated secret/credentials, feedback), `euskalduo_uploads`
+(pictures), `euskalduo_audio` (speech and story clips), `euskalduo_speech-models`
+(the voice model) and `euskalduo_speech-queue` (a text list the API
+regenerates on every start — no need to back it up).
 
 ```sh
 # Backup (briefly stops the API for a consistent SQLite copy)
@@ -271,9 +299,55 @@ docker run --rm -v euskalduo_content:/data -v euskalduo_uploads:/uploads \
 docker compose up -d
 ```
 
+Audio can always be regenerated (`docker compose run --rm --no-deps tts once`);
+include `euskalduo_audio` in the backup only to save that time.
+
 **Reset to the demo state:** `docker compose down -v && docker compose up --build`.
-This deletes **all** content, pictures and the generated admin password. A
-new password is printed, and the samples are loaded again.
+This deletes **all** content, pictures, audio and the generated admin
+password. A new password is printed, and the samples are loaded again.
+
+## Upgrading to 0.2 (catalogue, lessons, listening)
+
+The database moves to schema version 8 automatically on the first start of
+the new API. The migration only adds columns and tables; it changes no
+existing content: sets keep their ids, entries their ids and order, so
+learners' progress keys stay valid. School "weeks" become sheets (their date
+is kept as "received on"), and every set with an exam date becomes an exam of
+that set with the same id. Nothing in browsers is cleared: learner progress
+(version 1) is migrated in the browser when it is read, old progress files
+can still be imported, old `#/semana…`/`#/mezclar` links redirect, offline
+copies of the old catalogue are read as before, and counters queued offline
+by the old version are still accepted.
+
+```sh
+# 1. Back up first (see above).
+# 2. Build and start the new version (migrates on start):
+docker compose up -d --build
+docker compose logs api | tail -20        # "Seeded …", "Speech queue updated."
+# 3. Speech: once per install, then the worker keeps up by itself.
+docker compose run --rm tts setup         # downloads the pinned voice model
+docker compose up -d tts
+#    or a single pass now:  docker compose run --rm --no-deps tts once
+# 4. Admin → Stories: review the starter stories, publish when audio is ready.
+```
+
+**Rollback:** stop the stack, restore the backup taken in step 1, check out
+the previous version and start it:
+
+```sh
+docker compose down
+# restore the tar backup into the volumes (see "Restore" above)
+git checkout <previous tag or commit>
+docker compose up -d --build
+```
+
+The old version also starts on an upgraded (v8) database, because it only
+reads the columns it knows; but sets, stories and exams created after the
+upgrade would then be invisible or behave like weeks without dates, so a
+restore from the backup is the clean way back. Learner browsers that already
+saved version 2 progress keep it; an older app would ignore that data
+(it reads only version 1), so prefer not to roll back once children have
+practised with the new version.
 
 ## Development and tests
 
@@ -285,7 +359,8 @@ docker compose --profile test run --rm api-test
 docker compose --profile test run --rm web-test
 
 # End-to-end against the running stack (headless Chromium; learner round,
-# reload persistence, mix mode, network privacy check, admin import→picture→publish→edit)
+# reload persistence, lessons, topics, listening, sentences/grammar, exams,
+# offline, network privacy check, admin import→picture→publish→edit)
 cd web && npm ci
 E2E_ADMIN_PASSWORD=... npx playwright test
 # If a Chromium is already installed and the bundled one is missing:
@@ -315,14 +390,24 @@ browser-only state, the practice algorithm).
 
 * Progress is per browser. There is no sync between devices except manual
   export/import.
-* Voice clips require initial model setup and background generation. There is no pronunciation scoring. Only the typed-meaning exercise accepts
+* The starter stories, sentences and grammar items were written without a
+  Basque speaker's review; they ship as drafts flagged for review.
+* Voice clips require initial model setup and background generation. There
+  is no pronunciation scoring. Only the typed-meaning exercise accepts
   accent-less answers ("almost"); Basque spelling must be exact.
+* Stories have one narrator (the Maider voice) and multiple-choice questions
+  only. Durations are checked after generation; a story that is too long or
+  short must be edited and regenerated.
+* Sentence and grammar answers are exactly the curated ones: a different but
+  correct sentence is marked wrong unless it is listed as an alternative.
+* The same word on two sheets keeps two separate progress records (it is
+  only kept out of the same lesson twice); there is no shared word identity.
 * The ordering exercise uses runs of up to 5 items from an ordered group, not
   the full 12-month sequence.
 * Only Spanish UI strings exist today (`web/src/i18n/es.ts`). Russian or
   Basque UI needs a translated copy of that file.
 * One admin account. There are no roles, audit log or content versioning.
-  Deleting a set is permanent (the UI asks for confirmation).
+  Deleting a set or story is permanent (the UI asks for confirmation).
 * Emoji depend on the device's emoji font. Sample pictures are emoji only; no
   licensed image set is bundled.
 * Learner content is fetched on every visit (with ETag revalidation); offline,

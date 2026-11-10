@@ -864,6 +864,8 @@ img.word-visual-small {
 .story-transcript {
   margin-top: 8px;
   white-space: pre-line;
+  /* Long text reads better left-aligned than centred like a prompt. */
+  text-align: start;
 }
 
 .story-transcript h3 {
@@ -1880,6 +1882,19 @@ fieldset legend {
     padding: 6px 8px;
     font-size: 0.9rem;
     gap: 4px;
+  }
+
+  /* Four sections: icon above a short label, so they fit side by side. */
+  .app-nav a {
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    padding: 4px 2px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    text-align: center;
+    min-width: 0;
   }
 
   .app-nav .nav-button {

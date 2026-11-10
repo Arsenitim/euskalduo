@@ -10,9 +10,13 @@ import { starsFor } from '../questions';
 import { todayIso } from '../scheduler';
 import { recordStory, shuffledOptions, storyPoints, type StoryResult } from '../story';
 
-/** One story from the listening section, as a block of its own. */
+/** One story from the listening section, as a block of its own (fresh state per story). */
 export function StoryPage() {
   const { storyId } = useParams();
+  return <StoryView key={storyId} storyId={storyId} />;
+}
+
+function StoryView({ storyId }: { storyId: string | undefined }) {
   const { stories, state, update } = useLearner();
   const story = stories.find((s) => s.id === storyId);
   const [attempt, setAttempt] = useState(0);

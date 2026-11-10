@@ -124,9 +124,10 @@ test.describe('learner', () => {
     await page.getByRole('navigation', { name: 'Principal' }).getByRole('link', { name: 'Temas' }).click();
     await expect(page.getByRole('heading', { name: 'Temas', level: 1 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Hojas del cole' })).toBeVisible();
-    await expect(page.locator('.week-card', { hasText: /^ASTEGUNAK/ })).toContainText('7 palabras');
+    const weekdays = page.locator('.week-card').filter({ has: page.locator('.week-title', { hasText: /^\s*ASTEGUNAK\s*$/ }) });
+    await expect(weekdays).toContainText('7 palabras');
 
-    await page.locator('.week-card', { hasText: 'ASTEGUNAK' }).first().click();
+    await weekdays.click();
     await expect(page.locator('.word-group ol li')).toHaveCount(7);
     await page.getByRole('link', { name: '¡A practicar!' }).click();
     await playRound(page);

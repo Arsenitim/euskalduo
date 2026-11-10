@@ -30,6 +30,9 @@ async function prepare(page: Page, { missing = false, random = 0.01 } = {}) {
     w.__plays = w.__pauses = 0;
     HTMLMediaElement.prototype.play = function () { w.__plays++; return Promise.resolve(); };
     HTMLMediaElement.prototype.pause = function () { w.__pauses++; this.dispatchEvent(new Event('pause')); };
+    // No real decoding in tests: the fake clip is never loaded.
+    Object.defineProperty(HTMLMediaElement.prototype, 'src', { configurable: true, get() { return ''; }, set() {} });
+    HTMLMediaElement.prototype.load = function () {};
   }, random);
 }
 const plays = (page: Page) => page.evaluate(() => (window as unknown as { __plays: number }).__plays);
