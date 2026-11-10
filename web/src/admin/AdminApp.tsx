@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HashRouter, Link, Route, Routes } from 'react-router-dom';
+import { setStatsExcluded } from '../api/stats';
 import { adminApi } from './api';
 import { ImportPage } from './ImportPage';
 import { SetListPage } from './SetListPage';
@@ -18,6 +19,11 @@ export default function AdminApp() {
       .then((s) => setAuth(s.authenticated ? { state: 'in', username: s.username ?? '' } : { state: 'out' }))
       .catch(() => setAuth({ state: 'out' }));
   }, []);
+
+  useEffect(() => {
+    // Our own testing should not count as learners' practice (Usage page can undo it).
+    if (auth.state === 'in') setStatsExcluded(true);
+  }, [auth.state]);
 
   if (auth.state === 'checking') return <p className="center-note">Loading…</p>;
   if (auth.state === 'out') return <LoginForm onLogin={(username) => setAuth({ state: 'in', username })} />;

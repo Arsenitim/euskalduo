@@ -34,8 +34,8 @@ Endpoints:
 | --- | --- | --- |
 | `GET /api/public/content` | anyone | All published sets with entries, one response. No input, no cookies, no session. ETag for cheap revalidation. |
 | `POST /api/public/feedback` | anyone | Learner feedback (multipart: `message`, optional `name`, `page`, `viewport`, `screenshot`). Stored as files, rate-limited per IP, total size capped. The only learner request with a body, sent only from the feedback form. |
-| `POST /api/public/stats` | anyone | Anonymous usage counters (JSON: optional `day`, `newDevice`, `activeToday`, `answers`, `rounds`), added to one row of totals per day. `day` (device date, for counters queued offline) is used if within the last 30 days or tomorrow, otherwise today (UTC). No id, no IP; each counter capped at 500 per request. |
-| `GET /api/admin/stats` | admin | Totals and the last 30 days for **Admin → Usage**. |
+| `POST /api/public/stats` | anyone | Anonymous usage counters (JSON: optional `day`, `newDevice`, `activeToday`, `activeWeek`, `answers`, `rounds`, `breakdown`), added to one row of totals per day (`usage_daily`) and, for `breakdown` (up to 100 `{dimension, key, answers, rounds}` rows: set id, exercise type, mode, connection, display), to `usage_breakdown`; unknown labels and set ids are ignored. `day` (device date, for counters queued offline) is used if within the last 30 days or tomorrow, otherwise today (UTC). No id, no IP; each counter capped at 500 per request. |
+| `GET /api/admin/stats` | admin | Totals, the last 30 days, the last 8 weeks and the 30-day breakdowns for **Admin → Usage**. |
 | `GET /api/health` | anyone | Health check. |
 | `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/session` | admin | Session login (JSON body required). |
 | `GET/POST /api/admin/sets`, `GET/PUT/DELETE /api/admin/sets/{id}` | admin | CRUD. The same validator runs for import and every save. |

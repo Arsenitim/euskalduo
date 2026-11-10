@@ -11,7 +11,7 @@ namespace App\Content;
  */
 final class Database
 {
-    public const SCHEMA_VERSION = 6;
+    public const SCHEMA_VERSION = 7;
 
     private ?\PDO $pdo = null;
 
@@ -113,6 +113,13 @@ final class Database
         }
         // v4: anonymous usage counters, one row per day (see App\Stats\UsageStats).
         $pdo->exec('CREATE TABLE IF NOT EXISTS usage_daily (day TEXT PRIMARY KEY, new_devices INTEGER NOT NULL DEFAULT 0, active_devices INTEGER NOT NULL DEFAULT 0, answers INTEGER NOT NULL DEFAULT 0, correct INTEGER NOT NULL DEFAULT 0, hinted INTEGER NOT NULL DEFAULT 0, wrong INTEGER NOT NULL DEFAULT 0, skipped INTEGER NOT NULL DEFAULT 0, rounds INTEGER NOT NULL DEFAULT 0)');
+        // v7: devices counted once a week, and the same counters broken down by
+        // homework set, exercise type, practice mode, connection and app/browser.
+        $usageColumns = array_column($pdo->query('PRAGMA table_info(usage_daily)')->fetchAll(), 'name');
+        if (!\in_array('weekly_devices', $usageColumns, true)) {
+            $pdo->exec('ALTER TABLE usage_daily ADD COLUMN weekly_devices INTEGER NOT NULL DEFAULT 0');
+        }
+        $pdo->exec('CREATE TABLE IF NOT EXISTS usage_breakdown (day TEXT NOT NULL, dimension TEXT NOT NULL, key TEXT NOT NULL, answers INTEGER NOT NULL DEFAULT 0, correct INTEGER NOT NULL DEFAULT 0, hinted INTEGER NOT NULL DEFAULT 0, wrong INTEGER NOT NULL DEFAULT 0, skipped INTEGER NOT NULL DEFAULT 0, rounds INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, dimension, key))');
         $pdo->exec("INSERT INTO meta(key, value) VALUES('schema_version', '".self::SCHEMA_VERSION."') ON CONFLICT(key) DO UPDATE SET value = excluded.value");
         $pdo->commit();
     }

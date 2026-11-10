@@ -1507,8 +1507,17 @@ fieldset legend {
   position: relative;
 }
 
-.usage-table tr.is-quiet td {
+.usage-table tr.is-quiet td,
+.admin-table tr.is-quiet td {
   color: var(--muted);
+}
+
+.usage-exclude {
+  margin: 16px 0;
+}
+
+.usage-exclude p {
+  margin: 6px 0 0;
 }
 
 .admin {

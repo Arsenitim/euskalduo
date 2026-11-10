@@ -150,14 +150,21 @@ in [`docs/IMPORT_FORMAT.md`](IMPORT_FORMAT.md) and
   origin.
 * **Anonymous usage counters.** While practising, the app posts small
   counters to `POST /api/public/stats`: one answer (right / with hint / wrong
-  / skipped) or one finished round, plus two yes/no flags sent at most once:
-  "new device" (ever) and "active today" (per day). The browser remembers in
+  / skipped) or one finished round, plus three yes/no flags sent at most once:
+  "new device" (ever), "active today" (per day) and "active this week" (per
+  Monday–Sunday week). The browser remembers in
   `localStorage` (`euskalduo.stats.v1`) that it already sent them; there is no
-  device id. Counters wait in `localStorage` (`euskalduo.stats.pending.v1`)
+  device id. Each answer and round is also counted per homework set (its
+  public id), exercise type, practice mode (week / categoría / exam / mix),
+  online or offline, and installed app or browser tab; the server accepts only
+  those fixed labels and ids of existing sets. A browser signed in to the admin
+  area stops counting (`euskalduo.stats.exclude.v1`), so our own testing is
+  left out; **Admin → Usage** has a switch to count it again. Counters wait in `localStorage` (`euskalduo.stats.pending.v1`)
   until the server has them, so offline practice is sent later with the
   device's date for that day (`"day"`; accepted up to 30 days back, otherwise
-  counted today). The server adds them to one row of totals per day (no IP, no id,
-  capped per request) shown under **Admin → Usage**. Browsing without
+  counted today). The server adds them to one row of totals per day and one
+  row per day and label (no IP, no id, capped per request), shown under
+  **Admin → Usage** with weekly devices and the last 30 days per label. Browsing without
   practising sends nothing. Clearing browser data makes a device count as new
   again, so "devices" is an upper bound.
 * **Feedback is the exception, and only on purpose.** When someone sends

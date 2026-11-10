@@ -85,7 +85,12 @@ test.describe('learner', () => {
       if (stats.includes(r)) {
         expect(r.method()).toBe('POST');
         const body = JSON.parse(r.postData() ?? '{}');
-        expect(['day', 'newDevice', 'activeToday', 'answers', 'rounds']).toEqual(expect.arrayContaining(Object.keys(body)));
+        expect(['day', 'newDevice', 'activeToday', 'activeWeek', 'answers', 'rounds', 'breakdown']).toEqual(expect.arrayContaining(Object.keys(body)));
+        // Breakdown rows carry only fixed labels and public set ids.
+        for (const part of body.breakdown ?? []) {
+          expect(['set', 'exercise', 'mode', 'connection', 'display']).toContain(part.dimension);
+          expect(['dimension', 'key', 'answers', 'rounds']).toEqual(expect.arrayContaining(Object.keys(part)));
+        }
         expect(r.postData()).not.toContain('Ane');
       } else {
         expect(r.method(), r.url()).toBe('GET');
@@ -195,6 +200,38 @@ test.describe('admin', () => {
   test('rejects anonymous writes', async ({ request }) => {
     const r = await request.post('/api/admin/sets', { data: { title: 'x', entries: [] } });
     expect(r.status()).toBe(401);
+  });
+
+  test('a browser signed in to the admin area is not counted, until switched back on', async ({ page }) => {
+    await page.goto('/admin/');
+    await page.getByLabel('Password').fill(ADMIN_PASSWORD);
+    await page.getByRole('button', { name: 'Log in' }).click();
+    await expect(page.getByRole('heading', { name: 'Homework sets' })).toBeVisible();
+
+    const stats: string[] = [];
+    page.on('request', (r) => {
+      if (new URL(r.url()).pathname === '/api/public/stats') stats.push(r.postData() ?? '');
+    });
+    await page.goto('/#/');
+    await page.getByRole('link', { name: /Esta semana/ }).click();
+    await answerCurrent(page);
+    await page.waitForTimeout(500);
+    expect(stats).toEqual([]);
+
+    await page.goto('/admin/#/uso');
+    const count = page.getByLabel('Count practice from this browser');
+    await expect(count).not.toBeChecked();
+    await expect(page.getByRole('heading', { name: 'By exercise type' })).toBeVisible();
+    await count.check();
+    await page.screenshot({ path: 'test-results/admin-usage.png', fullPage: true });
+
+    await page.goto('/#/');
+    await page.getByRole('link', { name: /Esta semana/ }).click();
+    const sent = page.waitForRequest((r) => new URL(r.url()).pathname === '/api/public/stats');
+    await answerCurrent(page);
+    const body = JSON.parse((await sent).postData()!);
+    expect(body.activeWeek).toBe(true);
+    expect(body.breakdown.map((p: { dimension: string }) => p.dimension).sort()).toEqual(['connection', 'display', 'exercise', 'mode', 'set']);
   });
 
   test('imports, reviews, adds a picture, publishes and edits a set', async ({ page, browser }) => {

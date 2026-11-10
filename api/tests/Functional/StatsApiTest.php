@@ -47,7 +47,7 @@ final class StatsApiTest extends WebTestCase
         self::assertResponseIsSuccessful();
         $report = json_decode((string) $this->client->getResponse()->getContent(), true);
 
-        $expected = ['new_devices' => 1, 'active_devices' => 2, 'answers' => 4, 'correct' => 1, 'hinted' => 1, 'wrong' => 1, 'skipped' => 1, 'rounds' => 1];
+        $expected = ['new_devices' => 1, 'active_devices' => 2, 'answers' => 4, 'correct' => 1, 'hinted' => 1, 'wrong' => 1, 'skipped' => 1, 'rounds' => 1, 'weekly_devices' => 0];
         self::assertSame($expected, $report['totals']);
         self::assertCount(30, $report['days']);
         self::assertSame(['day' => gmdate('Y-m-d')] + $expected, $report['days'][0]);
@@ -61,8 +61,55 @@ final class StatsApiTest extends WebTestCase
 
         $pdo = (new Database($this->data))->pdo();
         $rows = $pdo->query('SELECT * FROM usage_daily')->fetchAll();
-        self::assertSame([['day' => gmdate('Y-m-d'), 'new_devices' => 0, 'active_devices' => 0, 'answers' => 500, 'correct' => 500, 'hinted' => 0, 'wrong' => 0, 'skipped' => 0, 'rounds' => 0]], $rows);
+        self::assertSame([['day' => gmdate('Y-m-d'), 'new_devices' => 0, 'active_devices' => 0, 'answers' => 500, 'correct' => 500, 'hinted' => 0, 'wrong' => 0, 'skipped' => 0, 'rounds' => 0, 'weekly_devices' => 0]], $rows);
         self::assertSame(['day', ...UsageStats::COUNTERS], array_column($pdo->query('PRAGMA table_info(usage_daily)')->fetchAll(), 'name'), 'The table has no room for identifiers.');
+        self::assertSame(['day', 'dimension', 'key', ...UsageStats::BREAKDOWN_COUNTERS], array_column($pdo->query('PRAGMA table_info(usage_breakdown)')->fetchAll(), 'name'));
+    }
+
+    public function testCountsWeeklyDevicesAndBreaksCountersDownByKnownLabelsOnly(): void
+    {
+        [$setId, $title] = $this->publishedSet();
+        $part = static fn (string $dimension, string $key, array $answers, int $rounds = 0): array => ['dimension' => $dimension, 'key' => $key, 'answers' => $answers, 'rounds' => $rounds];
+        $this->post([
+            'activeToday' => true,
+            'activeWeek' => true,
+            'answers' => ['correct' => 2, 'wrong' => 1],
+            'rounds' => 1,
+            'breakdown' => [
+                $part('set', $setId, ['correct' => 2, 'wrong' => 1], 1),
+                $part('exercise', 'spell', ['correct' => 1, 'wrong' => 1]),
+                $part('exercise', 'order', ['correct' => 1]),
+                $part('mode', 'week', ['correct' => 2, 'wrong' => 1], 1),
+                $part('connection', 'offline', ['correct' => 2, 'wrong' => 1], 1),
+                $part('display', 'app', ['correct' => 2, 'wrong' => 1], 1),
+                // Ignored: unknown sets, labels and dimensions, free text, bad shapes.
+                $part('set', 'no-such-set', ['correct' => 5]),
+                $part('exercise', 'Ane Etxeberria', ['correct' => 5]),
+                $part('name', 'Ane', ['correct' => 5]),
+                ['dimension' => 'mode', 'key' => ['week']],
+                'spell',
+            ],
+        ]);
+        self::assertResponseStatusCodeSame(204);
+        $this->post(['activeToday' => true, 'answers' => ['skipped' => 1], 'breakdown' => [$part('exercise', 'spell', ['skipped' => 1, 'correct' => 900])]]);
+
+        $this->login();
+        $this->client->request('GET', '/api/admin/stats');
+        $report = json_decode((string) $this->client->getResponse()->getContent(), true);
+
+        self::assertSame(1, $report['totals']['weekly_devices']);
+        self::assertSame(1, $report['weeks'][0]['weekly_devices']);
+        self::assertSame(4, $report['weeks'][0]['answers']);
+        self::assertCount(8, $report['weeks']);
+        $byKey = static fn (string $dimension): array => array_column($report['breakdown'][$dimension], null, 'key');
+        self::assertSame(['key' => $setId, 'title' => $title, 'answers' => 3, 'correct' => 2, 'hinted' => 0, 'wrong' => 1, 'skipped' => 0, 'rounds' => 1], $byKey('set')[$setId]);
+        self::assertCount(1, $report['breakdown']['set']);
+        self::assertSame(['spell', 'order'], array_keys($byKey('exercise')));
+        self::assertSame(['answers' => 503, 'correct' => 501, 'wrong' => 1, 'skipped' => 1], array_intersect_key($byKey('exercise')['spell'], array_flip(['answers', 'correct', 'wrong', 'skipped'])));
+        self::assertSame(['week'], array_keys($byKey('mode')));
+        self::assertSame(1, $byKey('connection')['offline']['rounds']);
+        self::assertSame(3, $byKey('display')['app']['answers']);
+        self::assertSame(['set', 'exercise', 'mode', 'connection', 'display'], array_keys($report['breakdown']));
     }
 
     public function testFilesOfflinePracticeUnderItsOwnRecentDay(): void
@@ -103,6 +150,17 @@ final class StatsApiTest extends WebTestCase
         self::assertSame(['2026-09-24', '2026-09-23'], [$report['days'][0]['day'], $report['days'][1]['day']]);
         self::assertSame([0, 2], [$report['days'][0]['answers'], $report['days'][1]['answers']]);
         self::assertSame('2026-09-18', $report['days'][6]['day']);
+    }
+
+    /** @return array{string, string} id and title of a homework set in the database */
+    private function publishedSet(): array
+    {
+        $now = gmdate('c');
+        (new Database($this->data))->pdo()
+            ->prepare("INSERT INTO homework_sets (id, title, week_start, status, created_at, updated_at, published_at) VALUES ('week-1', 'HIZTEGIA (1.Gaia)', '2026-09-21', 'published', ?, ?, ?)")
+            ->execute([$now, $now, $now]);
+
+        return ['week-1', 'HIZTEGIA (1.Gaia)'];
     }
 
     /** @param array<string, mixed> $body */

@@ -54,12 +54,41 @@ export interface UsageCounters {
   wrong: number;
   skipped: number;
   rounds: number;
+  /** Devices practising for the first time that week (Monday–Sunday). */
+  weekly_devices: number;
 }
+
+export interface UsageWeek {
+  /** Monday (UTC). */
+  week: string;
+  weekly_devices: number;
+  new_devices: number;
+  answers: number;
+  rounds: number;
+}
+
+export interface UsageBreakdownRow {
+  key: string;
+  /** Set title, for the 'set' dimension (null if the set was deleted). */
+  title?: string | null;
+  answers: number;
+  correct: number;
+  hinted: number;
+  wrong: number;
+  skipped: number;
+  rounds: number;
+}
+
+export type UsageDimension = 'set' | 'exercise' | 'mode' | 'connection' | 'display';
 
 export interface UsageReport {
   totals: UsageCounters;
   /** Last 30 days (UTC), newest first. */
   days: Array<UsageCounters & { day: string }>;
+  /** Last 8 weeks, newest first. */
+  weeks: UsageWeek[];
+  /** Each dimension's totals over the last 30 days, busiest first. */
+  breakdown: Record<UsageDimension, UsageBreakdownRow[]>;
 }
 
 export interface ValidationResponse {

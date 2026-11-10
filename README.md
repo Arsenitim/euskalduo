@@ -18,7 +18,7 @@ leaderboards, and no pressure.
 - **Feedback button:** learners can send a message and a screenshot;
   you collect them as files (no e-mail, no chat).
 - **Private by design:** the server stores only homework content, anonymous
-  daily usage totals (no ids) and feedback people choose to send. Names,
+  anonymous usage totals (no ids) and feedback people choose to send. Names,
   answers and progress stay in the child's browser.
 - **Admin panel:** import, review, add pictures, publish.
 

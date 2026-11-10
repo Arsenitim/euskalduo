@@ -22,6 +22,8 @@ final class StatsController
     /** Offline practice is filed under its own day if it is at most this old. */
     private const MAX_DAYS_BACK = 30;
     private const ANSWER_RESULTS = ['correct', 'hinted', 'wrong', 'skipped'];
+    /** Breakdown rows accepted per request (each answer touches about five). */
+    private const MAX_BREAKDOWN = 100;
 
     public function __construct(private readonly UsageStats $stats)
     {
@@ -29,9 +31,13 @@ final class StatsController
 
     /**
      * Anonymous counters from the learner app, sent only while practising:
-     * {"day": "YYYY-MM-DD", "newDevice": bool, "activeToday": bool, "answers": {"correct": n, …}, "rounds": n}.
+     * {"day": "YYYY-MM-DD", "newDevice": bool, "activeToday": bool, "activeWeek": bool,
+     *  "answers": {"correct": n, …}, "rounds": n,
+     *  "breakdown": [{"dimension": "set|exercise|mode|connection|display", "key": "…", "answers": {…}, "rounds": n}, …]}.
      * "day" is optional (the device's date when it practised, e.g. offline);
      * a missing, malformed or out-of-range day counts as today (UTC).
+     * Breakdown keys are fixed labels or the id of an existing homework set;
+     * anything else is ignored (UsageStats::DIMENSIONS).
      * Nothing identifying is accepted or stored. A JSON body is required, so
      * other sites cannot post here from a plain HTML form.
      */
@@ -49,7 +55,25 @@ final class StatsController
             $deltas[$result] = self::count($answers[$result] ?? 0);
         }
         $deltas['answers'] = $deltas['correct'] + $deltas['hinted'] + $deltas['wrong'] + $deltas['skipped'];
-        $this->stats->add($deltas, self::day($body['day'] ?? null));
+        $deltas['weekly_devices'] = true === ($body['activeWeek'] ?? null) ? 1 : 0;
+        $day = self::day($body['day'] ?? null);
+        $breakdown = \is_array($body['breakdown'] ?? null) ? \array_slice(array_values($body['breakdown']), 0, self::MAX_BREAKDOWN) : [];
+
+        $this->stats->transaction(function () use ($deltas, $day, $breakdown): void {
+            $this->stats->add($deltas, $day);
+            foreach ($breakdown as $part) {
+                if (!\is_array($part) || !\is_string($part['dimension'] ?? null) || !\is_string($part['key'] ?? null)) {
+                    continue;
+                }
+                $partAnswers = \is_array($part['answers'] ?? null) ? $part['answers'] : [];
+                $counts = ['rounds' => self::count($part['rounds'] ?? 0)];
+                foreach (self::ANSWER_RESULTS as $result) {
+                    $counts[$result] = self::count($partAnswers[$result] ?? 0);
+                }
+                $counts['answers'] = $counts['correct'] + $counts['hinted'] + $counts['wrong'] + $counts['skipped'];
+                $this->stats->addBreakdown($part['dimension'], $part['key'], $counts, $day);
+            }
+        });
 
         return new Response(null, 204);
     }

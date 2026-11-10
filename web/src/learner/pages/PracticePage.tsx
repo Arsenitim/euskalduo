@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchAudio } from '../../api/audio';
-import { reportAnswer, reportRound } from '../../api/stats';
+import { reportAnswer, reportRound, type PracticeMode } from '../../api/stats';
 import { t } from '../../i18n';
 import type { HomeworkSet, Lang } from '../../types';
 import { ProgressBar, Stars } from '../components/bits';
@@ -49,6 +49,12 @@ function parseMode(params: URLSearchParams, sets: HomeworkSet[]): Mode | null {
   return null;
 }
 
+/** The practice mode as counted in the anonymous usage stats. */
+function practiceMode(mode: Mode, sets: HomeworkSet[]): PracticeMode {
+  if (mode.kind !== 'week') return mode.kind;
+  return sets.find((s) => s.id === mode.setId)?.kind === 'topic' ? 'topic' : 'week';
+}
+
 function newSession(sets: HomeworkSet[], mode: Mode, state: LearnerState, round: number): Session {
   const questions = buildRound({ sets, mode, stats: state.entries, today: todayIso(), lang: state.lang, rng: Math.random });
   return { round, questions, index: 0, outcome: null, firstTry: {}, answeredWords: [], retried: [], missed: [], mascot: newMascotTracker(Math.random), shown: null, done: questions.length === 0 };
@@ -80,7 +86,11 @@ export function PracticePage() {
       (correct ? playCorrect : playWrong)();
       playVoice(answerVoiceEntries(question).map((entry) => entry.audio), 550);
     }
-    reportAnswer(correct ? (outcome.hinted ? 'hinted' : 'correct') : outcome.skipped ? 'skipped' : 'wrong', todayIso());
+    reportAnswer(correct ? (outcome.hinted ? 'hinted' : 'correct') : outcome.skipped ? 'skipped' : 'wrong', todayIso(), {
+      set: question.kind === 'order' ? question.setId : question.item.setId,
+      exercise: question.kind,
+      mode: practiceMode(mode, sets),
+    });
     const retry = question.kind !== 'order' && question.retry;
     const mascot = nextMascot(session.mascot, { correct, hinted: outcome.hinted, almost: outcome.verdict === 'almost', skipped: outcome.skipped, retry }, Math.random);
     const next: Session = { ...session, outcome, firstTry: { ...session.firstTry }, mascot: mascot.tracker, shown: mascot.show };
@@ -121,7 +131,7 @@ export function PracticePage() {
     const scored = Object.values(session.firstTry);
     const stars = starsFor(sum(scored), scored.length);
     const today = todayIso();
-    reportRound(today);
+    reportRound(today, { sets: mode.kind === 'mix' ? [] : [mode.setId], mode: practiceMode(mode, sets) });
     const setIds = mode.kind === 'mix' ? mode.setIds : [mode.setId];
     update((s) => {
       const updated = { ...s.sets };

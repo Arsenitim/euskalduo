@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { flushStats, reportAnswer, reportRound } from './stats';
+import { flushStats, reportAnswer, reportRound, setStatsExcluded, statsExcluded, weekOf } from './stats';
 
 function memoryStorage(): Storage {
   const data = new Map<string, string>();
@@ -37,7 +37,7 @@ describe('usage stats', () => {
     await flushStats();
 
     expect(bodies()).toEqual([
-      { day: '2026-09-24', newDevice: true, activeToday: true, answers: { correct: 1 } },
+      { day: '2026-09-24', newDevice: true, activeToday: true, activeWeek: true, answers: { correct: 1 } },
       { day: '2026-09-24', answers: { hinted: 1 } },
       { day: '2026-09-24', rounds: 1 },
       { day: '2026-09-25', activeToday: true, answers: { skipped: 1 } },
@@ -63,7 +63,7 @@ describe('usage stats', () => {
     await flushStats();
 
     expect(bodies().slice(tries)).toEqual([
-      { day: '2026-09-24', newDevice: true, activeToday: true, answers: { correct: 1, wrong: 1 }, rounds: 1 },
+      { day: '2026-09-24', newDevice: true, activeToday: true, activeWeek: true, answers: { correct: 1, wrong: 1 }, rounds: 1 },
       { day: '2026-09-25', activeToday: true, answers: { correct: 1 } },
     ]);
     expect(localStorage.getItem('euskalduo.stats.pending.v1')).toBeNull();
@@ -88,6 +88,75 @@ describe('usage stats', () => {
     const sent = bodies().slice(tries);
     expect(sent.map((b) => b.answers)).toEqual([{ correct: 500 }, { correct: 500, wrong: 1 }, { correct: 203 }]);
     expect(sent.filter((b) => b.newDevice)).toHaveLength(1);
+  });
+
+  it('flags a device once per week (weeks start on Monday)', async () => {
+    expect(weekOf('2026-09-27')).toBe('2026-09-21'); // Sunday
+    expect(weekOf('2026-09-28')).toBe('2026-09-28'); // Monday
+    for (const day of ['2026-09-24', '2026-09-27', '2026-09-28', '2026-09-29']) {
+      reportAnswer('correct', day);
+      await flushStats();
+    }
+    expect(bodies().map((b) => [b.day, b.activeWeek ?? false])).toEqual([
+      ['2026-09-24', true],
+      ['2026-09-27', false],
+      ['2026-09-28', true],
+      ['2026-09-29', false],
+    ]);
+  });
+
+  it('breaks answers and rounds down by set, exercise, mode, connection and app/browser', async () => {
+    fetchMock.mockRejectedValue(new TypeError('offline'));
+    reportAnswer('correct', '2026-09-24', { set: 'week-1', exercise: 'spell', mode: 'week' });
+    reportAnswer('wrong', '2026-09-24', { set: 'week-1', exercise: 'order', mode: 'week' });
+    reportRound('2026-09-24', { sets: ['week-1'], mode: 'week' });
+    reportRound('2026-09-24', { sets: [], mode: 'mix' });
+    await flushStats();
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    await flushStats();
+
+    const body = bodies().at(-1);
+    expect(body).toMatchObject({ day: '2026-09-24', answers: { correct: 1, wrong: 1 }, rounds: 2 });
+    const parts = Object.fromEntries(body.breakdown.map((p: { dimension: string; key: string }) => [`${p.dimension}:${p.key}`, p]));
+    expect(parts['set:week-1']).toEqual({ dimension: 'set', key: 'week-1', answers: { correct: 1, wrong: 1 }, rounds: 1 });
+    expect(parts['exercise:spell']).toEqual({ dimension: 'exercise', key: 'spell', answers: { correct: 1 } });
+    expect(parts['exercise:order']).toEqual({ dimension: 'exercise', key: 'order', answers: { wrong: 1 } });
+    expect(parts['mode:week']).toMatchObject({ answers: { correct: 1, wrong: 1 }, rounds: 1 });
+    expect(parts['mode:mix']).toEqual({ dimension: 'mode', key: 'mix', rounds: 1 });
+    expect(parts['connection:online']).toMatchObject({ rounds: 2 });
+    expect(parts['display:browser']).toMatchObject({ rounds: 2 });
+    expect(Object.keys(parts)).toHaveLength(7);
+    expect(localStorage.getItem('euskalduo.stats.pending.v1')).toBeNull();
+  });
+
+  it('sends at most 100 breakdown rows per request and keeps the rest for the next one', async () => {
+    fetchMock.mockRejectedValue(new TypeError('offline'));
+    for (let i = 0; i < 130; i++) reportAnswer('correct', '2026-09-24', { set: `set-${i}`, exercise: 'spell', mode: 'week' });
+    await flushStats();
+    const tries = fetchMock.mock.calls.length;
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    await flushStats();
+
+    const sent = bodies().slice(tries);
+    expect(sent.map((b) => b.breakdown.length)).toEqual([100, 34]);
+    expect(sent.map((b) => b.answers?.correct ?? 0)).toEqual([130, 0]);
+    expect(sent.flatMap((b) => b.breakdown).filter((p: { dimension: string }) => p.dimension === 'set')).toHaveLength(130);
+  });
+
+  it('counts nothing from a browser that is left out, until it is counted again', async () => {
+    setStatsExcluded(true);
+    expect(statsExcluded()).toBe(true);
+    reportAnswer('correct', '2026-09-24', { set: 'week-1', exercise: 'spell', mode: 'week' });
+    reportRound('2026-09-24');
+    await flushStats();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(localStorage.getItem('euskalduo.stats.pending.v1')).toBeNull();
+    expect(localStorage.getItem('euskalduo.stats.v1'), 'not even flagged as a device').toBeNull();
+
+    setStatsExcluded(false);
+    reportAnswer('correct', '2026-09-24');
+    await flushStats();
+    expect(bodies()).toEqual([{ day: '2026-09-24', newDevice: true, activeToday: true, activeWeek: true, answers: { correct: 1 } }]);
   });
 
   it('drops a batch the server rejects instead of retrying it forever', async () => {
