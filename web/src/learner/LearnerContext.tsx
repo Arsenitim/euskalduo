@@ -2,33 +2,36 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { mediaUrls, pruneMedia } from '../api/offline';
 import { fetchContent } from '../api/public';
 import { startStatsSync } from '../api/stats';
-import { isWeek, type HomeworkSet, type WeekSet } from '../types';
+import type { Exam, HomeworkSet, Story } from '../types';
 import { learnerSets } from './display';
 import { clearState, emptyState, loadState, saveState, type LearnerState } from './progress';
 import { todayIso } from './scheduler';
 
 interface LearnerContextValue {
-  /** Every published set (weeks and categories), for practice and progress. */
+  /** Every published set (sheets and topics): one catalogue for practice and progress. */
   sets: HomeworkSet[] | null;
-  /** Homework weeks, newest first. */
-  weeks: WeekSet[];
-  /** Categories (days of the week, months…), by title. */
+  /** School sheets, by title (dates never decide the order). */
+  sheets: HomeworkSet[];
+  /** Topics (days of the week, months, sentences…), by title. */
   topics: HomeworkSet[];
-  /** Sets with an exam today or later, soonest first: shown as an exam section until the exam day. */
-  examSets: HomeworkSet[];
+  /** Published listening stories with audio. */
+  stories: Story[];
+  /** Exams without a date or with a date today or later, soonest first. */
+  exams: Exam[];
   error: boolean;
   reload: () => void;
   state: LearnerState;
   update: (fn: (state: LearnerState) => LearnerState) => void;
   reset: () => void;
   storageOk: boolean;
-  currentSet: WeekSet | null;
 }
 
 const LearnerContext = createContext<LearnerContextValue | null>(null);
 
 export function LearnerProvider({ children }: { children: ReactNode }) {
   const [sets, setSets] = useState<HomeworkSet[] | null>(null);
+  const [stories, setStories] = useState<Story[]>([]);
+  const [exams, setExams] = useState<Exam[]>([]);
   const [error, setError] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<LearnerState>(() => loadState());
@@ -40,9 +43,11 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
       .then((content) => {
         if (cancelled) return;
         setSets(learnerSets(content.sets));
+        setStories(content.stories.filter((story) => story.audio));
+        setExams(content.exams);
         setError(false);
         // Pictures and speech that left the catalogue need not stay on the device.
-        pruneMedia(mediaUrls(content.sets)).catch(() => undefined);
+        pruneMedia(mediaUrls(content.sets, content.stories)).catch(() => undefined);
       })
       .catch(() => !cancelled && setError(true));
     return () => {
@@ -67,19 +72,20 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<LearnerContextValue>(() => {
-    // Newest week first; the server already orders, this keeps it explicit.
-    const weeks = (sets ?? []).filter(isWeek).sort((a, b) => b.weekStart.localeCompare(a.weekStart));
-    const topics = (sets ?? []).filter((s) => s.kind === 'topic').sort((a, b) => a.title.localeCompare(b.title, 'eu'));
+    const byTitle = (a: HomeworkSet, b: HomeworkSet) => a.title.localeCompare(b.title, 'eu');
+    const sheets = (sets ?? []).filter((s) => s.kind === 'sheet').sort(byTitle);
+    const topics = (sets ?? []).filter((s) => s.kind === 'topic').sort(byTitle);
     const today = todayIso();
-    const examSets = (sets ?? [])
-      .filter((s) => s.examDate !== null && s.examDate >= today)
-      .sort((a, b) => a.examDate!.localeCompare(b.examDate!));
-    const pinned = weeks.find((s) => s.id === state.pinnedWeek);
+    const ids = new Set((sets ?? []).map((s) => s.id));
+    const activeExams = exams
+      .filter((e) => (e.examDate === null || e.examDate >= today) && e.setIds.some((id) => ids.has(id)))
+      .sort((a, b) => (a.examDate ?? '9999').localeCompare(b.examDate ?? '9999'));
     return {
       sets,
-      weeks,
+      sheets,
       topics,
-      examSets,
+      stories,
+      exams: activeExams,
       error,
       reload: () => {
         setError(false);
@@ -89,9 +95,8 @@ export function LearnerProvider({ children }: { children: ReactNode }) {
       update,
       reset,
       storageOk,
-      currentSet: pinned ?? weeks[0] ?? null,
     };
-  }, [sets, error, state, update, reset, storageOk]);
+  }, [sets, stories, exams, error, state, update, reset, storageOk]);
 
   return <LearnerContext.Provider value={value}>{children}</LearnerContext.Provider>;
 }

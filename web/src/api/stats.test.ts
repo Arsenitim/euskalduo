@@ -107,10 +107,10 @@ describe('usage stats', () => {
 
   it('breaks answers and rounds down by set, exercise, mode, connection and app/browser', async () => {
     fetchMock.mockRejectedValue(new TypeError('offline'));
-    reportAnswer('correct', '2026-09-24', { set: 'week-1', exercise: 'spell', mode: 'week' });
-    reportAnswer('wrong', '2026-09-24', { set: 'week-1', exercise: 'order', mode: 'week' });
-    reportRound('2026-09-24', { sets: ['week-1'], mode: 'week' });
-    reportRound('2026-09-24', { sets: [], mode: 'mix' });
+    reportAnswer('correct', '2026-09-24', { set: 'week-1', exercise: 'spell', mode: 'topic' });
+    reportAnswer('wrong', '2026-09-24', { set: 'week-1', exercise: 'order', mode: 'topic' });
+    reportRound('2026-09-24', { sets: ['week-1'], mode: 'topic' });
+    reportRound('2026-09-24', { sets: [], mode: 'lesson' });
     await flushStats();
     fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
     await flushStats();
@@ -121,17 +121,35 @@ describe('usage stats', () => {
     expect(parts['set:week-1']).toEqual({ dimension: 'set', key: 'week-1', answers: { correct: 1, wrong: 1 }, rounds: 1 });
     expect(parts['exercise:spell']).toEqual({ dimension: 'exercise', key: 'spell', answers: { correct: 1 } });
     expect(parts['exercise:order']).toEqual({ dimension: 'exercise', key: 'order', answers: { wrong: 1 } });
-    expect(parts['mode:week']).toMatchObject({ answers: { correct: 1, wrong: 1 }, rounds: 1 });
-    expect(parts['mode:mix']).toEqual({ dimension: 'mode', key: 'mix', rounds: 1 });
+    expect(parts['mode:topic']).toMatchObject({ answers: { correct: 1, wrong: 1 }, rounds: 1 });
+    expect(parts['mode:lesson']).toEqual({ dimension: 'mode', key: 'lesson', rounds: 1 });
     expect(parts['connection:online']).toMatchObject({ rounds: 2 });
     expect(parts['display:browser']).toMatchObject({ rounds: 2 });
     expect(Object.keys(parts)).toHaveLength(7);
     expect(localStorage.getItem('euskalduo.stats.pending.v1')).toBeNull();
   });
 
+  it('labels listening answers by story and never by set', async () => {
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    reportAnswer('correct', '2026-09-24', { story: 'triku-1', exercise: 'listening', mode: 'listening' });
+    reportRound('2026-09-24', { sets: [], stories: ['triku-1'], mode: 'listening' });
+    await flushStats();
+    const keys = bodies().flatMap((b) => b.breakdown.map((p: { dimension: string; key: string }) => `${p.dimension}:${p.key}`));
+    expect(new Set(keys)).toEqual(new Set(['story:triku-1', 'exercise:listening', 'mode:listening', 'connection:online', 'display:browser']));
+  });
+
+  it('still sends counters queued offline by the previous version', async () => {
+    const old = { '2026-09-20': { answers: { correct: 2, hinted: 0, wrong: 0, skipped: 0 }, rounds: 1, parts: { '["mode","week"]': { answers: { correct: 2, hinted: 0, wrong: 0, skipped: 0 }, rounds: 1 } } } };
+    localStorage.setItem('euskalduo.stats.pending.v1', JSON.stringify(old));
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    await flushStats();
+    expect(bodies()[0]).toMatchObject({ day: '2026-09-20', answers: { correct: 2 }, rounds: 1, breakdown: [{ dimension: 'mode', key: 'week', answers: { correct: 2 }, rounds: 1 }] });
+    expect(localStorage.getItem('euskalduo.stats.pending.v1')).toBeNull();
+  });
+
   it('sends at most 100 breakdown rows per request and keeps the rest for the next one', async () => {
     fetchMock.mockRejectedValue(new TypeError('offline'));
-    for (let i = 0; i < 130; i++) reportAnswer('correct', '2026-09-24', { set: `set-${i}`, exercise: 'spell', mode: 'week' });
+    for (let i = 0; i < 130; i++) reportAnswer('correct', '2026-09-24', { set: `set-${i}`, exercise: 'spell', mode: 'topic' });
     await flushStats();
     const tries = fetchMock.mock.calls.length;
     fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
@@ -146,7 +164,7 @@ describe('usage stats', () => {
   it('counts nothing from a browser that is left out, until it is counted again', async () => {
     setStatsExcluded(true);
     expect(statsExcluded()).toBe(true);
-    reportAnswer('correct', '2026-09-24', { set: 'week-1', exercise: 'spell', mode: 'week' });
+    reportAnswer('correct', '2026-09-24', { set: 'week-1', exercise: 'spell', mode: 'topic' });
     reportRound('2026-09-24');
     await flushStats();
     expect(fetchMock).not.toHaveBeenCalled();

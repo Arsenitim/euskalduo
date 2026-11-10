@@ -5,6 +5,8 @@ import { adminApi } from './api';
 import { ImportPage } from './ImportPage';
 import { SetListPage } from './SetListPage';
 import { SetPage } from './SetPage';
+import { ExamsPage } from './ExamsPage';
+import { StoryListPage, StoryPage } from './StoriesPage';
 import { UsagePage } from './UsagePage';
 
 type Auth = { state: 'checking' } | { state: 'out' } | { state: 'in'; username: string };
@@ -37,8 +39,10 @@ export default function AdminApp() {
             <span className="logo-text">EUSKALDUO admin</span>
           </Link>
           <nav className="app-nav" aria-label="Admin">
-            <Link to="/">Homework sets</Link>
+            <Link to="/">Sheets &amp; topics</Link>
             <Link to="/import">Import</Link>
+            <Link to="/stories">Stories</Link>
+            <Link to="/exams">Exams</Link>
             <Link to="/uso">Usage</Link>
             <a href="/" target="_blank" rel="noopener">
               Learner view ↗
@@ -59,6 +63,9 @@ export default function AdminApp() {
             <Route path="/" element={<SetListPage />} />
             <Route path="/import" element={<ImportPage />} />
             <Route path="/sets/:id" element={<SetPage />} />
+            <Route path="/stories" element={<StoryListPage />} />
+            <Route path="/stories/:id" element={<StoryPage />} />
+            <Route path="/exams" element={<ExamsPage />} />
             <Route path="/uso" element={<UsagePage />} />
           </Routes>
         </main>

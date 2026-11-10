@@ -6,7 +6,7 @@ const entries = ['Kaixo', 'Agur', 'Txakurra'].map((basque, i) => ({
   note: null, group: null, emoji: null, image: null,
   audio: `/audio/${String(i + 1).repeat(64)}.mp3`,
 }));
-const set: HomeworkSet = { id: 'voice', kind: 'week', title: 'Voice test', weekStart: '2026-10-05', examDate: null, description: null, sample: false, groups: [], entries };
+const set: HomeworkSet = { id: 'voice', kind: 'sheet', title: 'Voice test', receivedOn: null, description: null, sample: false, groups: [], entries };
 
 async function prepare(page: Page, rng = 0.01) {
   await page.route('**/api/public/content', (route) => route.fulfill({ json: { schemaVersion: 1, sets: [set] } }));
@@ -26,7 +26,7 @@ const plays = (page: Page) => page.evaluate(() => (window as unknown as { __play
 
 test('speaks a Basque prompt, then its answer; mute and replay share the preference', async ({ page }) => {
   await prepare(page);
-  await page.goto('/#/practicar?modo=semana&id=voice');
+  await page.goto('/#/practicar?modo=tema&id=voice');
   await expect(page.locator('.prompt-basque')).toBeVisible();
   await expect.poll(() => plays(page)).toBe(1);
   await page.locator('.option').first().click();
@@ -40,14 +40,14 @@ test('speaks a Basque prompt, then its answer; mute and replay share the prefere
   await expect(page.locator('.feedback')).toBeVisible();
   await page.waitForTimeout(700);
   expect(await plays(page)).toBe(3);
-  await page.goto('/#/semana/voice');
+  await page.goto('/#/tema/voice');
   await expect(page.locator('.word-card .voice-button')).toHaveCount(3);
   await expect(page.locator('.word-card .voice-button').first()).toBeDisabled();
 });
 
 test('does not speak the target before a Basque-choice answer and stops on exit', async ({ page }) => {
   await prepare(page, 0.6);
-  await page.goto('/#/practicar?modo=semana&id=voice');
+  await page.goto('/#/practicar?modo=tema&id=voice');
   await expect(page.locator('.prompt-meaning')).toBeVisible();
   await expect(page.locator('.question-card .voice-button')).toHaveCount(0);
   expect(await plays(page)).toBe(0);

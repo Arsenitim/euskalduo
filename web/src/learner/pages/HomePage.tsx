@@ -1,15 +1,21 @@
 import { Link } from 'react-router-dom';
-import { examLabel, t, weekLabel, wordCount } from '../../i18n';
-import { SampleBadge } from '../components/bits';
+import { examLabel, t } from '../../i18n';
 import { OfflineNotice, UpdatePill } from '../components/Offline';
 import { useLearner } from '../LearnerContext';
-import { examPath, practicePath } from '../routes';
+import { examPath, LESSON_PATH } from '../routes';
 import { todayIso } from '../scheduler';
+import { recommendStory } from '../story';
 
+/**
+ * One big button starts a lesson chosen for the learner; topics and
+ * listening are there for when a child wants something specific.
+ */
 export function HomePage() {
-  const { weeks, topics, examSets, state, currentSet } = useLearner();
+  const { sets, topics, sheets, stories, exams, state } = useLearner();
   const name = state.displayName.trim();
-  const hasPrevious = weeks.length > 1;
+  const today = todayIso();
+  const hasMaterial = (sets ?? []).some((s) => s.entries.length > 0);
+  const recommended = recommendStory(stories, state, sets ?? [], today);
 
   return (
     <div className="home">
@@ -17,56 +23,42 @@ export function HomePage() {
       <p className="lead">{t('homeQuestion')}</p>
       <OfflineNotice />
       <UpdatePill />
-      {!currentSet && topics.length === 0 && examSets.length === 0 ? (
+      {!hasMaterial ? (
         <p className="card center-note">{t('noContent')}</p>
       ) : (
-        <div className="home-actions">
-          {examSets.map((set) => (
-            <Link key={set.id} className="action-card action-exam" to={examPath(set)}>
-              <span className="action-icon" aria-hidden="true">📝</span>
-              <span className="action-title">{t('examPrepare')}</span>
-              <span className="action-sub">
-                {examLabel(set.examDate!, todayIso())} · {set.title} {set.sample && <SampleBadge />}
-              </span>
-              <span className="action-sub">
-                {t('examPrepareHint')} · {wordCount(set.entries.length)}
-              </span>
-            </Link>
-          ))}
-          {currentSet && (
-            <>
-              <Link className="action-card action-week" to={practicePath(currentSet)}>
-                <span className="action-icon" aria-hidden="true">🎒</span>
-                <span className="action-title">{t('thisWeek')}</span>
+        <>
+          <Link className="action-card action-start" to={LESSON_PATH}>
+            <span className="action-icon" aria-hidden="true">🚀</span>
+            <span className="action-title">{t('start')}</span>
+            <span className="action-sub">{t('startHint')}</span>
+          </Link>
+          <div className="home-actions">
+            {exams.map((exam) => (
+              <Link key={exam.id} className="action-card action-exam" to={examPath(exam)}>
+                <span className="action-icon" aria-hidden="true">📝</span>
+                <span className="action-title">{t('examPrepare')}</span>
                 <span className="action-sub">
-                  {currentSet.title} {currentSet.sample && <SampleBadge />}
-                </span>
-                <span className="action-sub">
-                  {weekLabel(currentSet.weekStart)} · {wordCount(currentSet.entries.length)}
+                  {exam.examDate ? `${examLabel(exam.examDate, today)} · ` : ''}
+                  {exam.title}
                 </span>
               </Link>
-              <Link className="action-card action-choose" to="/semanas">
-                <span className="action-icon" aria-hidden="true">📅</span>
-                <span className="action-title">{t('chooseWeek')}</span>
-                <span className="action-sub">{t('chooseWeekHint')}</span>
+            ))}
+            {topics.length + sheets.length > 0 && (
+              <Link className="action-card action-topics" to="/temas">
+                <span className="action-icon" aria-hidden="true">🧩</span>
+                <span className="action-title">{t('topics')}</span>
+                <span className="action-sub">{t('topicsHint')}</span>
               </Link>
-              {hasPrevious && (
-                <Link className="action-card action-mix" to="/mezclar">
-                  <span className="action-icon" aria-hidden="true">🔀</span>
-                  <span className="action-title">{t('mixWeeks')}</span>
-                  <span className="action-sub">{t('mixWeeksHint')}</span>
-                </Link>
-              )}
-            </>
-          )}
-          {topics.length > 0 && (
-            <Link className="action-card action-topics" to="/categorias">
-              <span className="action-icon" aria-hidden="true">🧩</span>
-              <span className="action-title">{t('categories')}</span>
-              <span className="action-sub">{t('categoriesHint')}</span>
-            </Link>
-          )}
-        </div>
+            )}
+            {stories.length > 0 && (
+              <Link className="action-card action-listen" to="/escuchar">
+                <span className="action-icon" aria-hidden="true">🎧</span>
+                <span className="action-title">{t('listen')}</span>
+                <span className="action-sub">{recommended ? t('listenRecommended', { title: recommended.title }) : t('listenHint')}</span>
+              </Link>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

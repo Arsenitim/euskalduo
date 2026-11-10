@@ -358,16 +358,25 @@ a {
   min-height: 0;
 }
 
-.action-week {
-  background: linear-gradient(160deg, #e2f6ed, #ffffff 70%);
-  grid-column: 1 / -1;
+.action-start {
+  background: linear-gradient(160deg, #c9efdc, #ffffff 75%);
+  border-color: var(--primary);
+  min-height: 0;
+  margin-bottom: 16px;
+  align-items: center;
+  text-align: center;
 }
 
-.action-choose {
-  background: linear-gradient(160deg, #fff1bf, #ffffff 70%);
+.action-start .action-icon {
+  font-size: 3.2rem;
 }
 
-.action-mix {
+.action-start .action-title {
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  color: var(--primary);
+}
+
+.action-listen {
   background: linear-gradient(160deg, #fbe3ea, #ffffff 70%);
 }
 
@@ -760,6 +769,115 @@ img.word-visual-small {
   cursor: pointer;
   color: var(--ink);
   box-shadow: 0 4px 0 #e0b400;
+}
+
+.tile.tile-word {
+  width: auto;
+  min-width: 56px;
+  padding: 0 14px;
+  font-size: 1.3rem;
+}
+
+.sentence-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+  min-height: 52px;
+}
+
+.sentence-slot {
+  min-width: 48px;
+  height: 48px;
+  padding: 0 10px;
+  display: grid;
+  place-items: center;
+  border-bottom: 4px solid var(--muted);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.sentence-slot.slot-filled {
+  border-color: var(--primary);
+}
+
+.prompt-sentence .gap {
+  display: inline-block;
+  min-width: 3em;
+  margin: 0 0.25em;
+  border-bottom: 4px solid var(--accent);
+  text-align: center;
+}
+
+.prompt-sentence .gap-filled {
+  border-color: var(--right);
+  color: var(--right);
+}
+
+/* Listening block */
+.badge-story {
+  background: #fbe3ea;
+  color: #8a1c3c;
+}
+
+.badge-story-new {
+  background: var(--accent-soft);
+  color: #6b5200;
+}
+
+.badge-story-heard,
+.badge-story-supported {
+  background: #eceff4;
+  color: #394150;
+}
+
+.badge-story-understood {
+  background: var(--right-soft);
+  color: var(--right);
+}
+
+.story-card .badge {
+  justify-self: start;
+}
+
+.story-controls {
+  margin: 12px 0;
+}
+
+.story-questions {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 16px;
+}
+
+.story-question-prompt {
+  margin: 0 0 6px;
+}
+
+.story-text {
+  margin-top: 16px;
+}
+
+.story-transcript {
+  margin-top: 8px;
+  white-space: pre-line;
+}
+
+.story-transcript h3 {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.story-notice {
+  background: var(--accent-soft);
+}
+
+.skill-row h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.2em;
 }
 
 .tile.is-used,
@@ -1811,4 +1929,9 @@ fieldset legend {
   .confetti {
     display: none;
   }
+}
+
+.issue-ok {
+  color: var(--right);
+  font-weight: 700;
 }

@@ -20,7 +20,33 @@ export function ImportPage() {
   const [warnings, setWarnings] = useState<Issue[]>([]);
   const [busy, setBusy] = useState(false);
 
+  const isStory = (() => {
+    try {
+      return format === 'json' && (JSON.parse(text) as { type?: unknown }).type === 'story';
+    } catch {
+      return false;
+    }
+  })();
+
+  const importStory = async () => {
+    setBusy(true);
+    try {
+      const result = await adminApi.validateStory(text);
+      setErrors(result.errors);
+      setWarnings(result.warnings);
+      if (result.valid && result.draft) {
+        const { story } = await adminApi.createStory(result.draft);
+        navigate(`/stories/${story.id}`);
+      }
+    } catch (e) {
+      setErrors(issuesOf(e).errors);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const check = async () => {
+    if (isStory) return importStory();
     setBusy(true);
     try {
       const result = await adminApi.validate(format, text);
@@ -63,7 +89,7 @@ export function ImportPage() {
 
   return (
     <div>
-      <h1>Import homework</h1>
+      <h1>Import</h1>
       <p className="muted">
         Prepare the JSON with ChatGPT using the prompt in <code>CHATGPT_IMPORT_INSTRUCTIONS.md</code>, then paste or upload it here. Nothing is saved until
         you review it and press “Save as draft”. Drafts are invisible to learners until published.
@@ -107,7 +133,7 @@ export function ImportPage() {
             </>
           )}
           <button className="btn btn-primary" onClick={check} disabled={busy || text.trim() === ''}>
-            Check &amp; review
+            {isStory ? 'Import story as draft' : 'Check & review'}
           </button>
         </div>
       </div>
@@ -118,7 +144,7 @@ export function ImportPage() {
         <section className="card">
           <h2>Review before saving</h2>
           <p className="muted">
-            {model.rows.length} entries. Fix any errors, assign the homework week (or make it a category), and clear “needs review” flags before publishing.
+            {model.rows.length} entries. Fix any errors, choose sheet or topic, and clear “needs review” flags before publishing. No date is needed.
           </p>
           <SetEditor model={model} onChange={setModel} errors={errors} warnings={warnings} />
           <div className="button-row sticky-actions">

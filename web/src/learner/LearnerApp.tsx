@@ -1,23 +1,24 @@
-import { HashRouter, Link, NavLink, Route, Routes } from 'react-router-dom';
+import { HashRouter, Link, Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { t } from '../i18n';
 import { VoiceLifecycle } from './components/Voice';
 import { FeedbackButton } from './components/FeedbackDialog';
 import { OfflinePill } from './components/Offline';
 import { LearnerProvider, useLearner } from './LearnerContext';
-import { CategoriesPage } from './pages/CategoriesPage';
+import { CollectionPage } from './pages/CollectionPage';
 import { ExamPage } from './pages/ExamPage';
 import { HomePage } from './pages/HomePage';
-import { MixPage } from './pages/MixPage';
+import { ListenPage } from './pages/ListenPage';
 import { PracticePage } from './pages/PracticePage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { SettingsPage } from './pages/SettingsPage';
-import { WeekPage } from './pages/WeekPage';
-import { WeeksPage } from './pages/WeeksPage';
+import { StoryPage } from './pages/StoryPage';
+import { TopicsPage } from './pages/TopicsPage';
+import { legacyRedirect } from './routes';
 
 /**
  * Learner routes live in the URL fragment (#/…), which browsers never send
- * to the server, so not even the chosen week reaches the server logs.
+ * to the server, so not even the chosen topic or story reaches the server logs.
  */
 export function LearnerApp() {
   return (
@@ -36,8 +37,11 @@ export function LearnerApp() {
             <OfflinePill />
           </div>
           <nav className="app-nav" aria-label="Principal">
-            <NavLink to="/semanas">
-              <span aria-hidden="true">📅</span> {t('navWeeks')}
+            <NavLink to="/temas">
+              <span aria-hidden="true">🧩</span> {t('navTopics')}
+            </NavLink>
+            <NavLink to="/escuchar">
+              <span aria-hidden="true">🎧</span> {t('navListen')}
             </NavLink>
             <NavLink to="/progreso">
               <span aria-hidden="true">⭐</span> {t('navProgress')}
@@ -50,15 +54,16 @@ export function LearnerApp() {
         </header>
         <main id="main" tabIndex={-1} className="app-main">
           <ContentGate>
+            <LegacyRedirect />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/semanas" element={<WeeksPage />} />
-              <Route path="/semana/:setId" element={<WeekPage />} />
-              <Route path="/categorias" element={<CategoriesPage />} />
-              <Route path="/categoria/:setId" element={<WeekPage />} />
-              <Route path="/examen/:setId" element={<ExamPage />} />
-              <Route path="/mezclar" element={<MixPage />} />
-              <Route path="/practicar" element={<PracticePage />} />
+              <Route path="/leccion" element={<LessonRoute />} />
+              <Route path="/temas" element={<TopicsPage />} />
+              <Route path="/tema/:setId" element={<CollectionPage />} />
+              <Route path="/escuchar" element={<ListenPage />} />
+              <Route path="/escuchar/:storyId" element={<StoryPage />} />
+              <Route path="/examen/:examId" element={<ExamPage />} />
+              <Route path="/practicar" element={<PracticeRoute />} />
               <Route path="/progreso" element={<ProgressPage />} />
               <Route path="/ajustes" element={<SettingsPage />} />
               <Route path="/privacidad" element={<PrivacyPage />} />
@@ -78,6 +83,24 @@ export function LearnerApp() {
       </HashRouter>
     </LearnerProvider>
   );
+}
+
+/** Old week-era links (#/semanas, #/mezclar, …) lead to their new pages. */
+function LegacyRedirect() {
+  const location = useLocation();
+  const target = legacyRedirect(location.pathname, location.search);
+  return target ? <Navigate to={target} replace /> : null;
+}
+
+/** A fresh lesson each time the route is entered. */
+function LessonRoute() {
+  const location = useLocation();
+  return <PracticePage key={location.key} lesson />;
+}
+
+function PracticeRoute() {
+  const location = useLocation();
+  return <PracticePage key={location.key + location.search} />;
 }
 
 function ContentGate({ children }: { children: React.ReactNode }) {

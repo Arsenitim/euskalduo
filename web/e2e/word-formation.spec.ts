@@ -2,13 +2,13 @@ import { expect, test } from '@playwright/test';
 import { basqueLabel, spanishLabel } from '../src/learner/display';
 import type { Content } from '../src/types';
 
-for (const kind of ['week', 'topic'] as const) {
+for (const kind of ['sheet', 'topic'] as const) {
   test(`word building in the October 5 ${kind}: choose pieces, feedback and score`, async ({ page, request }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     const content = await (await request.get('/api/public/content')).json() as Content;
-    const set = content.sets.find((s) => s.kind === kind && (kind === 'week' ? s.weekStart === '2026-10-05' && !s.sample : s.title.startsWith('Formación de palabras')))!;
+    const set = content.sets.find((s) => s.kind === kind && (kind === 'sheet' ? s.receivedOn === '2026-10-05' && !s.sample : s.title.startsWith('Formación de palabras')))!;
     expect(set).toBeTruthy();
-    await page.goto(`/#/${kind === 'topic' ? 'categoria' : 'semana'}/${set.id}`);
+    await page.goto(`/#/tema/${set.id}`);
     await expect(page.getByRole('heading', { name: set.title })).toBeVisible();
     await page.getByRole('link', { name: '¡A practicar!' }).click();
     const built: string[] = [];

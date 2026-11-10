@@ -3,68 +3,71 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { fetchAudio } from '../../api/audio';
 import { reportAnswer, reportRound, type PracticeMode } from '../../api/stats';
 import { t } from '../../i18n';
-import type { HomeworkSet, Lang } from '../../types';
+import type { Exam, HomeworkSet, Lang } from '../../types';
 import { ProgressBar, Stars } from '../components/bits';
 import { Mascot } from '../components/Mascot';
-import { WordBuildQuestionView, ChoiceQuestionView, OrderQuestionView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
+import { WordBuildQuestionView, ChoiceQuestionView, GrammarChoiceView, OrderQuestionView, SentenceBuildView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
+import { StoryBlock } from '../components/StoryBlock';
 import { useLearner } from '../LearnerContext';
+import { LESSON } from '../lessonConfig';
 import { newMascotTracker, nextMascot, type MascotShow, type MascotTracker } from '../mascot';
-import { buildRound, meaningsOf, pointsFor, retryQuestion, starsFor, type Item, type Mode, type Question } from '../questions';
-import type { LearnerState } from '../progress';
+import { buildRound, meaningsOf, pointsFor, retryPosition, retryQuestion, skillOf, starsFor, type Item, type Mode, type Question, type StoryBlock as StoryBlockQuestion } from '../questions';
+import { recordSkill, type LearnerState } from '../progress';
 import { recordAnswer, todayIso } from '../scheduler';
+import { recordStory, storyPoints, type StoryResult } from '../story';
 import { VoiceButton } from '../components/Voice';
 import { promptVoiceEntries, answerVoiceEntries } from '../voicePolicy';
 import { playVoice, setVoiceEnabled, stopVoice } from '../voice';
 import { playCorrect, playRoundDone, playWrong, stopSounds } from '../sounds';
-
-const MAX_RETRIES = 4;
-const RETRY_GAP = 3;
 
 interface Session {
   round: number;
   questions: Question[];
   index: number;
   outcome: Outcome | null;
-  /** Points per question for its first answer: 1, ½ with a hint, 0. */
+  /** Points per question for its first answer: 1, ½ with a hint, 0. A story block scores as one question. */
   firstTry: Record<string, number>;
   answeredWords: string[];
   retried: string[];
   missed: Item[];
+  /** Stories played in this round (for the round counters). */
+  stories: string[];
   mascot: MascotTracker;
   /** The mascot reacting to the current answer, if it is its turn. */
   shown: MascotShow | null;
   done: boolean;
 }
 
-function parseMode(params: URLSearchParams, sets: HomeworkSet[]): Mode | null {
+/** Reads the mode from the URL. Old exam links (#/examen/<setId>) still resolve. */
+export function parseMode(params: URLSearchParams, sets: HomeworkSet[], exams: Exam[]): Mode | null {
   const modo = params.get('modo');
-  if (modo === 'semana' || modo === 'categoria' || modo === 'examen') {
-    const id = params.get('id');
-    return id && sets.some((s) => s.id === id) ? { kind: modo === 'examen' ? 'exam' : 'week', setId: id } : null;
+  const id = params.get('id');
+  if ((modo === 'tema' || modo === 'semana' || modo === 'categoria') && id && sets.some((s) => s.id === id)) return { kind: 'collection', setId: id };
+  if (modo === 'examen' && id) {
+    const exam = exams.find((e) => e.id === id);
+    if (exam) return { kind: 'exam', setIds: exam.setIds.filter((sid) => sets.some((s) => s.id === sid)) };
+    if (sets.some((s) => s.id === id)) return { kind: 'exam', setIds: [id] };
   }
-  if (params.get('modo') === 'mezcla') {
-    const ids = (params.get('ids') ?? '').split(',').filter((id) => sets.some((s) => s.id === id));
-    return ids.length > 0 ? { kind: 'mix', setIds: ids } : null;
-  }
+  if (modo === 'mezcla') return { kind: 'lesson' };
   return null;
 }
 
 /** The practice mode as counted in the anonymous usage stats. */
-function practiceMode(mode: Mode, sets: HomeworkSet[]): PracticeMode {
-  if (mode.kind !== 'week') return mode.kind;
-  return sets.find((s) => s.id === mode.setId)?.kind === 'topic' ? 'topic' : 'week';
+function practiceMode(mode: Mode): PracticeMode {
+  return mode.kind === 'lesson' ? 'lesson' : mode.kind === 'exam' ? 'exam' : 'topic';
 }
 
-function newSession(sets: HomeworkSet[], mode: Mode, state: LearnerState, round: number): Session {
-  const questions = buildRound({ sets, mode, stats: state.entries, today: todayIso(), lang: state.lang, rng: Math.random });
-  return { round, questions, index: 0, outcome: null, firstTry: {}, answeredWords: [], retried: [], missed: [], mascot: newMascotTracker(Math.random), shown: null, done: questions.length === 0 };
+function newSession(sets: HomeworkSet[], mode: Mode, state: LearnerState, stories: Parameters<typeof buildRound>[0]['stories'], round: number): Session {
+  const questions = buildRound({ sets, mode, stats: state.entries, today: todayIso(), lang: state.lang, rng: Math.random, stories, learner: state });
+  return { round, questions, index: 0, outcome: null, firstTry: {}, answeredWords: [], retried: [], missed: [], stories: [], mascot: newMascotTracker(Math.random), shown: null, done: questions.length === 0 };
 }
 
-export function PracticePage() {
+/** "Empezar" (lesson), a topic or sheet, or an exam: all rounds run here. */
+export function PracticePage({ lesson = false }: { lesson?: boolean }) {
   const [params] = useSearchParams();
-  const { sets, state, update } = useLearner();
-  const mode = parseMode(params, sets ?? []);
-  const [session, setSession] = useState<Session | null>(() => (mode && sets ? newSession(sets, mode, state, 1) : null));
+  const { sets, state, update, stories, exams } = useLearner();
+  const mode: Mode | null = lesson ? { kind: 'lesson' } : parseMode(params, sets ?? [], exams);
+  const [session, setSession] = useState<Session | null>(() => (mode && sets ? newSession(sets, mode, state, stories, 1) : null));
 
   if (!mode || !session || !sets) {
     return (
@@ -75,9 +78,10 @@ export function PracticePage() {
   }
 
   const question = session.questions[session.index];
+  const hasStory = session.questions.some((q) => q.kind === 'story');
 
   const onAnswer = (outcome: Outcome) => {
-    if (!question || session.outcome) return;
+    if (!question || question.kind === 'story' || session.outcome) return;
     const correct = outcome.verdict !== 'wrong';
     stopVoice();
     stopSounds();
@@ -89,7 +93,7 @@ export function PracticePage() {
     reportAnswer(correct ? (outcome.hinted ? 'hinted' : 'correct') : outcome.skipped ? 'skipped' : 'wrong', todayIso(), {
       set: question.kind === 'order' ? question.setId : question.item.setId,
       exercise: question.kind,
-      mode: practiceMode(mode, sets),
+      mode: practiceMode(mode),
     });
     const retry = question.kind !== 'order' && question.retry;
     const mascot = nextMascot(session.mascot, { correct, hinted: outcome.hinted, almost: outcome.verdict === 'almost', skipped: outcome.skipped, retry }, Math.random);
@@ -100,18 +104,26 @@ export function PracticePage() {
     } else {
       const key = question.item.key;
       const hinted = outcome.hinted === true;
+      const today = todayIso();
       if (!question.retry) next.firstTry[question.id] = pointsFor(correct, hinted);
-      // Only the first answer to a word in a round moves it between boxes.
-      if (!question.retry && !session.answeredWords.includes(key)) {
-        next.answeredWords = [...session.answeredWords, key];
-        const today = todayIso();
-        update((s) => ({ ...s, entries: { ...s.entries, [key]: recordAnswer(s.entries[key], !correct ? 'wrong' : hinted ? 'hinted' : 'correct', today) } }));
+      // Only the first answer to an item in a round moves it between boxes.
+      const moveBox = !question.retry && !session.answeredWords.includes(key);
+      const skill = question.retry ? null : skillOf(question.kind);
+      if (moveBox) next.answeredWords = [...session.answeredWords, key];
+      if (moveBox || skill) {
+        update((s) => ({
+          ...s,
+          entries: moveBox ? { ...s.entries, [key]: recordAnswer(s.entries[key], !correct ? 'wrong' : hinted ? 'hinted' : 'correct', today) } : s.entries,
+          // Each skill keeps its own record: recognising a word does not mean spelling it.
+          skills: skill ? { ...s.skills, [key]: { ...s.skills[key], [skill]: recordSkill(s.skills[key]?.[skill], correct && !hinted, today) } } : s.skills,
+        }));
       }
       if (!correct) {
         if (!session.missed.some((i) => i.key === key)) next.missed = [...session.missed, question.item];
-        if (!question.retry && !session.retried.includes(key) && session.retried.length < MAX_RETRIES) {
+        const maxRetries = hasStory ? LESSON.maxRetriesWithStory : LESSON.maxRetries;
+        if (!question.retry && !session.retried.includes(key) && session.retried.length < maxRetries) {
           const questions = [...session.questions];
-          questions.splice(Math.min(session.index + RETRY_GAP, questions.length), 0, retryQuestion(question, sets, state.lang, Math.random));
+          questions.splice(retryPosition(questions, session.index), 0, retryQuestion(question, sets, state.lang, Math.random));
           next.questions = questions;
           next.retried = [...session.retried, key];
         }
@@ -120,19 +132,12 @@ export function PracticePage() {
     setSession(next);
   };
 
-  const goNext = () => {
-    stopVoice();
-    stopSounds();
-    const index = session.index + 1;
-    if (index < session.questions.length) {
-      setSession({ ...session, index, outcome: null, shown: null });
-      return;
-    }
-    const scored = Object.values(session.firstTry);
+  const finishRound = (current: Session) => {
+    const scored = Object.values(current.firstTry);
     const stars = starsFor(sum(scored), scored.length);
     const today = todayIso();
-    reportRound(today, { sets: mode.kind === 'mix' ? [] : [mode.setId], mode: practiceMode(mode, sets) });
-    const setIds = mode.kind === 'mix' ? mode.setIds : [mode.setId];
+    const setIds = mode.kind === 'collection' ? [mode.setId] : mode.kind === 'exam' ? mode.setIds : [];
+    reportRound(today, { sets: setIds, stories: current.stories, mode: practiceMode(mode) });
     update((s) => {
       const updated = { ...s.sets };
       for (const id of setIds) {
@@ -141,11 +146,38 @@ export function PracticePage() {
       }
       return { ...s, sets: updated };
     });
-    setSession({ ...session, done: true, outcome: null, shown: null });
+    setSession({ ...current, done: true, outcome: null, shown: null });
+  };
+
+  const goNext = (current: Session = session) => {
+    stopVoice();
+    stopSounds();
+    const index = current.index + 1;
+    if (index < current.questions.length) {
+      setSession({ ...current, index, outcome: null, shown: null });
+      return;
+    }
+    finishRound(current);
+  };
+
+  const onStoryDone = (block: StoryBlockQuestion, result: StoryResult) => {
+    const today = todayIso();
+    const points = storyPoints(result);
+    const next: Session = { ...session, firstTry: { ...session.firstTry }, stories: result.status === 'unavailable' ? session.stories : [...session.stories, block.story.id] };
+    // Skipped or unplayable: not scored, so it can never lower the stars.
+    if (points !== null) next.firstTry[block.id] = points;
+    if (result.status !== 'unavailable') {
+      const tags = { story: block.story.id, exercise: 'listening', mode: practiceMode(mode) } as const;
+      if (result.status === 'done') for (const right of result.answers) reportAnswer(right ? (result.supported ? 'hinted' : 'correct') : 'wrong', today, tags);
+      else reportAnswer('skipped', today, tags);
+      // Only the story's own record changes; word boxes stay as they are.
+      update((s) => ({ ...s, stories: { ...s.stories, [block.story.id]: recordStory(s.stories[block.story.id], result, today)! } }));
+    }
+    goNext(next);
   };
 
   if (session.done) {
-    return <RoundSummary session={session} lang={state.lang} sound={state.sound} onAgain={() => setSession(newSession(sets, mode, state, session.round + 1))} />;
+    return <RoundSummary session={session} lang={state.lang} sound={state.sound} onAgain={() => setSession(newSession(sets, mode, state, stories, session.round + 1))} />;
   }
   if (!question) return null;
 
@@ -170,21 +202,33 @@ export function PracticePage() {
         </Link>
       </div>
       <div className="card question-card" key={`${session.round}-${question.id}`}>
-        <QuestionVoice question={question} round={session.round} />
-        {question.kind !== 'order' && question.retry && <span className="badge badge-retry">{t('retryBadge')}</span>}
-        {question.kind === 'meaning-choice' || question.kind === 'basque-choice' ? (
-          <ChoiceQuestionView question={question} {...common} />
-        ) : question.kind === 'word-build' ? (
-          <WordBuildQuestionView question={question} {...common} />
-        ) : question.kind === 'spell' ? (
-          <SpellQuestionView question={question} {...common} />
-        ) : question.kind === 'type-meaning' ? (
-          <TypeMeaningView question={question} {...common} />
+        {question.kind === 'story' ? (
+          <StoryBlock story={question.story} optionOrder={question.optionOrder} lang={state.lang} sound={state.sound} onDone={(result) => onStoryDone(question, result)} />
         ) : (
-          <OrderQuestionView question={question} {...common} />
+          <>
+            <QuestionVoice question={question} round={session.round} />
+            {question.kind !== 'order' && question.retry && <span className="badge badge-retry">{t('retryBadge')}</span>}
+            {question.kind === 'meaning-choice' || question.kind === 'basque-choice' ? (
+              <ChoiceQuestionView question={question} {...common} />
+            ) : question.kind === 'word-build' ? (
+              <WordBuildQuestionView question={question} {...common} />
+            ) : question.kind === 'spell' ? (
+              <SpellQuestionView question={question} {...common} />
+            ) : question.kind === 'type-meaning' ? (
+              <TypeMeaningView question={question} {...common} />
+            ) : question.kind === 'sentence-build' ? (
+              <SentenceBuildView question={question} {...common} />
+            ) : question.kind === 'grammar-choice' ? (
+              <GrammarChoiceView question={question} {...common} />
+            ) : (
+              <OrderQuestionView question={question} {...common} />
+            )}
+          </>
         )}
       </div>
-      {session.outcome && <Feedback question={question} outcome={session.outcome} mascot={session.shown} lang={state.lang} willRetry={session.questions.some((q) => q.id === `${question.id}-retry`)} onNext={goNext} />}
+      {session.outcome && question.kind !== 'story' && (
+        <Feedback question={question} outcome={session.outcome} mascot={session.shown} lang={state.lang} willRetry={session.questions.some((q) => q.id === `${question.id}-retry`)} onNext={() => goNext()} />
+      )}
     </div>
   );
 }
@@ -216,13 +260,17 @@ function correctAnswer(question: Question, lang: Lang): string {
     case 'basque-choice':
     case 'word-build':
     case 'spell':
+    case 'sentence-build':
+    case 'grammar-choice':
       return question.item.entry.basque;
     case 'order':
       return question.items.map((i) => i.entry.basque).join(' → ');
+    case 'story':
+      return '';
   }
 }
 
-function Feedback({ question, outcome, mascot, lang, willRetry, onNext }: { question: Question; outcome: Outcome; mascot: MascotShow | null; lang: Lang; willRetry: boolean; onNext: () => void }) {
+function Feedback({ question, outcome, mascot, lang, willRetry, onNext }: { question: Exclude<Question, StoryBlockQuestion>; outcome: Outcome; mascot: MascotShow | null; lang: Lang; willRetry: boolean; onNext: () => void }) {
   const nextRef = useRef<HTMLButtonElement>(null);
   useEffect(() => nextRef.current?.focus(), []);
   const answerLang = question.kind === 'meaning-choice' || question.kind === 'type-meaning' ? lang : 'eu';

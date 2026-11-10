@@ -1,4 +1,4 @@
-import type { HomeworkSet } from '../types';
+import type { HomeworkSet, Story } from '../types';
 
 /**
  * Offline mode, page side. The service worker (web/sw/sw.js) serves the app,
@@ -43,14 +43,18 @@ export function registerServiceWorker(): void {
   });
 }
 
-/** Every picture and speech clip the catalogue refers to. */
-export function mediaUrls(sets: HomeworkSet[]): string[] {
+/**
+ * Every picture, speech clip and story recording the catalogue refers to.
+ * Only "Descargar" fetches them all; otherwise each is cached when used.
+ */
+export function mediaUrls(sets: HomeworkSet[], stories: Pick<Story, 'audio'>[] = []): string[] {
   const urls = new Set<string>();
   for (const set of sets) {
     for (const entry of set.entries) {
       for (const url of [entry.image, entry.audio]) if (url && MEDIA_PATH.test(url)) urls.add(url);
     }
   }
+  for (const story of stories) if (story.audio && MEDIA_PATH.test(story.audio)) urls.add(story.audio);
   return [...urls];
 }
 

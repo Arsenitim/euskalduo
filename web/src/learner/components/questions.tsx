@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { t } from '../../i18n';
 import type { Lang } from '../../types';
 import { answerKey, checkTyped, type TypedVerdict } from '../normalize';
-import { hintLength, meaningsOf, type Item, type OrderQuestion, type WordQuestion } from '../questions';
+import { checkSentence, hintLength, meaningsOf, type Item, type OrderQuestion, type WordQuestion } from '../questions';
 import { WordVisual } from './bits';
 
 export interface Outcome {
@@ -386,6 +386,123 @@ export function WordBuildQuestionView({ question, lang, answered, onAnswer }: Pr
         <p lang="eu"><strong>{formation.parts.join(' + ')} → {question.item.entry.basque}</strong></p>
         {question.item.entry.note && <p>{question.item.entry.note}</p>}
       </div>}
+    </div>
+  );
+}
+
+/**
+ * Sentence building: tap tiles into order. Identical tiles are
+ * interchangeable (compared by text). The hint places the first third of
+ * the tiles (half credit); extra curated tiles may be left over.
+ */
+export function SentenceBuildView({ question, lang, answered, onAnswer }: Props<Extract<WordQuestion, { kind: 'sentence-build' }>>) {
+  const { item, tiles } = question;
+  const exercise = item.entry.sentence!;
+  const needed = exercise.tiles.length;
+  const [placed, setPlaced] = useState<number[]>([]);
+  const [hinted, setHinted] = useState(0);
+  const hintSize = hintLength(needed);
+  const complete = placed.length === needed;
+  const built = placed.map((i) => tiles[i]!);
+
+  const place = (index: number) => {
+    if (answered || placed.includes(index) || complete) return;
+    setPlaced((p) => [...p, index]);
+  };
+  const erase = () => !answered && setPlaced((p) => (p.length > hinted ? p.slice(0, -1) : p));
+  const check = () => {
+    if (answered || !complete) return;
+    onAnswer({ verdict: checkSentence(item.entry, built) ? 'exact' : 'wrong', given: built.join(' '), hinted: hinted > 0 });
+  };
+  const hint = () => {
+    if (answered || hinted > 0) return;
+    const used: number[] = [];
+    for (const tile of exercise.tiles.slice(0, hintSize)) {
+      const index = tiles.findIndex((t, i) => !used.includes(i) && answerKey(t) === answerKey(tile));
+      if (index < 0) return;
+      used.push(index);
+    }
+    setPlaced(used);
+    setHinted(used.length);
+  };
+
+  return (
+    <div>
+      <Prompt title={t('buildSentence')}>
+        <Meaning item={item} lang={lang} />
+        <p className="muted">{t('buildSentenceHint')}</p>
+      </Prompt>
+      <div className="sentence-slots" aria-label={t('yourAnswer')} aria-live="polite" lang="eu">
+        {Array.from({ length: needed }, (_, i) => (
+          <span key={i} className={built[i] !== undefined ? (i < hinted ? 'sentence-slot slot-filled slot-hint' : 'sentence-slot slot-filled') : 'sentence-slot'}>
+            {built[i] ?? ''}
+          </span>
+        ))}
+      </div>
+      <div className="tiles" role="group" aria-label="Piezas">
+        {tiles.map((tile, i) => (
+          <button key={i} className={placed.includes(i) ? 'tile tile-word is-used' : 'tile tile-word'} onClick={() => place(i)} aria-disabled={answered || placed.includes(i)} lang="eu">
+            {tile}
+          </button>
+        ))}
+      </div>
+      <div className="button-row">
+        <button className="btn" onClick={erase} disabled={answered || placed.length <= hinted}>
+          ⌫ {t('erase')}
+        </button>
+        <button className="btn btn-primary" onClick={check} disabled={answered || !complete}>
+          {t('check')}
+        </button>
+      </div>
+      {!answered && (
+        <div className="button-row help-row">
+          {hintSize > 0 && (
+            <button className="btn btn-small" onClick={hint} disabled={hinted > 0}>
+              💡 {t('hint')}
+            </button>
+          )}
+          <button className="btn btn-link" onClick={() => onAnswer({ verdict: 'wrong', hinted: hinted > 0, skipped: true })}>
+            {t('dontKnow')}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Grammar: a curated sentence with one gap; any listed answer is right. */
+export function GrammarChoiceView({ question, lang, answered, onAnswer }: Props<Extract<WordQuestion, { kind: 'grammar-choice' }>>) {
+  const [chosen, setChosen] = useState<number | null>(null);
+  const exercise = question.item.entry.grammar!;
+  const [before, after] = exercise.text.split('___') as [string, string];
+  const right = question.options.find((o) => o.correct)?.label ?? '';
+  const choose = (n: number) => {
+    if (answered || !question.options[n]) return;
+    setChosen(n);
+    onAnswer({ verdict: question.options[n].correct ? 'exact' : 'wrong', given: question.options[n].label });
+  };
+  return (
+    <div onKeyDown={(e) => { const n = Number(e.key); if (n >= 1 && n <= question.options.length) choose(n - 1); }}>
+      <Prompt title={t('chooseWord')}>
+        <p className="prompt-basque prompt-sentence" lang="eu">
+          {before}
+          <span className={answered ? 'gap gap-filled' : 'gap'}>{answered ? right : '___'}</span>
+          {after}
+        </p>
+        <Meaning item={question.item} lang={lang} />
+      </Prompt>
+      <div className="options" role="group" aria-label={t('chooseWord')}>
+        {question.options.map((option, n) => (
+          <button key={option.label} className={`option ${answered ? (option.correct ? 'is-correct' : n === chosen ? 'is-wrong' : 'is-dim') : ''}`} onClick={() => choose(n)} aria-disabled={answered} lang="eu">
+            <span className="option-key" aria-hidden="true">{n + 1}</span>
+            <span className="option-label">{option.label}</span>
+            {answered && option.correct && <span className="option-mark" aria-label="correcta">✓</span>}
+            {answered && !option.correct && n === chosen && <span className="option-mark" aria-label="incorrecta">✗</span>}
+          </button>
+        ))}
+      </div>
+      {!answered && <button className="btn btn-link" onClick={() => onAnswer({ verdict: 'wrong', skipped: true })}>{t('dontKnow')}</button>}
+      {answered && question.item.entry.note && <p className="center-note">{question.item.entry.note}</p>}
     </div>
   );
 }

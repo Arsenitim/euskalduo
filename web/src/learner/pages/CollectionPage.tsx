@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { examLabel, t, weekLabel } from '../../i18n';
+import { examLabel, receivedLabel, t } from '../../i18n';
 import type { Entry, HomeworkSet, Lang } from '../../types';
 import { VoiceButton } from '../components/Voice';
 import { ProgressBar, SampleBadge, WordVisual } from '../components/bits';
@@ -9,52 +9,43 @@ import { examPath, practicePath } from '../routes';
 import { todayIso } from '../scheduler';
 import { setProgress } from '../setProgress';
 
-/** A homework week or a category: word list, progress and "practise". */
-export function WeekPage() {
+/** A school sheet or a topic: its words, progress and "practise". */
+export function CollectionPage() {
   const { setId } = useParams();
-  const { sets, state, update, currentSet } = useLearner();
+  const { sets, state, exams } = useLearner();
   const set = sets?.find((s) => s.id === setId);
-  const backTo = set?.kind === 'topic' ? '/categorias' : '/semanas';
   if (!set) {
     return (
       <p className="card center-note">
-        {t('noContent')} <Link to={backTo}>{t('back')}</Link>
+        {t('noContent')} <Link to="/temas">{t('back')}</Link>
       </p>
     );
   }
   const p = setProgress(set, state);
-  const isCurrent = currentSet?.id === set.id;
+  const relatedExams = exams.filter((e) => e.setIds.includes(set.id));
 
   return (
     <div>
       <p>
-        <Link to={backTo}>← {t('back')}</Link>
+        <Link to="/temas">← {t('back')}</Link>
       </p>
       <h1>
         {set.title} {set.sample && <SampleBadge />}
       </h1>
-      <p className="lead">{set.weekStart !== null && set.kind === 'week' ? weekLabel(set.weekStart) : t('category')}</p>
+      <p className="lead">{set.kind === 'sheet' ? (set.receivedOn ? receivedLabel(set.receivedOn) : t('sheet')) : t('category')}</p>
       {set.description && <p>{set.description}</p>}
-      {set.examDate !== null && set.examDate >= todayIso() && (
-        <p>
-          <Link className="badge badge-exam" to={examPath(set)}>
-            <span aria-hidden="true">📝</span> {examLabel(set.examDate, todayIso())}
+      {relatedExams.map((exam) => (
+        <p key={exam.id}>
+          <Link className="badge badge-exam" to={examPath(exam)}>
+            <span aria-hidden="true">📝</span> {exam.examDate ? examLabel(exam.examDate, todayIso()) : t('examPrepare')}
           </Link>
         </p>
-      )}
+      ))}
       <ProgressBar value={p.learned} max={p.total} label={t('learned', { n: p.learned, total: p.total })} />
       <div className="button-row">
         <Link className="btn btn-primary btn-big" to={practicePath(set)}>
           {t('practice')}
         </Link>
-        {set.kind === 'week' &&
-          (isCurrent ? (
-            <span className="badge badge-current">{t('isCurrent')}</span>
-          ) : (
-            <button className="btn" onClick={() => update((s) => ({ ...s, pinnedWeek: set.id }))}>
-              {t('useAsCurrent')}
-            </button>
-          ))}
       </div>
       <h2>{t('wordList')}</h2>
       <WordList set={set} lang={state.lang} />

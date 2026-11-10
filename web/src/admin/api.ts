@@ -1,4 +1,4 @@
-import type { Formation, Group, SetKind } from '../types';
+import type { EntryType, Formation, GrammarExercise, Group, Localized, SentenceExercise, SetKind, StoryFormat, StoryQuestion } from '../types';
 
 export interface Issue {
   path: string;
@@ -7,6 +7,9 @@ export interface Issue {
 }
 
 export interface AdminEntry {
+  type?: EntryType;
+  sentence?: SentenceExercise | null;
+  grammar?: GrammarExercise | null;
   formation?: Formation | null;
   id: string | null;
   basque: string;
@@ -23,8 +26,8 @@ export interface AdminEntry {
 export interface Draft {
   kind: SetKind;
   title: string;
-  weekStart: string | null;
-  examDate: string | null;
+  /** When the sheet arrived: information only. */
+  receivedOn: string | null;
   description: string | null;
   groups: Group[];
   entries: AdminEntry[];
@@ -79,7 +82,7 @@ export interface UsageBreakdownRow {
   rounds: number;
 }
 
-export type UsageDimension = 'set' | 'exercise' | 'mode' | 'connection' | 'display';
+export type UsageDimension = 'set' | 'story' | 'exercise' | 'mode' | 'connection' | 'display';
 
 export interface UsageReport {
   totals: UsageCounters;
@@ -96,6 +99,44 @@ export interface ValidationResponse {
   draft: Draft | null;
   errors: Issue[];
   warnings: Issue[];
+}
+
+export interface StoryDraft {
+  id: string | null;
+  title: string;
+  format: StoryFormat;
+  difficulty: number;
+  transcript: string;
+  translations: Localized;
+  questions: StoryQuestion[];
+  links: { sets: string[]; entries: string[]; words: string[]; topics: string[] };
+  needsReview: boolean;
+  reviewNote: string | null;
+}
+
+export interface AdminStory extends StoryDraft {
+  id: string;
+  status: 'draft' | 'published';
+  sample: boolean;
+  updatedAt: string;
+  audio: { state: 'ready' | 'pending' | 'failed'; url: string | null; durationMs: number | null; failure: string | null };
+  publishBlockers: string[];
+  publishWarnings: string[];
+}
+
+export interface StoryValidation {
+  valid: boolean;
+  draft: StoryDraft | null;
+  errors: Issue[];
+  warnings: Issue[];
+}
+
+export interface AdminExam {
+  id: string;
+  title: string;
+  examDate: string | null;
+  setIds: string[];
+  status: 'draft' | 'published';
 }
 
 export class ApiError extends Error {
@@ -158,6 +199,20 @@ export const adminApi = {
   },
   stats: () => request<UsageReport>('GET', '/api/admin/stats'),
   deleteImage: (setId: string, entryId: string) => request<unknown>('DELETE', `/api/admin/sets/${setId}/entries/${entryId}/image`),
+  listStories: () => request<{ stories: AdminStory[] }>('GET', '/api/admin/stories'),
+  getStory: (id: string) => request<{ story: AdminStory }>('GET', `/api/admin/stories/${id}`),
+  validateStory: (text: string) => request<StoryValidation>('POST', '/api/admin/stories/validate', { text }),
+  createStory: (draft: StoryDraft) => request<{ story: AdminStory; warnings: Issue[] }>('POST', '/api/admin/stories', draft),
+  updateStory: (id: string, draft: StoryDraft) => request<{ story: AdminStory; warnings: Issue[] }>('PUT', `/api/admin/stories/${id}`, draft),
+  deleteStory: (id: string) => request<unknown>('DELETE', `/api/admin/stories/${id}`),
+  publishStory: (id: string) => request<{ story: AdminStory }>('POST', `/api/admin/stories/${id}/publish`, {}),
+  unpublishStory: (id: string) => request<{ story: AdminStory }>('POST', `/api/admin/stories/${id}/unpublish`, {}),
+  listExams: () => request<{ exams: AdminExam[] }>('GET', '/api/admin/exams'),
+  createExam: (exam: Omit<AdminExam, 'id' | 'status'>) => request<{ exam: AdminExam }>('POST', '/api/admin/exams', exam),
+  updateExam: (id: string, exam: Omit<AdminExam, 'id' | 'status'>) => request<{ exam: AdminExam }>('PUT', `/api/admin/exams/${id}`, exam),
+  publishExam: (id: string) => request<{ exam: AdminExam }>('POST', `/api/admin/exams/${id}/publish`, {}),
+  unpublishExam: (id: string) => request<{ exam: AdminExam }>('POST', `/api/admin/exams/${id}/unpublish`, {}),
+  deleteExam: (id: string) => request<unknown>('DELETE', `/api/admin/exams/${id}`),
 };
 
 /** Server issues attached to a failed save (422), if any. */

@@ -51,3 +51,11 @@ export function checkTyped(input: string, accepted: readonly string[], kind: 'ba
   }
   return 'wrong';
 }
+
+/**
+ * Compares built sentences: case and spacing before punctuation are
+ * ignored, letters and accents must match (like Basque spelling).
+ */
+export function sentenceKey(text: string): string {
+  return answerKey(text.replace(/\s+([.,!?;:])/gu, '$1'));
+}

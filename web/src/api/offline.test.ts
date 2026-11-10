@@ -16,4 +16,9 @@ describe('offline download list', () => {
     ] as unknown as HomeworkSet[];
     expect(mediaUrls(sets)).toEqual([image, audio]);
   });
+
+  it('includes story recordings, so a full download covers listening too', () => {
+    const story = `/audio/${'c'.repeat(64)}.mp3`;
+    expect(mediaUrls([], [{ audio: story }, { audio: story }, { audio: 'https://example.com/x.mp3' }])).toEqual([story]);
+  });
 });

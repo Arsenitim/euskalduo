@@ -27,7 +27,7 @@ export function SetListPage() {
   return (
     <div>
       <div className="title-row">
-        <h1>Homework sets</h1>
+        <h1>Sheets and topics</h1>
         <Link className="btn btn-primary" to="/import">
           + Import homework
         </Link>
@@ -40,13 +40,13 @@ export function SetListPage() {
       {!sets ? (
         <p>Loading…</p>
       ) : sets.length === 0 ? (
-        <p className="card">No homework yet. Start with an import.</p>
+        <p className="card">No material yet. Start with an import.</p>
       ) : (
         <div className="table-wrap">
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Week</th>
+                <th>Type</th>
                 <th>Title</th>
                 <th>Status</th>
                 <th>Entries</th>
@@ -58,7 +58,7 @@ export function SetListPage() {
             <tbody>
               {sets.map((s) => (
                 <tr key={s.id}>
-                  <td>{s.kind === 'topic' ? <em>category</em> : (s.weekStart ?? <em>not set</em>)}</td>
+                  <td>{s.kind === 'topic' ? <em>topic</em> : <>sheet{s.receivedOn && <span className="muted"> · {s.receivedOn}</span>}</>}</td>
                   <td>
                     <Link to={`/sets/${s.id}`}>{s.title}</Link> {s.sample && <span className="badge badge-sample">sample</span>}
                   </td>

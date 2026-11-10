@@ -48,24 +48,24 @@ export const OFFLINE_CARD_STATE = { focus: 'offline' } as const;
 /**
  * Home-screen hint, online only: this device downloaded for offline use
  * before, and the catalogue now has pictures or speech it has not saved
- * (a new week, or clips generated after the download).
+ * (new material, a new story, or clips generated after the download).
  */
 export function UpdatePill() {
-  const { sets } = useLearner();
+  const { sets, stories } = useLearner();
   const online = useOnline();
   const [missing, setMissing] = useState(0);
   useEffect(() => {
     // Offline the pill is hidden by the render below; nothing to look up.
     if (!online || !sets || !offlineSupported() || !hasDownloaded()) return;
     let cancelled = false;
-    offlineStatus(mediaUrls(sets)).then(
+    offlineStatus(mediaUrls(sets, stories)).then(
       (status) => !cancelled && setMissing(status.missing),
       () => undefined,
     );
     return () => {
       cancelled = true;
     };
-  }, [online, sets]);
+  }, [online, sets, stories]);
   if (!online || missing === 0) return null;
   return (
     <Link className="status-pill status-update" to="/ajustes" state={OFFLINE_CARD_STATE} aria-label={t('updatePillLabel', { n: missing })}>
@@ -84,9 +84,9 @@ function needsHomeScreen(): boolean {
 const savedFormat = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 
 export function OfflineCard() {
-  const { sets } = useLearner();
+  const { sets, stories } = useLearner();
   const online = useOnline();
-  const urls = useMemo(() => mediaUrls(sets ?? []), [sets]);
+  const urls = useMemo(() => mediaUrls(sets ?? [], stories), [sets, stories]);
   const [status, setStatus] = useState<OfflineStatus | null>(null);
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [failed, setFailed] = useState(false);

@@ -17,9 +17,12 @@ const DIMENSIONS: Array<{ id: UsageDimension; title: string; column: string; lab
       'type-meaning': 'Type the meaning',
       'word-build': 'Build the word',
       order: 'Put in order',
+      'sentence-build': 'Build the sentence',
+      'grammar-choice': 'Grammar (fill the gap)',
+      listening: 'Listening question',
     },
   },
-  { id: 'mode', title: 'By practice mode', column: 'Mode', labels: { week: 'Homework week', topic: 'Categoría', exam: 'Exam preparation', mix: 'Mix' } },
+  { id: 'mode', title: 'By practice mode', column: 'Mode', labels: { lesson: 'Lesson (Empezar)', topic: 'Topic or sheet', listening: 'Listening section', exam: 'Exam preparation', week: 'Homework week (old version)', mix: 'Mix (old version)' } },
   { id: 'connection', title: 'Online or offline', column: 'Connection', labels: { online: 'Online', offline: 'Offline' } },
   { id: 'display', title: 'Installed app or browser', column: 'Opened as', labels: { app: 'Installed app (home screen)', browser: 'Browser tab' } },
 ];

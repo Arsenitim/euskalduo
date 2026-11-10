@@ -5,8 +5,8 @@
  * a day "this device practised today" and once a week "this device practised
  * this week". There is no device id: the browser only remembers locally that
  * it already counted those flags. The same answer and round counters are also
- * kept per homework set, exercise type, practice mode, online/offline and
- * installed app/browser (fixed labels and public set ids only).
+ * kept per set or story, exercise type, practice mode, online/offline and
+ * installed app/browser (fixed labels and public set/story ids only).
  * Names, answers, words and progress are never sent.
  *
  * A browser can be left out (e.g. ours, while testing): see setStatsExcluded.
@@ -16,16 +16,23 @@
  * happened, once the device is back online.
  */
 export type AnswerResult = 'correct' | 'hinted' | 'wrong' | 'skipped';
-export type PracticeMode = 'week' | 'topic' | 'exam' | 'mix';
+/**
+ * lesson: "Empezar". topic: one sheet or topic. listening: the listening
+ * section. exam: exam preparation. (Older versions sent "week" and "mix";
+ * the server still accepts them for counters that were queued offline.)
+ */
+export type PracticeMode = 'lesson' | 'topic' | 'listening' | 'exam';
 /** What an answer belongs to (breakdown labels the server knows; see UsageStats::DIMENSIONS). */
 export interface AnswerTags {
-  set: string;
+  set?: string;
+  story?: string;
   exercise: string;
   mode: PracticeMode;
 }
-/** What a finished round belongs to; `sets` is empty for mixed rounds. */
+/** What a finished round belongs to; `sets` is empty for mixed lessons. */
 export interface RoundTags {
   sets: string[];
+  stories?: string[];
   mode: PracticeMode;
 }
 
@@ -326,12 +333,16 @@ function record(today: string, add: (c: Part) => void, labels: Array<[string, st
 }
 
 export function reportAnswer(result: AnswerResult, today: string, tags?: AnswerTags): void {
-  const labels: Array<[string, string]> = tags ? [['set', tags.set], ['exercise', tags.exercise], ['mode', tags.mode], ...context()] : [];
+  const labels: Array<[string, string]> = tags
+    ? [...(tags.set ? [['set', tags.set] as [string, string]] : []), ...(tags.story ? [['story', tags.story] as [string, string]] : []), ['exercise', tags.exercise], ['mode', tags.mode], ...context()]
+    : [];
   record(today, (c) => c.answers[result]++, labels);
 }
 
 export function reportRound(today: string, tags?: RoundTags): void {
-  const labels: Array<[string, string]> = tags ? [...tags.sets.map((id): [string, string] => ['set', id]), ['mode', tags.mode], ...context()] : [];
+  const labels: Array<[string, string]> = tags
+    ? [...tags.sets.map((id): [string, string] => ['set', id]), ...(tags.stories ?? []).map((id): [string, string] => ['story', id]), ['mode', tags.mode], ...context()]
+    : [];
   record(today, (c) => c.rounds++, labels);
 }
 

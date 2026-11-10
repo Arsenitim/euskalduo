@@ -1,8 +1,17 @@
 import { useState } from 'react';
-import type { Formation, Group, SetKind } from '../types';
+import type { EntryType, Formation, Group, SetKind } from '../types';
 import { adminApi, type AdminEntry, type Draft, type Issue } from './api';
 
 export interface Row {
+  type: EntryType;
+  /** Sentence: tiles in order, separated by " | "; one alternative order per line; extra tiles. */
+  tiles: string;
+  alternatives: string;
+  extraTiles: string;
+  /** Grammar: the text with ___, accepted answers and wrong options (";"-separated). */
+  gapText: string;
+  answers: string;
+  wrongOptions: string;
   formation: Formation | null;
   uid: string;
   id: string | null;
@@ -21,8 +30,7 @@ export interface Row {
 export interface EditorModel {
   kind: SetKind;
   title: string;
-  weekStart: string;
-  examDate: string;
+  receivedOn: string;
   description: string;
   groups: Group[];
   rows: Row[];
@@ -39,17 +47,29 @@ const splitAlternatives = (text: string) =>
     .filter(Boolean);
 
 const nullIfEmpty = (s: string) => (s.trim() === '' ? null : s.trim());
+const TILE_SEPARATOR = ' | ';
+const splitTiles = (text: string) =>
+  text
+    .split('|')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
 export function modelFromDraft(draft: Draft): EditorModel {
   return {
     kind: draft.kind,
     title: draft.title,
-    weekStart: draft.weekStart ?? '',
-    examDate: draft.examDate ?? '',
+    receivedOn: draft.receivedOn ?? '',
     description: draft.description ?? '',
     groups: draft.groups,
     rows: draft.entries.map((e) => ({
       uid: uid(),
+      type: e.type ?? 'word',
+      tiles: (e.sentence?.tiles ?? []).join(TILE_SEPARATOR),
+      alternatives: (e.sentence?.alternatives ?? []).map((a) => a.join(TILE_SEPARATOR)).join('\n'),
+      extraTiles: (e.sentence?.distractors ?? []).join(TILE_SEPARATOR),
+      gapText: e.grammar?.text ?? '',
+      answers: (e.grammar?.answers ?? []).join('; '),
+      wrongOptions: (e.grammar?.distractors ?? []).join('; '),
       formation: e.formation ?? null,
       id: e.id,
       basque: e.basque,
@@ -70,15 +90,17 @@ export function draftFromModel(model: EditorModel): Draft {
   return {
     kind: model.kind,
     title: model.title,
-    weekStart: model.kind === 'week' ? model.weekStart || null : null,
-    examDate: model.examDate || null,
+    receivedOn: model.kind === 'sheet' ? model.receivedOn || null : null,
     description: nullIfEmpty(model.description),
     groups: model.groups,
     entries: model.rows.map((r): AdminEntry => {
       const ru = splitAlternatives(r.ru);
       return {
         id: r.id,
-        formation: r.formation,
+        type: r.type,
+        sentence: r.type === 'sentence' ? { tiles: splitTiles(r.tiles), alternatives: r.alternatives.split('\n').map(splitTiles).filter((a) => a.length > 0), distractors: splitTiles(r.extraTiles) } : null,
+        grammar: r.type === 'grammar' ? { text: r.gapText.trim(), answers: splitAlternatives(r.answers), distractors: splitAlternatives(r.wrongOptions) } : null,
+        formation: r.type === 'word' ? r.formation : null,
         basque: r.basque,
         translations: ru.length > 0 ? { es: splitAlternatives(r.es), ru } : { es: splitAlternatives(r.es) },
         note: nullIfEmpty(r.note),
@@ -93,7 +115,7 @@ export function draftFromModel(model: EditorModel): Draft {
 }
 
 function emptyRow(): Row {
-  return { formation: null, uid: uid(), id: null, basque: '', es: '', ru: '', note: '', group: '', emoji: '', imageHint: '', needsReview: false, reviewNote: '', image: null };
+  return { type: 'word', tiles: '', alternatives: '', extraTiles: '', gapText: '', answers: '', wrongOptions: '', formation: null, uid: uid(), id: null, basque: '', es: '', ru: '', note: '', group: '', emoji: '', imageHint: '', needsReview: false, reviewNote: '', image: null };
 }
 
 interface Props {
@@ -137,20 +159,17 @@ export function SetEditor({ model, onChange, errors, warnings, setId, onImageCha
         <label>
           Type
           <select value={model.kind} onChange={(e) => setField('kind', e.target.value as SetKind)}>
-            <option value="week">Homework week</option>
-            <option value="topic">Category (no week: months, animals…)</option>
+            <option value="sheet">School sheet</option>
+            <option value="topic">Topic (months, sentences, animals…)</option>
           </select>
         </label>
-        {model.kind === 'week' && (
+        {model.kind === 'sheet' && (
           <label>
-            Homework week (Monday)
-            <input type="date" value={model.weekStart} onChange={(e) => setField('weekStart', e.target.value)} />
+            Received on (optional, for reference only — never affects practice)
+            <input type="date" value={model.receivedOn} onChange={(e) => setField('receivedOn', e.target.value)} />
           </label>
         )}
-        <label>
-          Exam date (optional) — learners get an exam section until that day
-          <input type="date" value={model.examDate} onChange={(e) => setField('examDate', e.target.value)} />
-        </label>
+        <p className="muted wide">Exams are set up under <a href="#/exams">Exams</a>.</p>
         <label className="wide">
           Description / theme (optional)
           <input value={model.description} maxLength={500} onChange={(e) => setField('description', e.target.value)} />
@@ -171,9 +190,49 @@ export function SetEditor({ model, onChange, errors, warnings, setId, onImageCha
               <div className="entry-num">{index + 1}</div>
               <div className="entry-fields">
                 <label>
-                  Basque
-                  <input lang="eu" value={row.basque} maxLength={80} onChange={(e) => setRow(index, { basque: e.target.value })} />
+                  Kind
+                  <select value={row.type} onChange={(e) => setRow(index, { type: e.target.value as EntryType })}>
+                    <option value="word">Word</option>
+                    <option value="sentence">Sentence building</option>
+                    <option value="grammar">Grammar (fill the gap)</option>
+                  </select>
                 </label>
+                <label>
+                  {row.type === 'word' ? 'Basque' : 'Basque sentence (complete)'}
+                  <input lang="eu" value={row.basque} maxLength={row.type === 'word' ? 80 : 160} onChange={(e) => setRow(index, { basque: e.target.value })} />
+                </label>
+                {row.type === 'sentence' && (
+                  <>
+                    <label className="wide">
+                      Tiles in the right order, separated by | (repeats allowed; punctuation may be its own tile)
+                      <input lang="eu" value={row.tiles} onChange={(e) => setRow(index, { tiles: e.target.value })} placeholder="gaur | astelehena | da | ." />
+                    </label>
+                    <label className="wide">
+                      Other accepted orders (one per line, same tiles)
+                      <textarea lang="eu" rows={2} value={row.alternatives} onChange={(e) => setRow(index, { alternatives: e.target.value })} placeholder="astelehena | da | gaur | ." />
+                    </label>
+                    <label className="wide">
+                      Extra tiles that do not belong (optional, separated by |; must not make another valid sentence)
+                      <input lang="eu" value={row.extraTiles} onChange={(e) => setRow(index, { extraTiles: e.target.value })} />
+                    </label>
+                  </>
+                )}
+                {row.type === 'grammar' && (
+                  <>
+                    <label className="wide">
+                      Sentence with one gap written as ___
+                      <input lang="eu" value={row.gapText} onChange={(e) => setRow(index, { gapText: e.target.value })} placeholder="Ni ikaslea ___." />
+                    </label>
+                    <label>
+                      Accepted answers (;)
+                      <input lang="eu" value={row.answers} onChange={(e) => setRow(index, { answers: e.target.value })} />
+                    </label>
+                    <label>
+                      Wrong options (;)
+                      <input lang="eu" value={row.wrongOptions} onChange={(e) => setRow(index, { wrongOptions: e.target.value })} />
+                    </label>
+                  </>
+                )}
                 <label>
                   Spanish
                   <input lang="es" value={row.es} onChange={(e) => setRow(index, { es: e.target.value })} />
@@ -182,15 +241,15 @@ export function SetEditor({ model, onChange, errors, warnings, setId, onImageCha
                   Russian (optional)
                   <input lang="ru" value={row.ru} onChange={(e) => setRow(index, { ru: e.target.value })} />
                 </label>
-                <label>
+                {row.type === 'word' && <label>
                   Word formation
                   <select value={row.formation?.kind ?? ''} onChange={(e) => setRow(index, { formation: e.target.value ? { kind: e.target.value as Formation['kind'], parts: row.formation?.parts ?? ['', ''] } : null })}>
                     <option value="">None</option>
                     <option value="compound">Compound: two words</option>
                     <option value="derived">Derived: stem + suffix</option>
                   </select>
-                </label>
-                {row.formation && row.formation.parts.map((part, n) => (
+                </label>}
+                {row.type === 'word' && row.formation && row.formation.parts.map((part, n) => (
                   <label key={n}>
                     {n === 0 ? 'First word / stem' : 'Second word / suffix (e.g. -lari)'}
                     <input lang="eu" value={part} maxLength={40} onChange={(e) => {

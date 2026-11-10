@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { emptyState, exportProgress, importProgress, loadState, parseState, saveState, STORAGE_KEY } from './progress';
+import { emptyState, exportProgress, importProgress, loadState, parseState, recordSkill, saveState, STORAGE_KEY } from './progress';
 import { recordAnswer } from './scheduler';
 
 function memoryStorage() {
@@ -55,5 +55,48 @@ describe('learner progress storage', () => {
     expect(importProgress(exportProgress(state))).toEqual(state);
     expect(importProgress(JSON.stringify({ schemaVersion: 1, title: 'homework' }))).toBeNull();
     expect(importProgress('garbage')).toBeNull();
+  });
+
+  it('migrates version 1 progress without losing any record, and repeating it changes nothing', () => {
+    const box = recordAnswer(recordAnswer(undefined, 'correct', '2026-09-20'), 'correct', '2026-09-21');
+    const v1 = {
+      version: 1,
+      displayName: 'Ane',
+      lang: 'ru',
+      sound: false,
+      pinnedWeek: 's1',
+      entries: { 's1/e1': box, 's2/e9': recordAnswer(undefined, 'wrong', '2026-09-22') },
+      sets: { s1: { rounds: 4, bestStars: 3, last: '2026-09-21' } },
+    };
+    const v2 = parseState(v1)!;
+    expect(v2.version).toBe(2);
+    expect(v2.entries).toEqual(v1.entries);
+    expect(v2.sets).toEqual(v1.sets);
+    expect([v2.displayName, v2.lang, v2.sound]).toEqual(['Ane', 'ru', false]);
+    expect(v2).not.toHaveProperty('pinnedWeek');
+    expect(v2.skills).toEqual({});
+    expect(v2.stories).toEqual({});
+    // Repeatable: parsing the migrated state (as on the next start) gives the same.
+    expect(parseState(JSON.parse(JSON.stringify(v2)))).toEqual(v2);
+
+    // An old export file still loads.
+    const oldExport = JSON.stringify({ app: 'euskalduo', kind: 'learner-progress', exportedAt: '2026-10-01T10:00:00Z', state: v1 });
+    expect(importProgress(oldExport)).toEqual(v2);
+  });
+
+  it('keeps word skills and listening records separate and validated', () => {
+    const today = '2026-11-10';
+    const skill = recordSkill(recordSkill(undefined, true, today), true, today);
+    expect(skill).toEqual({ seen: 2, correct: 2, streak: 2, last: today });
+    expect(recordSkill(skill, false, today).streak).toBe(0);
+    const story = { plays: 2, completed: 1, correct: 2, answered: 3, supported: 1, passes: 0, last: today };
+    const state = parseState({
+      version: 2,
+      skills: { 's1/e1': { spelling: skill, recognition: { seen: 1, correct: 5, streak: 0, last: today } }, bad: { spelling: skill } },
+      stories: { 'triku-1': story, 'x y': story, broken: { ...story, correct: 9 } },
+    })!;
+    expect(state.skills).toEqual({ 's1/e1': { spelling: skill } });
+    expect(state.stories).toEqual({ 'triku-1': story });
+    expect(importProgress(exportProgress(state))).toEqual(state);
   });
 });

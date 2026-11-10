@@ -1,8 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import type { Entry, Formation, HomeworkSet } from '../types';
+import type { Entry, EntryType, Formation, GrammarExercise, HomeworkSet, SentenceExercise } from '../types';
 
 interface SampleEntry {
+  id?: string;
+  type?: EntryType;
+  sentence?: Partial<SentenceExercise>;
+  grammar?: GrammarExercise;
   formation?: Formation;
   note?: string;
   basque: string;
@@ -12,19 +16,21 @@ interface SampleEntry {
 }
 
 /** Loads a repository sample as the learner API would serve it. */
-export function sampleSet(file: string, id: string, weekStart: string): HomeworkSet {
+export function sampleSet(file: string, id: string, receivedOn: string | null = null): HomeworkSet {
   const doc = JSON.parse(readFileSync(resolve(__dirname, '../../../samples', file), 'utf8'));
   return {
     id,
-    kind: 'week',
+    kind: doc.kind === 'topic' ? 'topic' : 'sheet',
     title: doc.title,
-    weekStart,
-    examDate: doc.examDate ?? null,
+    receivedOn,
     description: doc.description ?? null,
     sample: true,
     groups: doc.groups ?? [],
     entries: (doc.entries as SampleEntry[]).map((e, i) => ({
-      id: `e${i}`,
+      id: e.id ?? `e${i}`,
+      type: e.type ?? 'word',
+      sentence: e.sentence ? { tiles: e.sentence.tiles ?? [], alternatives: e.sentence.alternatives ?? [], distractors: e.sentence.distractors ?? [] } : null,
+      grammar: e.grammar ?? null,
       basque: e.basque,
       translations: e.translations,
       note: e.note ?? null,
@@ -36,13 +42,12 @@ export function sampleSet(file: string, id: string, weekStart: string): Homework
   };
 }
 
-export function tinySet(id: string, weekStart: string, words: Array<[string, string[]]>): HomeworkSet {
+export function tinySet(id: string, _received: string | null, words: Array<[string, string[]]>): HomeworkSet {
   return {
     id,
-    kind: 'week',
+    kind: 'sheet',
     title: id,
-    weekStart,
-    examDate: null,
+    receivedOn: null,
     description: null,
     sample: false,
     groups: [],

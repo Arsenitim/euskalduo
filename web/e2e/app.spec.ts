@@ -11,6 +11,11 @@ const PNG = resolve(here, 'fixtures/mochila.png');
 /** Answers whatever question is on screen (not necessarily correctly). */
 async function answerCurrent(page: Page) {
   const card = page.locator('.question-card');
+  // A listening block is answered as a whole (see listening.spec.ts); skipping it is fine here.
+  if (await card.locator('.story-block').count()) {
+    await card.getByRole('button', { name: /Saltar la historia|Seguir/ }).first().click();
+    return;
+  }
   // Basque → meaning: a picture would give the answer away before answering.
   const title = await card.locator('.prompt-title').innerText();
   if (title === '¿Qué significa?' || title === 'Escribe qué significa') {
@@ -48,7 +53,7 @@ function recordRequests(page: Page): Request[] {
 }
 
 test.describe('learner', () => {
-  test('plays the current week, gets feedback and rewards, and progress survives a reload', async ({ page, baseURL }) => {
+  test('"Empezar" starts a mixed lesson at once, gives feedback and rewards, and progress survives a reload', async ({ page, baseURL }) => {
     const requests = recordRequests(page);
     await page.goto('/');
     await page.getByRole('link', { name: /Ajustes/ }).click();
@@ -57,7 +62,13 @@ test.describe('learner', () => {
     await page.getByRole('link', { name: /EUSKALDUO/ }).click();
     await expect(page.getByRole('heading', { name: '¡Kaixo, Ane!' })).toBeVisible();
 
-    await page.getByRole('link', { name: /Esta semana/ }).click();
+    const start = page.getByRole('link', { name: /Empezar/ });
+    await expect(start).toContainText('Palabras, temas variados y comprensión oral. Ejercicios elegidos para ti.');
+    await expect(page.getByText(/Esta semana|Elegir semana|Mezclar semanas/)).toHaveCount(0);
+    await page.screenshot({ path: 'test-results/home.png' });
+    await start.click();
+    // No configuration step: the first question is right there.
+    await expect(page).toHaveURL(/#\/leccion$/);
     await expect(page.locator('.question-card')).toBeVisible();
     await answerCurrent(page);
     await playRound(page);
@@ -66,11 +77,13 @@ test.describe('learner', () => {
 
     await page.reload();
     await page.goto('/#/progreso');
-    await expect(page.getByText(/practicadas/).first()).toBeVisible();
-    const practiced = await page.locator('.week-meta').first().innerText();
-    expect(practiced).not.toMatch(/^0 practicadas/);
+    await expect(page.getByRole('heading', { name: 'Lo que sabes hacer' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Reconocer palabras' })).toBeVisible();
+    await page.screenshot({ path: 'test-results/progress.png', fullPage: true });
     const stored = await page.evaluate(() => localStorage.getItem('euskalduo.learner.v1'));
     expect(JSON.parse(stored!).displayName).toBe('Ane');
+    expect(JSON.parse(stored!).version).toBe(2);
+    expect(Object.keys(JSON.parse(stored!).entries).length).toBeGreaterThan(0);
 
     // Privacy: same-origin GETs without bodies, plus anonymous stats counters;
     // nothing identifying leaves the browser.
@@ -88,7 +101,7 @@ test.describe('learner', () => {
         expect(['day', 'newDevice', 'activeToday', 'activeWeek', 'answers', 'rounds', 'breakdown']).toEqual(expect.arrayContaining(Object.keys(body)));
         // Breakdown rows carry only fixed labels and public set ids.
         for (const part of body.breakdown ?? []) {
-          expect(['set', 'exercise', 'mode', 'connection', 'display']).toContain(part.dimension);
+          expect(['set', 'story', 'exercise', 'mode', 'connection', 'display']).toContain(part.dimension);
           expect(['dimension', 'key', 'answers', 'rounds']).toEqual(expect.arrayContaining(Object.keys(part)));
         }
         expect(r.postData()).not.toContain('Ane');
@@ -106,36 +119,50 @@ test.describe('learner', () => {
     expect((await page.context().cookies()).length).toBe(0);
   });
 
-  test('categories: days of the week and months are practised apart from the weeks', async ({ page }) => {
+  test('topics and school sheets can be practised on their own; old week links lead there', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('link', { name: /Categorías/ }).click();
-    await expect(page.getByRole('heading', { name: 'Categorías' })).toBeVisible();
-    await expect(page.locator('.week-card')).toHaveText([/ASTEGUNAK.*7 palabras/s, /Formación de palabras.*19 palabras/s, /HILABETEAK.*12 palabras/s]);
+    await page.getByRole('navigation', { name: 'Principal' }).getByRole('link', { name: 'Temas' }).click();
+    await expect(page.getByRole('heading', { name: 'Temas', level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Hojas del cole' })).toBeVisible();
+    await expect(page.locator('.week-card', { hasText: /^ASTEGUNAK/ })).toContainText('7 palabras');
 
-    await page.locator('.week-card', { hasText: 'ASTEGUNAK' }).click();
+    await page.locator('.week-card', { hasText: 'ASTEGUNAK' }).first().click();
     await expect(page.locator('.word-group ol li')).toHaveCount(7);
-    await expect(page.getByRole('button', { name: 'Usar como mi semana actual' })).toHaveCount(0);
     await page.getByRole('link', { name: '¡A practicar!' }).click();
     await playRound(page);
 
-    // Categories are not weeks: they never show up in the week list or the mix.
-    // (The sample week "HILABETEAK ETA ASTEGUNAK" is a different, longer title.)
+    // Bookmarks from the week era still work.
     await page.goto('/#/semanas');
-    await expect(page.locator('.week-list')).toBeVisible();
-    await expect(page.locator('.week-title', { hasText: /^ASTEGUNAK\b/ })).toHaveCount(0);
+    await expect(page).toHaveURL(/#\/temas$/);
     await page.goto('/#/mezclar');
-    await expect(page.locator('.check-card strong', { hasText: /^HILABETEAK$/ })).toHaveCount(0);
+    await expect(page).toHaveURL(/#\/leccion$/);
+    await expect(page.locator('.question-card')).toBeVisible();
+  });
+
+  test('a lesson mixes material from several sheets and topics', async ({ page }) => {
+    const sets = new Set<string>();
+    page.on('request', (r) => {
+      if (new URL(r.url()).pathname !== '/api/public/stats') return;
+      for (const part of JSON.parse(r.postData() ?? '{}').breakdown ?? []) if (part.dimension === 'set') sets.add(part.key);
+    });
+    for (let lesson = 0; lesson < 3 && sets.size < 2; lesson++) {
+      await page.goto('/#/');
+      await page.getByRole('link', { name: /Empezar/ }).click();
+      await playRound(page);
+      await page.waitForTimeout(300);
+    }
+    expect(sets.size).toBeGreaterThanOrEqual(2);
   });
 
   test('spelling offers a locked hint and "No lo sé" to skip', async ({ page }) => {
     // Play rounds until a letter-tiles question comes up (question types are random).
     for (let round = 0; round < 6; round++) {
       await page.goto('/');
-      await page.getByRole('link', { name: /Esta semana/ }).click();
+      await page.getByRole('link', { name: /Empezar/ }).click();
       for (let i = 0; i < 20; i++) {
         const card = page.locator('.question-card');
         if (await page.getByRole('heading', { name: '¡Ronda terminada!' }).isVisible()) break;
-        if (await card.locator('.tile').count()) {
+        if (await card.locator('.tile:not(.tile-word)').count()) {
           await card.getByRole('button', { name: /Pista/ }).click();
           await expect(card.locator('.slot-hint').first()).toBeVisible();
           await expect(card.getByRole('button', { name: /Pista/ })).toBeDisabled();
@@ -164,7 +191,9 @@ test.describe('learner', () => {
     const notes = () => page.evaluate(() => (window as unknown as { __notes: number }).__notes);
 
     await page.goto('/');
-    await page.getByRole('link', { name: /Esta semana/ }).click();
+    await page.getByRole('link', { name: /Empezar/ }).click();
+    // A story block makes no answer sound; get past it to a question that does.
+    while (await page.locator('.story-block').count()) await answerCurrent(page);
     await answerCurrent(page);
     expect(await notes()).toBeGreaterThan(0);
 
@@ -179,19 +208,6 @@ test.describe('learner', () => {
     await expect(page.getByRole('radio', { name: /No/ })).toBeChecked();
   });
 
-  test('mixes earlier weeks chosen by the learner', async ({ page }) => {
-    await page.goto('/#/mezclar');
-    const older = page.locator('.check-list .check-card').first();
-    const title = (await older.locator('strong').innerText()).trim();
-    await older.click();
-    await page.getByRole('button', { name: 'Empezar repaso' }).click();
-    await expect(page.locator('.question-card')).toBeVisible();
-    // The first choice is the newest week before this one.
-    const { sets } = (await (await page.request.get('/api/public/content')).json()) as { sets: { kind: string; title: string; weekStart: string }[] };
-    const weeks = sets.filter((s) => s.kind === 'week').sort((a, b) => b.weekStart.localeCompare(a.weekStart));
-    expect(title).toBe(weeks[1]?.title);
-    await playRound(page);
-  });
 });
 
 test.describe('admin', () => {
@@ -206,14 +222,14 @@ test.describe('admin', () => {
     await page.goto('/admin/');
     await page.getByLabel('Password').fill(ADMIN_PASSWORD);
     await page.getByRole('button', { name: 'Log in' }).click();
-    await expect(page.getByRole('heading', { name: 'Homework sets' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sheets and topics' })).toBeVisible();
 
     const stats: string[] = [];
     page.on('request', (r) => {
       if (new URL(r.url()).pathname === '/api/public/stats') stats.push(r.postData() ?? '');
     });
     await page.goto('/#/');
-    await page.getByRole('link', { name: /Esta semana/ }).click();
+    await page.getByRole('link', { name: /Empezar/ }).click();
     await answerCurrent(page);
     await page.waitForTimeout(500);
     expect(stats).toEqual([]);
@@ -226,12 +242,14 @@ test.describe('admin', () => {
     await page.screenshot({ path: 'test-results/admin-usage.png', fullPage: true });
 
     await page.goto('/#/');
-    await page.getByRole('link', { name: /Esta semana/ }).click();
+    await page.getByRole('link', { name: /Empezar/ }).click();
+    while (await page.locator('.story-block').count()) await answerCurrent(page);
     const sent = page.waitForRequest((r) => new URL(r.url()).pathname === '/api/public/stats');
     await answerCurrent(page);
     const body = JSON.parse((await sent).postData()!);
     expect(body.activeWeek).toBe(true);
     expect(body.breakdown.map((p: { dimension: string }) => p.dimension).sort()).toEqual(['connection', 'display', 'exercise', 'mode', 'set']);
+    expect(body.breakdown.find((p: { dimension: string }) => p.dimension === 'mode').key).toBe('lesson');
   });
 
   test('imports, reviews, adds a picture, publishes and edits a set', async ({ page, browser }) => {
@@ -239,7 +257,7 @@ test.describe('admin', () => {
     await page.goto('/admin/');
     await page.getByLabel('Password').fill(ADMIN_PASSWORD);
     await page.getByRole('button', { name: 'Log in' }).click();
-    await expect(page.getByRole('heading', { name: 'Homework sets' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sheets and topics' })).toBeVisible();
 
     await page.getByRole('link', { name: 'Import', exact: true }).click();
     await page.getByLabel('Import content').fill(readFileSync(resolve(here, '../../samples/hiztegia-1-gaia.json'), 'utf8'));
@@ -249,7 +267,7 @@ test.describe('admin', () => {
     await expect(page.locator('.entry-row').nth(6).getByLabel('Spanish')).toHaveValue('campeonato; concurso');
 
     await page.getByLabel('Title').fill('E2E 1.Gaia');
-    await page.getByLabel('Homework week (Monday)').fill('2026-09-28');
+    // No date needed to publish.
     await page.getByRole('button', { name: 'Save as draft' }).click();
     await expect(page.getByRole('heading', { name: /E2E 1\.Gaia/ })).toBeVisible();
 
@@ -266,9 +284,9 @@ test.describe('admin', () => {
     await page.getByRole('button', { name: 'Save changes' }).click();
     await expect(page.getByText('Saved.')).toBeVisible();
 
-    // A fresh learner sees it, with the picture, as the newest week.
+    // A fresh learner sees it, with the picture, among the school sheets.
     const learner = await browser.newPage();
-    await learner.goto('/#/semanas');
+    await learner.goto('/#/temas');
     await learner.getByRole('link', { name: /E2E 1\.Gaia/ }).click();
     await expect(learner.getByText('cubo de la basura / papelera')).toBeVisible();
     await expect(learner.locator('img.word-visual')).toHaveCount(1);
@@ -276,7 +294,7 @@ test.describe('admin', () => {
 
     // Clean up.
     await page.getByRole('button', { name: 'Delete' }).click();
-    await expect(page.getByRole('heading', { name: 'Homework sets' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sheets and topics' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'E2E 1.Gaia' })).toHaveCount(0);
   });
 });

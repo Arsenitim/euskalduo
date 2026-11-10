@@ -1,29 +1,31 @@
 import { Link, useParams } from 'react-router-dom';
 import { examLabel, t } from '../../i18n';
-import { ProgressBar, SampleBadge } from '../components/bits';
+import { ProgressBar } from '../components/bits';
 import { useLearner } from '../LearnerContext';
 import { examPracticePath } from '../routes';
 import { todayIso } from '../scheduler';
 import { setProgress } from '../setProgress';
-import { WordList } from './WeekPage';
+import { WordList } from './CollectionPage';
 
 /**
- * Exam preparation: everything that comes up in one announced school exam.
- * Practice from here drills every word of the set, ignoring the review
- * calendar, so nothing on the sheet is left out before the exam day.
+ * Exam preparation: the sets chosen for one exam. Practice from here
+ * drills every item of them, ignoring the review calendar. The same
+ * material keeps appearing in ordinary lessons too.
  */
 export function ExamPage() {
-  const { setId } = useParams();
-  const { sets, state } = useLearner();
-  const set = sets?.find((s) => s.id === setId);
-  if (!set) {
+  const { examId } = useParams();
+  const { sets, state, exams } = useLearner();
+  // Old links used the set id; migrated exams keep that id.
+  const exam = exams.find((e) => e.id === examId) ?? exams.find((e) => e.setIds.length === 1 && e.setIds[0] === examId);
+  const examSets = (sets ?? []).filter((s) => exam?.setIds.includes(s.id));
+  if (!exam || examSets.length === 0) {
     return (
       <p className="card center-note">
         {t('noContent')} <Link to="/">{t('home')}</Link>
       </p>
     );
   }
-  const p = setProgress(set, state);
+  const totals = examSets.map((set) => setProgress(set, state)).reduce((a, p) => ({ learned: a.learned + p.learned, total: a.total + p.total }), { learned: 0, total: 0 });
 
   return (
     <div>
@@ -31,18 +33,22 @@ export function ExamPage() {
         <Link to="/">← {t('back')}</Link>
       </p>
       <h1>
-        <span aria-hidden="true">📝</span> {t('examTitle')}: {set.title} {set.sample && <SampleBadge />}
+        <span aria-hidden="true">📝</span> {t('examTitle')}: {exam.title}
       </h1>
-      {set.examDate !== null && <p className="lead">{examLabel(set.examDate, todayIso())}</p>}
+      {exam.examDate !== null && <p className="lead">{examLabel(exam.examDate, todayIso())}</p>}
       <p>{t('examIntro')}</p>
-      <ProgressBar value={p.learned} max={p.total} label={t('learned', { n: p.learned, total: p.total })} />
+      <ProgressBar value={totals.learned} max={totals.total} label={t('learned', { n: totals.learned, total: totals.total })} />
       <div className="button-row">
-        <Link className="btn btn-primary btn-big" to={examPracticePath(set)}>
+        <Link className="btn btn-primary btn-big" to={examPracticePath(exam)}>
           {t('examPractice')}
         </Link>
       </div>
-      <h2>{t('wordList')}</h2>
-      <WordList set={set} lang={state.lang} />
+      {examSets.map((set) => (
+        <section key={set.id}>
+          <h2>{set.title}</h2>
+          <WordList set={set} lang={state.lang} />
+        </section>
+      ))}
       <p className="muted">{t('examGoodLuck')}</p>
     </div>
   );

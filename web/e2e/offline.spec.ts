@@ -15,6 +15,10 @@ async function answerUntilDone(page: Page) {
   for (let i = 0; i < 25; i++) {
     if (await page.getByRole('heading', { name: '¡Ronda terminada!' }).isVisible()) return;
     const card = page.locator('.question-card');
+    if (await card.locator('.story-block').count()) {
+      await card.getByRole('button', { name: /Saltar la historia|Seguir/ }).first().click();
+      continue;
+    }
     if (await card.locator('.options').count()) await card.locator('.option').first().click();
     else if (await card.locator('.order-sequence').count()) {
       while (await card.locator('.tiles .order-chip').count()) await card.locator('.tiles .order-chip').first().click();
@@ -34,7 +38,7 @@ const pending = (page: Page) => page.evaluate(() => localStorage.getItem('euskal
 
 test('downloads, practises on a plane, and reports the counters once back online', async ({ page, context }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Empezar/ })).toBeVisible();
   await waitForWorker(page);
 
   await page.goto('/#/ajustes');
@@ -58,7 +62,7 @@ test('downloads, practises on a plane, and reports the counters once back online
   await page.getByRole('link', { name: /EUSKALDUO/ }).click();
   await expect(page.getByText(/Sin conexión\. Puedes seguir practicando/)).toBeVisible();
   await page.screenshot({ path: 'test-results/offline-home.png' });
-  await page.getByRole('link', { name: /Esta semana/ }).click();
+  await page.getByRole('link', { name: /Empezar/ }).click();
   await answerUntilDone(page);
   await page.screenshot({ path: 'test-results/offline-round.png' });
 
@@ -84,26 +88,28 @@ test('downloads, practises on a plane, and reports the counters once back online
 
 test('a plain visit is enough to open the app and practise offline (without pictures or speech)', async ({ page, context }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Empezar/ })).toBeVisible();
   await waitForWorker(page);
   await context.setOffline(true);
   await page.reload();
-  await page.getByRole('link', { name: /Esta semana/ }).click();
+  await page.getByRole('link', { name: /Empezar/ }).click();
   await expect(page.locator('.question-card')).toBeVisible();
 });
 
 test('pictures and speech are kept for offline use and the admin area is left alone', async ({ page, context }) => {
   const image = `/uploads/${'a'.repeat(32)}.webp`;
   const audio = `/audio/${'b'.repeat(64)}.mp3`;
+  const storyAudio = `/audio/${'c'.repeat(64)}.mp3`;
+  const story = { id: 'st1', title: 'Story', format: 'extended', difficulty: 1, transcript: 'x', translations: { es: 'x', ru: 'x' }, questions: [], links: { sets: [], entries: [], words: [], topics: [] }, audio: storyAudio, durationMs: 60000 };
   const set = {
-    id: 'offline-media', kind: 'week', title: 'Offline media', weekStart: '2026-10-05', description: null, sample: false, groups: [],
+    id: 'offline-media', kind: 'sheet', title: 'Offline media', receivedOn: null, description: null, sample: false, groups: [],
     entries: ['Kaixo', 'Agur', 'Txakurra'].map((basque, i) => ({
       id: `e${i}`, basque, translations: { es: [['hola'], ['adiós'], ['perro']][i]! }, note: null, group: null, emoji: null,
       image: i === 0 ? image : null, audio: i === 0 ? audio : null,
     })),
   };
   // context.route also sees requests made by the service worker.
-  await context.route('**/api/public/content', (r) => r.fulfill({ json: { schemaVersion: 1, sets: [set] } }));
+  await context.route('**/api/public/content', (r) => r.fulfill({ json: { schemaVersion: 2, sets: [set], stories: [story], exams: [] } }));
   await context.route('**/uploads/*.webp', (r) => r.fulfill({ contentType: 'image/webp', body: 'picture' }));
   await context.route('**/audio/*.mp3', (r) => r.fulfill({ contentType: 'audio/mpeg', body: 'speech' }));
 
@@ -118,10 +124,11 @@ test('pictures and speech are kept for offline use and the admin area is left al
   const offline = await page.evaluate(async (urls) => Promise.all(urls.map(async (u) => {
     const r = await fetch(u);
     return [r.status, await r.text()];
-  })), [image, audio, '/api/public/content']);
+  })), [image, audio, '/api/public/content', storyAudio]);
   expect(offline[0]).toEqual([200, 'picture']);
   expect(offline[1]).toEqual([200, 'speech']);
   expect(JSON.parse(offline[2]![1] as string).sets[0].id).toBe('offline-media');
+  expect(offline[3], 'the full download includes story recordings').toEqual([200, 'speech']);
 
   // Nothing of the admin area is stored or answered by the worker.
   const adminCached = await page.evaluate(async () => {
@@ -149,14 +156,14 @@ test('home shows "Novedades para descargar" after new pictures or speech appear,
   await page.goto('/');
   await waitForWorker(page);
   await page.reload();
-  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Empezar/ })).toBeVisible();
   await expect(pill, 'never downloaded: no nagging').toHaveCount(0);
 
   await page.goto('/#/ajustes');
   await page.getByRole('button', { name: /Descargar para usar sin conexión/ }).click();
   await expect(page.getByText('Listo para practicar sin conexión.')).toBeVisible();
   await page.goto('/#/');
-  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Empezar/ })).toBeVisible();
   await expect(pill, 'everything saved').toHaveCount(0);
 
   // The voice worker finished two more clips after the download.
@@ -179,6 +186,6 @@ test('home shows "Novedades para descargar" after new pictures or speech appear,
   await page.getByRole('button', { name: /Descargar para usar sin conexión/ }).click();
   await expect(page.getByText('Listo para practicar sin conexión.')).toBeVisible();
   await page.goto('/#/');
-  await expect(page.getByRole('link', { name: /Esta semana/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Empezar/ })).toBeVisible();
   await expect(pill).toHaveCount(0);
 });
