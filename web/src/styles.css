@@ -99,7 +99,6 @@
   --k-sea-deep: #164f80;
   --k-ink: #13293d;
   --k-muted: #3e5a72;
-  --k-lime: #fbf8f1;
   --k-ochre: #e0a21c;
   --k-line: #b9c9d6;
   --k-right: #1b5e33;
@@ -2220,7 +2219,7 @@ fieldset legend {
   border: 2px solid var(--k-ink);
   border-radius: 16px;
   box-shadow: 0 4px 0 var(--k-ink);
-  background: var(--k-lime);
+  background: var(--surface);
   animation: dock-up 0.22s ease-out;
 }
 
@@ -2418,7 +2417,7 @@ fieldset legend {
 }
 
 .shell .app-header {
-  background: var(--k-lime);
+  background: var(--surface);
   border-bottom: 2px solid var(--k-ink);
 }
 
@@ -2573,7 +2572,7 @@ fieldset legend {
   border: 2px solid var(--k-ink);
   border-bottom-width: 8px;
   border-radius: 18px 18px 56px 56px;
-  background: var(--k-lime);
+  background: var(--surface);
   box-shadow: none;
   color: var(--k-ink);
 }
@@ -2624,7 +2623,7 @@ fieldset legend {
   border: 2px solid var(--k-ink);
   border-top-width: 8px;
   border-radius: 12px;
-  background: var(--k-lime);
+  background: var(--surface);
   box-shadow: 0 4px 0 rgba(19, 41, 61, 0.35);
 }
 
