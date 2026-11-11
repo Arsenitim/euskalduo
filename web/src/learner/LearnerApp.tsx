@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { HashRouter, Link, Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { t } from '../i18n';
 import { VoiceLifecycle } from './components/Voice';
@@ -38,10 +39,21 @@ function isLessonPath(pathname: string): boolean {
   return pathname === LESSON_PATH || pathname === '/practicar';
 }
 
+/** The browser's address bar takes the colour of what is right below it. */
+const HEADER_WHITE = '#ffffff';
+const LESSON_SKY = '#e3f3fa';
+
+function useBrowserBarColour(colour: string) {
+  useEffect(() => {
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', colour);
+  }, [colour]);
+}
+
 function Shell() {
   const location = useLocation();
   const lesson = isLessonPath(location.pathname);
   const home = location.pathname === '/';
+  useBrowserBarColour(lesson ? LESSON_SKY : HEADER_WHITE);
   return (
     <div className={lesson ? 'shell shell-lesson' : home ? 'shell shell-home' : 'shell'}>
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
