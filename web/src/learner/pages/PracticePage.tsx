@@ -4,7 +4,9 @@ import { fetchAudio } from '../../api/audio';
 import { reportAnswer, reportRound, type PracticeMode } from '../../api/stats';
 import { t } from '../../i18n';
 import type { Exam, HomeworkSet, Lang } from '../../types';
-import { ProgressBar, Stars } from '../components/bits';
+import { Stars } from '../components/bits';
+import { FeedbackButton } from '../components/FeedbackDialog';
+import { SeaProgress } from '../components/Seascape';
 import { Mascot } from '../components/Mascot';
 import { WordBuildQuestionView, ChoiceQuestionView, GrammarChoiceView, OrderQuestionView, SentenceBuildView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
 import { StoryBlock } from '../components/StoryBlock';
@@ -186,10 +188,13 @@ export function PracticePage({ lesson = false }: { lesson?: boolean }) {
 
   return (
     <div className="practice">
-      <div className="practice-top">
-        <ProgressBar value={session.index + (session.outcome ? 1 : 0)} max={total} label={t('questionOf', { n: session.index + 1, total })} />
+      <div className="practice-top lesson-top">
+        <Link className="lesson-exit" to="/" aria-label={t('exit')} title={t('exit')}>
+          <span aria-hidden="true">✕</span>
+        </Link>
+        <span className="lesson-count">{t('questionOf', { n: session.index + 1, total })}</span>
         <button
-          className="btn btn-small"
+          className="btn btn-small lesson-tool"
           aria-pressed={state.sound}
           aria-label={state.sound ? t('soundOn') : t('soundOff')}
           title={state.sound ? t('soundOn') : t('soundOff')}
@@ -197,9 +202,7 @@ export function PracticePage({ lesson = false }: { lesson?: boolean }) {
         >
           <span aria-hidden="true">{state.sound ? '🔊' : '🔇'}</span>
         </button>
-        <Link className="btn btn-small" to="/">
-          {t('exit')}
-        </Link>
+        <FeedbackButton compact />
       </div>
       <div className="card question-card" key={`${session.round}-${question.id}`}>
         {question.kind === 'story' ? (
@@ -226,9 +229,12 @@ export function PracticePage({ lesson = false }: { lesson?: boolean }) {
           </>
         )}
       </div>
-      {session.outcome && question.kind !== 'story' && (
-        <Feedback question={question} outcome={session.outcome} mascot={session.shown} lang={state.lang} willRetry={session.questions.some((q) => q.id === `${question.id}-retry`)} onNext={() => goNext()} />
-      )}
+      <div className="practice-dock">
+        {session.outcome && question.kind !== 'story' && (
+          <Feedback question={question} outcome={session.outcome} mascot={session.shown} lang={state.lang} willRetry={session.questions.some((q) => q.id === `${question.id}-retry`)} onNext={() => goNext()} />
+        )}
+        <SeaProgress value={session.index + (session.outcome ? 1 : 0)} max={total} label={t('questionOf', { n: session.index + 1, total })} />
+      </div>
     </div>
   );
 }
@@ -278,13 +284,7 @@ function Feedback({ question, outcome, mascot, lang, willRetry, onNext }: { ques
 
   return (
     <div className={cls} role="status">
-      {mascot ? (
-        <Mascot kind={mascot.kind} state={mascot.state} className="feedback-mascot" />
-      ) : (
-        <span className="feedback-icon" aria-hidden="true">
-          {outcome.verdict === 'wrong' ? '🤔' : '🎉'}
-        </span>
-      )}
+      {mascot && <Mascot kind={mascot.kind} state={mascot.state} className="feedback-mascot" />}
       <div className="feedback-text">
         {outcome.verdict === 'exact' ? (
           <strong>{outcome.hinted ? t('correctWithHint') : t('correct')}</strong>
@@ -298,11 +298,11 @@ function Feedback({ question, outcome, mascot, lang, willRetry, onNext }: { ques
           </>
         )}
       </div>
-      <span lang="eu">
+      <span className="feedback-word" lang="eu">
         {question.kind !== 'order' && (outcome.verdict === 'exact' || answerLang !== 'eu') && <strong>{question.item.entry.basque}</strong>}
         <VoiceButton entries={answerVoiceEntries(question)} />
       </span>
-      <button ref={nextRef} className="btn btn-primary" onClick={onNext}>
+      <button ref={nextRef} className="btn btn-next" onClick={onNext}>
         {t('next')} →
       </button>
     </div>

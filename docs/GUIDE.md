@@ -130,7 +130,8 @@ are kept once played; **Ajustes → Usar sin conexión → Descargar** saves all
 them (stories included) at once and says when everything is ready. A story
 whose recording is not saved shows a short notice offline and the lesson
 simply continues. While offline a ✈️ pill in the header (a badge on
-the logo on phones) says so, and the home screen explains it. On a device that
+the logo on phones) says so, and the home screen explains it. Lessons hide the
+header so the question and **Siguiente** fit on a phone screen. On a device that
 has downloaded before, the home screen shows **⬇️ Novedades para descargar**
 (online only) when the catalogue has pictures or speech it has not saved yet,
 e.g. a new sheet, a new story or clips generated later; it opens Ajustes. Progress is local
@@ -373,8 +374,11 @@ Frontend dev server with hot reload (proxying `/api` to the running stack):
 ### Technology choices
 
 * **React 19 + TypeScript + Vite** for the client, with **react-router** (hash
-  routing) and no UI framework. The stylesheet is hand-written CSS with the
-  system font stack.
+  routing) and no UI framework. The stylesheet is hand-written CSS. Lessons
+  use two bundled fonts (`web/src/fonts`, SIL Open Font License): Andika,
+  designed for children learning to read, and Lilita One for signs and the
+  word being asked; nothing is loaded from a font service. The rest of the app
+  still uses the system font stack.
 * **PHP 8.4 + Symfony 8** micro-kernel (`framework-bundle` only) with plain
   PDO/SQLite. A small API does not need an ORM, security bundle or
   serializer, so it stays easy to read.

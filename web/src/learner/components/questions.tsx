@@ -50,6 +50,19 @@ function Meaning({ item, lang }: { item: Item; lang: Lang }) {
   );
 }
 
+/** Short answers sit two by two so the whole question fits on a phone; long ones stack. */
+export function optionsClass(labels: string[]): string {
+  return labels.length % 2 === 0 && labels.every((label) => label.length <= 12) ? 'options options-pairs' : 'options';
+}
+
+/** After answering: a teacher's stamp on the chosen answer, a tick on the right one if it was missed. */
+function OptionMark({ correct, chosen }: { correct: boolean; chosen: boolean }) {
+  if (correct) {
+    return chosen ? <span className="option-mark option-stamp" aria-label="correcta">Ondo!</span> : <span className="option-mark" aria-label="correcta">✓</span>;
+  }
+  return chosen ? <span className="option-mark option-stamp" aria-label="incorrecta">Ai!</span> : null;
+}
+
 export function ChoiceQuestionView({ question, lang, answered, onAnswer }: Props<Extract<WordQuestion, { kind: 'meaning-choice' | 'basque-choice' }>>) {
   const [chosen, setChosen] = useState<number | null>(null);
   const [hint, setHint] = useState(false);
@@ -88,7 +101,7 @@ export function ChoiceQuestionView({ question, lang, answered, onAnswer }: Props
           )}
         </Prompt>
       )}
-      <div className="options" role="group" aria-label={t('whatMeans')}>
+      <div className={optionsClass(options.map((o) => o.label))} role="group" aria-label={t('whatMeans')}>
         {options.map((option, index) => {
           const state = !answered ? '' : option.correct ? 'is-correct' : index === chosen ? 'is-wrong' : 'is-dim';
           return (
@@ -97,8 +110,7 @@ export function ChoiceQuestionView({ question, lang, answered, onAnswer }: Props
                 {index + 1}
               </span>
               <span className="option-label">{option.label}</span>
-              {answered && option.correct && <span className="option-mark" aria-label="correcta">✓</span>}
-              {answered && !option.correct && index === chosen && <span className="option-mark" aria-label="incorrecta">✗</span>}
+              {answered && <OptionMark correct={option.correct} chosen={index === chosen} />}
             </button>
           );
         })}
@@ -372,12 +384,12 @@ export function WordBuildQuestionView({ question, lang, answered, onAnswer }: Pr
         <p>{formation.kind === 'compound' ? 'Hitz elkartuak: une dos palabras.' : 'Hitz eratorriak: añade un sufijo a la raíz.'}</p>
         <Basque text={`${formation.parts[0]} + ${answered ? formation.parts[1] : '…'}`} />
       </Prompt>
-      <div className="options" role="group" aria-label="Elige la pieza que falta">
+      <div className={optionsClass(question.options.map((o) => o.label))} role="group" aria-label="Elige la pieza que falta">
         {question.options.map((option, n) => (
           <button key={option.label} className={`option ${answered ? option.correct ? 'is-correct' : n === chosen ? 'is-wrong' : 'is-dim' : ''}`} onClick={() => choose(n)} disabled={answered} lang="eu">
             <span className="option-key" aria-hidden="true">{n + 1}</span>
             <span className="option-label">{option.label}</span>
-            {answered && option.correct && <span aria-label="correcta">✓</span>}
+            {answered && <OptionMark correct={option.correct} chosen={n === chosen} />}
           </button>
         ))}
       </div>
@@ -493,13 +505,12 @@ export function GrammarChoiceView({ question, lang, answered, onAnswer }: Props<
         </p>
         <Meaning item={question.item} lang={lang} />
       </Prompt>
-      <div className="options" role="group" aria-label={t('chooseWord')}>
+      <div className={optionsClass(question.options.map((o) => o.label))} role="group" aria-label={t('chooseWord')}>
         {question.options.map((option, n) => (
           <button key={option.label} className={`option ${answered ? (option.correct ? 'is-correct' : n === chosen ? 'is-wrong' : 'is-dim') : ''}`} onClick={() => choose(n)} aria-disabled={answered} lang="eu">
             <span className="option-key" aria-hidden="true">{n + 1}</span>
             <span className="option-label">{option.label}</span>
-            {answered && option.correct && <span className="option-mark" aria-label="correcta">✓</span>}
-            {answered && !option.correct && n === chosen && <span className="option-mark" aria-label="incorrecta">✗</span>}
+            {answered && <OptionMark correct={option.correct} chosen={n === chosen} />}
           </button>
         ))}
       </div>

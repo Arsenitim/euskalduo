@@ -14,7 +14,7 @@ import { ProgressPage } from './pages/ProgressPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { StoryPage } from './pages/StoryPage';
 import { TopicsPage } from './pages/TopicsPage';
-import { legacyRedirect } from './routes';
+import { LESSON_PATH, legacyRedirect } from './routes';
 
 /**
  * Learner routes live in the URL fragment (#/…), which browsers never send
@@ -25,9 +25,26 @@ export function LearnerApp() {
     <LearnerProvider>
       <HashRouter>
         <VoiceLifecycle />
-        <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
-          Saltar al contenido
-        </a>
+        <Shell />
+      </HashRouter>
+    </LearnerProvider>
+  );
+}
+
+/** Lessons get the whole screen: no site menu or footer, so the answers and "Siguiente" fit on a phone. */
+function isLessonPath(pathname: string): boolean {
+  return pathname === LESSON_PATH || pathname === '/practicar';
+}
+
+function Shell() {
+  const location = useLocation();
+  const lesson = isLessonPath(location.pathname);
+  return (
+    <div className={lesson ? 'shell shell-lesson' : 'shell'}>
+      <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
+        Saltar al contenido
+      </a>
+      {!lesson && (
         <header className="app-header">
           <div className="header-brand">
             <Link to="/" className="logo" aria-label={`${t('appName')} — ${t('home')}`}>
@@ -52,25 +69,27 @@ export function LearnerApp() {
             <FeedbackButton />
           </nav>
         </header>
-        <main id="main" tabIndex={-1} className="app-main">
-          <ContentGate>
-            <LegacyRedirect />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/leccion" element={<LessonRoute />} />
-              <Route path="/temas" element={<TopicsPage />} />
-              <Route path="/tema/:setId" element={<CollectionPage />} />
-              <Route path="/escuchar" element={<ListenPage />} />
-              <Route path="/escuchar/:storyId" element={<StoryPage />} />
-              <Route path="/examen/:examId" element={<ExamPage />} />
-              <Route path="/practicar" element={<PracticeRoute />} />
-              <Route path="/progreso" element={<ProgressPage />} />
-              <Route path="/ajustes" element={<SettingsPage />} />
-              <Route path="/privacidad" element={<PrivacyPage />} />
-              <Route path="*" element={<HomePage />} />
-            </Routes>
-          </ContentGate>
-        </main>
+      )}
+      <main id="main" tabIndex={-1} className="app-main">
+        <ContentGate>
+          <LegacyRedirect />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/leccion" element={<LessonRoute />} />
+            <Route path="/temas" element={<TopicsPage />} />
+            <Route path="/tema/:setId" element={<CollectionPage />} />
+            <Route path="/escuchar" element={<ListenPage />} />
+            <Route path="/escuchar/:storyId" element={<StoryPage />} />
+            <Route path="/examen/:examId" element={<ExamPage />} />
+            <Route path="/practicar" element={<PracticeRoute />} />
+            <Route path="/progreso" element={<ProgressPage />} />
+            <Route path="/ajustes" element={<SettingsPage />} />
+            <Route path="/privacidad" element={<PrivacyPage />} />
+            <Route path="*" element={<HomePage />} />
+          </Routes>
+        </ContentGate>
+      </main>
+      {!lesson && (
         <footer className="app-footer">
           <Link to="/privacidad">{t('navPrivacy')}</Link>
           <span>{t('progressLocal')}</span>
@@ -80,8 +99,8 @@ export function LearnerApp() {
             </a>
           </small>
         </footer>
-      </HashRouter>
-    </LearnerProvider>
+      )}
+    </div>
   );
 }
 

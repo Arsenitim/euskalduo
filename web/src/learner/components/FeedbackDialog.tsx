@@ -20,8 +20,11 @@ function errorText(result: Exclude<FeedbackResult, { ok: true }>): string {
   }
 }
 
-/** Header button plus the modal form. The draft survives closing the dialog until it is sent. */
-export function FeedbackButton() {
+/**
+ * Header button plus the modal form. The draft survives closing the dialog until it is sent.
+ * `compact` is the icon-only version for the lesson top bar.
+ */
+export function FeedbackButton({ compact = false }: { compact?: boolean }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState('');
@@ -71,9 +74,15 @@ export function FeedbackButton() {
 
   return (
     <>
-      <button type="button" className="nav-button" onClick={open} aria-haspopup="dialog">
-        <span aria-hidden="true">💬</span> <span className="nav-button-label">{t('navFeedback')}</span>
-      </button>
+      {compact ? (
+        <button type="button" className="btn btn-small lesson-tool" onClick={open} aria-haspopup="dialog" aria-label={t('navFeedback')} title={t('navFeedback')}>
+          <span aria-hidden="true">💬</span>
+        </button>
+      ) : (
+        <button type="button" className="nav-button" onClick={open} aria-haspopup="dialog">
+          <span aria-hidden="true">💬</span> <span className="nav-button-label">{t('navFeedback')}</span>
+        </button>
+      )}
       <dialog ref={dialogRef} className="feedback-dialog" aria-labelledby="feedback-title" onClose={onClosed}>
         {isOpen && <h2 id="feedback-title">{t('feedbackTitle')}</h2>}
         {!isOpen ? null : status.kind === 'sent' ? (

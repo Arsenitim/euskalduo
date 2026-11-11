@@ -133,7 +133,7 @@ test('a short story appears inside a lesson without making it longer', async ({ 
   let sawStory = false;
   for (let n = 0; n < 20; n++) {
     if (await page.getByRole('heading', { name: '¡Ronda terminada!' }).isVisible()) break;
-    const label = await page.locator('.progress-label').first().innerText();
+    const label = await page.locator('.lesson-count').innerText();
     expect(Number(label.match(/de (\d+)/)![1])).toBeLessThanOrEqual(10);
     const card = page.locator('.question-card');
     if (await card.locator('.story-block').count()) {
