@@ -13,7 +13,7 @@ async function expectWithinScreen(page: Page, button: Locator) {
   expect(box!.y + box!.height, 'bottom edge on screen').toBeLessThanOrEqual(height);
 }
 
-test('on a phone, every lesson question keeps "Siguiente" on screen', async ({ page }) => {
+test('on a phone, Empezar, every "Siguiente" and the summary buttons are on screen', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('link', { name: /Empezar/ })).toBeVisible();
   await expectWithinScreen(page, page.getByRole('link', { name: /Empezar/ }));
@@ -46,4 +46,9 @@ test('on a phone, every lesson question keeps "Siguiente" on screen', async ({ p
     await next.click();
   }
   expect(checked).toBeGreaterThan(3);
+
+  // The round summary: the next round is one tap away, however many words are listed.
+  await expect(page.getByRole('heading', { name: '¡Ronda terminada!' })).toBeVisible();
+  await expectWithinScreen(page, page.getByRole('button', { name: 'Otra ronda' }));
+  await expectWithinScreen(page, page.getByRole('link', { name: 'Inicio' }));
 });

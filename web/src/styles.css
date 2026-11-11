@@ -106,6 +106,9 @@
   --k-right-soft: #e2f3e6;
   --k-wrong: #a2281f;
   --k-wrong-soft: #fde9e6;
+  --k-wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='10'%3E%3Cpath d='M0 5 q5 -4 10 0 t10 0 t10 0 t10 0' fill='none' stroke='white' stroke-opacity='.55' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  --k-wave-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='10'%3E%3Cpath d='M0 5 q5 -4 10 0 t10 0 t10 0 t10 0' fill='none' stroke='white' stroke-opacity='.4' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  --k-red: #c23a2b;
   --font-kid: 'Andika', ui-rounded, 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
   --font-sign: 'Lilita One', 'Andika', ui-rounded, system-ui, sans-serif;
   --font: ui-rounded, 'SF Pro Rounded', 'Nunito', 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -2291,8 +2294,8 @@ fieldset legend {
   height: calc(72px + env(safe-area-inset-bottom, 0px));
   margin-top: 28px;
   background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='10'%3E%3Cpath d='M0 5 q5 -4 10 0 t10 0 t10 0 t10 0' fill='none' stroke='white' stroke-opacity='.55' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") 0 10px / 40px 10px repeat-x,
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='10'%3E%3Cpath d='M0 5 q5 -4 10 0 t10 0 t10 0 t10 0' fill='none' stroke='white' stroke-opacity='.4' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") 20px 34px / 40px 10px repeat-x,
+    var(--k-wave) 0 10px / 40px 10px repeat-x,
+    var(--k-wave-soft) 20px 34px / 40px 10px repeat-x,
     linear-gradient(var(--k-sea-light), var(--k-sea) 45%, var(--k-sea-deep));
   animation: sea-drift 14s linear infinite;
 }
@@ -2365,6 +2368,328 @@ fieldset legend {
 
 .sea-dots i.on {
   background: var(--k-ochre);
+}
+
+/* Learner app (Kosta). The learner shell redefines the shared colour tokens,
+   so every learner page takes the coast palette; the admin area keeps its own. */
+.shell {
+  --bg: #f1f8fc;
+  --surface: #ffffff;
+  --ink: var(--k-ink);
+  --muted: #4a6378;
+  --primary: var(--k-sea);
+  --primary-ink: #ffffff;
+  --primary-soft: #dcecf8;
+  --accent: var(--k-ochre);
+  --accent-soft: #fbefcf;
+  --wrong: var(--k-wrong);
+  --wrong-soft: var(--k-wrong-soft);
+  --right: var(--k-right);
+  --right-soft: var(--k-right-soft);
+  --line: #c9d6e0;
+  --focus: var(--k-red);
+  --radius: 16px;
+  --shadow: 0 3px 0 #c9d6e0;
+  --font: var(--font-kid);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-kid);
+}
+
+.shell .app-main {
+  flex: 1;
+  width: 100%;
+}
+
+.shell h1,
+.shell h2 {
+  font-family: var(--font-sign);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.icon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.shell .app-header {
+  background: var(--k-lime);
+  border-bottom: 2px solid var(--k-ink);
+}
+
+.shell .logo-mark {
+  width: 40px;
+  height: 42px;
+  border-radius: 9px;
+  background: linear-gradient(#ffe39a, #f4c75a);
+  color: var(--k-ink);
+  box-shadow: inset 0 -4px 0 #c39327, 0 2px 0 rgba(19, 41, 61, 0.25);
+  font-family: var(--font-sign);
+  font-weight: 400;
+}
+
+.shell .logo-text {
+  font-family: var(--font-sign);
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: 0.03em;
+}
+
+/* Every page ends at the harbour. */
+.shell .app-footer {
+  position: relative;
+  max-width: none;
+  margin: 72px 0 0;
+  padding-block: 28px calc(20px + env(safe-area-inset-bottom, 0px));
+  padding-inline: max(16px, calc((100% - 848px) / 2));
+  background:
+    var(--k-wave) 0 10px / 40px 10px repeat-x,
+    linear-gradient(var(--k-sea), var(--k-sea-deep));
+  color: #e6f1fa;
+}
+
+.shell .app-footer a {
+  color: #ffffff;
+}
+
+.shell .app-footer .harbour {
+  right: max(16px, calc((100% - 848px) / 2));
+}
+
+/* :where() keeps this at one class, so the lesson's ink-outlined cards win. */
+.shell :where(.card, .week-card, .check-card) {
+  border: 2px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.shell .week-card:hover {
+  border-color: var(--primary);
+}
+
+.shell .btn-primary {
+  background: var(--primary);
+  border-color: var(--k-ink);
+  color: #ffffff;
+  box-shadow: 0 3px 0 var(--k-ink);
+}
+
+.shell .btn-primary:hover {
+  background: var(--k-sea-deep);
+}
+
+.shell .btn-primary:active {
+  box-shadow: 0 1px 0 var(--k-ink);
+}
+
+.shell .progress-track {
+  background: #dde8ef;
+}
+
+.shell .progress-fill {
+  background: linear-gradient(90deg, var(--k-sea-light), var(--k-sea));
+}
+
+.shell .stars {
+  color: #8aa0b2;
+}
+
+.shell .star-on {
+  color: var(--k-ochre);
+  text-shadow: 0 1px 0 #8a5d00;
+}
+
+/* Letter tiles are wooden; word chips are painted like the boats. */
+.shell .tile {
+  border: 2px solid #b88e52;
+  background: linear-gradient(#f6e4c0, #e6c896);
+  box-shadow: inset 0 -4px 0 #c9a064, 0 3px 0 rgba(19, 41, 61, 0.3);
+  color: #3b2a17;
+}
+
+.shell .order-chip {
+  border: 2px solid var(--k-sea);
+  background: #e8f2fa;
+  box-shadow: 0 3px 0 var(--k-sea);
+}
+
+/* Home: the landscape, then the sea with the boat and the shutters. */
+.shell-home .app-main {
+  max-width: none;
+  padding: 0;
+}
+
+.home-hero {
+  background: linear-gradient(#bfe3f5, #e8f6fb);
+}
+
+.home-hello {
+  width: min(880px, calc(100% - 32px));
+  margin: 0 auto;
+  padding-top: 12px;
+}
+
+.home .greeting {
+  margin: 0.15em 0 0;
+}
+
+.home .lead {
+  margin: 0;
+  color: var(--k-muted);
+  font-weight: 700;
+}
+
+.landscape {
+  display: block;
+  width: 100%;
+  height: clamp(150px, 20vw, 230px);
+  margin-top: -4px;
+}
+
+.home-sea {
+  display: grid;
+  gap: 16px;
+  padding-block: 22px 36px;
+  padding-inline: max(16px, calc((100% - 848px) / 2));
+  background:
+    var(--k-wave) 0 12px / 40px 10px repeat-x,
+    var(--k-wave-soft) 20px 40px / 40px 10px repeat-x,
+    linear-gradient(var(--k-sea-light), var(--k-sea) 35%, var(--k-sea-deep));
+}
+
+.shell-home .app-footer {
+  margin-top: 0;
+  background: var(--k-sea-deep);
+}
+
+.shell-home .app-footer .harbour {
+  display: none;
+}
+
+.shell .action-start {
+  position: relative;
+  margin: 0;
+  padding: 18px 20px 22px;
+  border: 2px solid var(--k-ink);
+  border-bottom-width: 8px;
+  border-radius: 18px 18px 56px 56px;
+  background: var(--k-lime);
+  box-shadow: none;
+  color: var(--k-ink);
+}
+
+.shell .action-start::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 22px;
+  right: 22px;
+  height: 7px;
+  border-radius: 0 0 6px 6px;
+  background: var(--k-red);
+}
+
+.shell .action-start:hover {
+  border-color: var(--k-ink);
+}
+
+.action-reg {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--k-muted);
+}
+
+.shell .action-card.action-start .action-title {
+  font-family: var(--font-sign);
+  font-weight: 400;
+  font-size: clamp(2.3rem, 8vw, 3rem);
+  line-height: 1;
+  color: var(--k-sea-deep);
+}
+
+.shell .action-start .action-sub {
+  max-width: 36ch;
+}
+
+.shell .home-actions {
+  gap: 14px;
+}
+
+.shell .action-topics,
+.shell .action-listen,
+.shell .action-exam {
+  min-height: 0;
+  padding: 12px 16px 14px;
+  border: 2px solid var(--k-ink);
+  border-top-width: 8px;
+  border-radius: 12px;
+  background: var(--k-lime);
+  box-shadow: 0 4px 0 rgba(19, 41, 61, 0.35);
+}
+
+.shell .action-topics {
+  border-top-color: #2f8f5b;
+}
+
+.shell .action-listen {
+  border-top-color: var(--k-red);
+}
+
+.shell .action-exam {
+  border-top-color: var(--k-ochre);
+}
+
+.shell .action-card .action-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sign);
+  font-weight: 400;
+  font-size: 1.45rem;
+}
+
+.shell .action-topics .action-title {
+  color: var(--k-right);
+}
+
+.shell .action-listen .action-title {
+  color: var(--k-wrong);
+}
+
+.shell .action-exam .action-title {
+  color: #7a5200;
+}
+
+.shell .action-sub {
+  color: var(--k-muted);
+  font-weight: 400;
+}
+
+/* Round summary: the boat is back in the harbour; the buttons sit in the dock. */
+.shell-lesson .round-done .summary {
+  margin-top: calc(16px + env(safe-area-inset-top, 0px));
+}
+
+.summary-actions {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  width: min(720px, calc(100% - 32px));
+  margin: 0 auto -14px;
+}
+
+.summary-actions .btn-big {
+  min-height: 52px;
+  border: 2px solid var(--k-ink);
+  background: #ffffff;
+  box-shadow: 0 3px 0 var(--k-ink);
 }
 
 @media (prefers-reduced-motion: reduce) {

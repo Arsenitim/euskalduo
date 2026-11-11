@@ -3,10 +3,12 @@
  * sea towards the harbour, one stroke per question. The strip is a real
  * progressbar for assistive tech; the boat, houses and dots are decoration.
  */
-export function SeaProgress({ value, max, label }: { value: number; max: number; label: string }) {
+export function SeaProgress({ value, max, label }: { value: number; max: number; label?: string }) {
   const share = max > 0 ? Math.min(1, Math.max(0, value / max)) : 0;
+  // Without a label it is decoration only (the round summary: the boat is home).
+  const a11y = label ? { role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': max, 'aria-valuenow': value, 'aria-label': label } : { 'aria-hidden': true };
   return (
-    <div className="sea" role="progressbar" aria-valuemin={0} aria-valuemax={max} aria-valuenow={value} aria-label={label}>
+    <div className="sea" {...a11y}>
       <Harbour />
       <span className="sea-wake" aria-hidden="true" style={{ width: `calc(${share} * (100% - var(--sea-route)))` }} />
       <span className="sea-boat" aria-hidden="true" style={{ left: `calc(var(--sea-start) + ${share} * (100% - var(--sea-route)))` }}>
@@ -42,7 +44,7 @@ function Trainera() {
 }
 
 /** Three painted harbour houses on a stone quay. */
-function Harbour() {
+export function Harbour() {
   const houses = [
     { x: 0, w: 22, h: 34, c: '#7a3e8c' },
     { x: 22, w: 26, h: 28, c: '#c23a2b' },

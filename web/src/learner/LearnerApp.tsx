@@ -2,7 +2,9 @@ import { HashRouter, Link, Navigate, NavLink, Route, Routes, useLocation } from 
 import { t } from '../i18n';
 import { VoiceLifecycle } from './components/Voice';
 import { FeedbackButton } from './components/FeedbackDialog';
+import { Icon } from './components/Icons';
 import { OfflinePill } from './components/Offline';
+import { Harbour } from './components/Seascape';
 import { LearnerProvider, useLearner } from './LearnerContext';
 import { CollectionPage } from './pages/CollectionPage';
 import { ExamPage } from './pages/ExamPage';
@@ -39,8 +41,9 @@ function isLessonPath(pathname: string): boolean {
 function Shell() {
   const location = useLocation();
   const lesson = isLessonPath(location.pathname);
+  const home = location.pathname === '/';
   return (
-    <div className={lesson ? 'shell shell-lesson' : 'shell'}>
+    <div className={lesson ? 'shell shell-lesson' : home ? 'shell shell-home' : 'shell'}>
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
         Saltar al contenido
       </a>
@@ -55,16 +58,16 @@ function Shell() {
           </div>
           <nav className="app-nav" aria-label="Principal">
             <NavLink to="/temas">
-              <span aria-hidden="true">🧩</span> {t('navTopics')}
+              <Icon name="topics" /> {t('navTopics')}
             </NavLink>
             <NavLink to="/escuchar">
-              <span aria-hidden="true">🎧</span> {t('navListen')}
+              <Icon name="listen" /> {t('navListen')}
             </NavLink>
             <NavLink to="/progreso">
-              <span aria-hidden="true">⭐</span> {t('navProgress')}
+              <Icon name="progress" /> {t('navProgress')}
             </NavLink>
             <NavLink to="/ajustes">
-              <span aria-hidden="true">⚙️</span> {t('navSettings')}
+              <Icon name="settings" /> {t('navSettings')}
             </NavLink>
             <FeedbackButton />
           </nav>
@@ -91,6 +94,7 @@ function Shell() {
       </main>
       {!lesson && (
         <footer className="app-footer">
+          <Harbour />
           <Link to="/privacidad">{t('navPrivacy')}</Link>
           <span>{t('progressLocal')}</span>
           <small className="voice-credit">

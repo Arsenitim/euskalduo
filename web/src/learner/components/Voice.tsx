@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { t } from '../../i18n';
+import { Icon } from './Icons';
 import type { Entry } from '../../types';
 import { useLearner } from '../LearnerContext';
 import { stopSounds } from '../sounds';
@@ -29,6 +30,6 @@ export function VoiceButton({ entries }: { entries: Entry[] }) {
   return <button type="button" lang="es" className="btn btn-small voice-button"
     disabled={!state.sound} aria-label={t('listenTo', { word: entries.map((e) => e.basque).join(', ') })}
     onClick={() => { stopSounds(); playVoice(entries.map((e) => e.audio)); }}>
-    <span aria-hidden="true">🔊</span>
+    <Icon name="sound" />
   </button>;
 }

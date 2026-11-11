@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { MAX_MESSAGE, sendFeedback, shrinkScreenshot, type FeedbackResult } from '../../api/feedback';
 import { t } from '../../i18n';
+import { Icon } from './Icons';
 
 type Status = { kind: 'idle' } | { kind: 'sending' } | { kind: 'sent' } | { kind: 'error'; text: string };
 
@@ -76,11 +77,11 @@ export function FeedbackButton({ compact = false }: { compact?: boolean }) {
     <>
       {compact ? (
         <button type="button" className="btn btn-small lesson-tool" onClick={open} aria-haspopup="dialog" aria-label={t('navFeedback')} title={t('navFeedback')}>
-          <span aria-hidden="true">💬</span>
+          <Icon name="feedback" />
         </button>
       ) : (
         <button type="button" className="nav-button" onClick={open} aria-haspopup="dialog">
-          <span aria-hidden="true">💬</span> <span className="nav-button-label">{t('navFeedback')}</span>
+          <Icon name="feedback" /> <span className="nav-button-label">{t('navFeedback')}</span>
         </button>
       )}
       <dialog ref={dialogRef} className="feedback-dialog" aria-labelledby="feedback-title" onClose={onClosed}>

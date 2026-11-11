@@ -6,6 +6,7 @@ import { t } from '../../i18n';
 import type { Exam, HomeworkSet, Lang } from '../../types';
 import { Stars } from '../components/bits';
 import { FeedbackButton } from '../components/FeedbackDialog';
+import { Icon } from '../components/Icons';
 import { SeaProgress } from '../components/Seascape';
 import { Mascot } from '../components/Mascot';
 import { WordBuildQuestionView, ChoiceQuestionView, GrammarChoiceView, OrderQuestionView, SentenceBuildView, SpellQuestionView, TypeMeaningView, type Outcome } from '../components/questions';
@@ -200,7 +201,7 @@ export function PracticePage({ lesson = false }: { lesson?: boolean }) {
           title={state.sound ? t('soundOn') : t('soundOff')}
           onClick={() => { setVoiceEnabled(!state.sound); stopSounds(); update((s) => ({ ...s, sound: !s.sound })); }}
         >
-          <span aria-hidden="true">{state.sound ? '🔊' : '🔇'}</span>
+          <Icon name={state.sound ? 'sound' : 'mute'} />
         </button>
         <FeedbackButton compact />
       </div>
@@ -322,45 +323,50 @@ function RoundSummary({ session, lang, sound, onAgain }: { session: Session; lan
   const reducedMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   return (
-    <div className="card summary">
-      {!reducedMotion && <Confetti />}
-      <div className="summary-mascots">
-        <Mascot kind="hedgehog" state={stars >= 2 ? 'cheer' : 'hint'} />
-        <Mascot kind="sheep" state={stars >= 2 ? 'cheer' : 'hint'} />
+    <div className="practice round-done">
+      <div className="card summary">
+        {!reducedMotion && <Confetti />}
+        <div className="summary-mascots">
+          <Mascot kind="hedgehog" state={stars >= 2 ? 'cheer' : 'hint'} />
+          <Mascot kind="sheep" state={stars >= 2 ? 'cheer' : 'hint'} />
+        </div>
+        <h1>{t('roundDone')}</h1>
+        <Stars count={stars} big />
+        <p className="lead">{stars === 3 ? t('greatJob') : stars === 2 ? t('goodJob') : t('keepGoing')}</p>
+        <p>{hints > 0 ? t('firstTryHints', { n: right, total: scored.length, hints }) : t('firstTry', { n: right, total: scored.length })}</p>
+        {session.missed.length > 0 && (
+          <>
+            <h2>{t('wordsToReview')}</h2>
+            <ul className="review-list">
+              {session.missed.map((item) => (
+                <li key={item.key}>
+                  <span lang="eu">
+                    <strong>{item.entry.basque}</strong>
+                  </span>{' '}
+                  <VoiceButton entries={[item.entry]} /> — <span lang={lang}>{meaningsOf(item.entry, lang).join(' / ')}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
-      <h1>{t('roundDone')}</h1>
-      <Stars count={stars} big />
-      <p className="lead">{stars === 3 ? t('greatJob') : stars === 2 ? t('goodJob') : t('keepGoing')}</p>
-      <p>{hints > 0 ? t('firstTryHints', { n: right, total: scored.length, hints }) : t('firstTry', { n: right, total: scored.length })}</p>
-      {session.missed.length > 0 && (
-        <>
-          <h2>{t('wordsToReview')}</h2>
-          <ul className="review-list">
-            {session.missed.map((item) => (
-              <li key={item.key}>
-                <span lang="eu">
-                  <strong>{item.entry.basque}</strong>
-                </span>{' '}
-                <VoiceButton entries={[item.entry]} /> — <span lang={lang}>{meaningsOf(item.entry, lang).join(' / ')}</span>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-      <div className="button-row">
-        <button className="btn btn-primary btn-big" onClick={onAgain} autoFocus>
-          {t('playAgain')}
-        </button>
-        <Link className="btn btn-big" to="/">
-          {t('home')}
-        </Link>
+      <div className="practice-dock">
+        <div className="summary-actions">
+          <button className="btn btn-next" onClick={onAgain} autoFocus>
+            {t('playAgain')}
+          </button>
+          <Link className="btn btn-big" to="/">
+            {t('home')}
+          </Link>
+        </div>
+        <SeaProgress value={1} max={1} />
       </div>
     </div>
   );
 }
 
 function Confetti() {
-  const colors = ['#ffd23f', '#1f7a5a', '#ee4266', '#3bceac', '#540d6e'];
+  const colors = ['#e0a21c', '#c23a2b', '#1f6fb3', '#2f8f5b', '#7a3e8c'];
   return (
     <div className="confetti" aria-hidden="true">
       {Array.from({ length: 36 }, (_, i) => (
