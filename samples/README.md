@@ -39,6 +39,23 @@ deleted, and they never overwrite real content.
   * `hiztegia-denborazkoak.json` — the sheet `HIZTEGIA (DENBORAZKOAK)`, 23
     time expressions, week of 2026-09-28. Reading order: left column top to
     bottom, then right column. Spelling kept as printed (`Aurten`).
+  * `2026-11-12-*.json` — the exam packet of 2026-11-12 (photos of the
+    filled-in handouts). Only printed text is used; the child's handwritten
+    answers and the drawings are left out, and every answer comes from the
+    printed subject and tense. The Spanish is ours (the sheets print none).
+    * `izan-lehenaldian` — 212 entries: the past-tense table, every distinct
+      gap sentence of the IZAN packet grouped by handout (lehenaldia,
+      orainaldia, *nahasian*), "zein da pertsona?" choices and one
+      sentence to build. A sentence with two gaps is one entry per gap. The
+      sheet "Bete esaldiak" prints the same frames for both tenses, so there
+      both forms are accepted. Left out as ambiguous: *Peio eta ni patioan
+      jolastu …*, *Gure txakurra txikia eta marroia … da*, the fifth
+      "pertsona" item and *Neska hori ez da maistra, idazkaria …*. Printing
+      slips fixed: *Duela hamar 10* → *Duela hamar urte*, *izpilu* → *ispilu*.
+    * `izenordainak` — the pronoun rules, the 12 examples and the exercises
+      ("Mahaia: ___" → hura), examples kept in capitals as printed.
+    * `izenondoak-atzizkiak` — the 25 adjectives with -tsu / -ti / -dun, in
+      column order, each with its base word (`formation`).
 * `homework.schema.json` — JSON Schema describing the import format.
 
 Editorial additions made by the developer and worth a human check:

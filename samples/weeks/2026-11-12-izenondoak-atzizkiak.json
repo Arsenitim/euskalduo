@@ -1,0 +1,481 @@
+{
+  "schemaVersion": 2,
+  "kind": "sheet",
+  "title": "IZENONDOAK SORTZEKO ATZIZKIAK",
+  "receivedOn": "2026-11-12",
+  "description": "Adjetivos formados con los sufijos -tsu, -ti y -dun, en el orden de las tres columnas de la ficha.",
+  "groups": [
+    {
+      "key": "tsu",
+      "title": "-TSU"
+    },
+    {
+      "key": "ti",
+      "title": "-TI"
+    },
+    {
+      "key": "dun",
+      "title": "-DUN"
+    }
+  ],
+  "entries": [
+    {
+      "id": "zoriontsu",
+      "basque": "zoriontsu",
+      "translations": {
+        "es": [
+          "feliz"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "zorion",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "adoretsu",
+      "basque": "adoretsu",
+      "translations": {
+        "es": [
+          "valiente",
+          "animoso"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "adore",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "iletsu",
+      "basque": "iletsu",
+      "translations": {
+        "es": [
+          "peludo"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ile",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "zaporetsu",
+      "basque": "zaporetsu",
+      "translations": {
+        "es": [
+          "sabroso"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "zapore",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "mamitsu",
+      "basque": "mamitsu",
+      "translations": {
+        "es": [
+          "significativo",
+          "sustancioso"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "mami",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "kementsu",
+      "basque": "kementsu",
+      "translations": {
+        "es": [
+          "enérgico",
+          "vigoroso"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "kemen",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "ospetsu",
+      "basque": "ospetsu",
+      "translations": {
+        "es": [
+          "famoso"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ospe",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "osasuntsu",
+      "basque": "osasuntsu",
+      "translations": {
+        "es": [
+          "sano"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "osasun",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "arduratsu",
+      "basque": "arduratsu",
+      "translations": {
+        "es": [
+          "cuidadoso",
+          "responsable"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "ardura",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "indartsu",
+      "basque": "indartsu",
+      "translations": {
+        "es": [
+          "fuerte"
+        ]
+      },
+      "group": "tsu",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "indar",
+          "-tsu"
+        ]
+      },
+      "note": "-tsu: lleno de, con mucho…"
+    },
+    {
+      "id": "beldurti",
+      "basque": "beldurti",
+      "translations": {
+        "es": [
+          "miedoso"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "beldur",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "loti",
+      "basque": "loti",
+      "translations": {
+        "es": [
+          "dormilón"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "lo",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "kexati",
+      "basque": "kexati",
+      "translations": {
+        "es": [
+          "quejica",
+          "quejón"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "kexa",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "gezurti",
+      "basque": "gezurti",
+      "translations": {
+        "es": [
+          "mentiroso"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "gezur",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "basati",
+      "basque": "basati",
+      "translations": {
+        "es": [
+          "salvaje"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "basa",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "lotsati",
+      "basque": "lotsati",
+      "translations": {
+        "es": [
+          "vergonzoso"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "lotsa",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "negarti",
+      "basque": "negarti",
+      "translations": {
+        "es": [
+          "llorón"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "negar",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "adurti",
+      "basque": "adurti",
+      "translations": {
+        "es": [
+          "baboso"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "adur",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "kakati",
+      "basque": "kakati",
+      "translations": {
+        "es": [
+          "cagón",
+          "miedica"
+        ]
+      },
+      "group": "ti",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "kaka",
+          "-ti"
+        ]
+      },
+      "note": "-ti: que tiende a…, que lo hace a menudo"
+    },
+    {
+      "id": "txokolatedun",
+      "basque": "txokolatedun",
+      "translations": {
+        "es": [
+          "que tiene chocolate"
+        ]
+      },
+      "group": "dun",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "txokolate",
+          "-dun"
+        ]
+      },
+      "note": "-dun: que tiene…"
+    },
+    {
+      "id": "bizardun",
+      "basque": "bizardun",
+      "translations": {
+        "es": [
+          "barbudo",
+          "que tiene barba"
+        ]
+      },
+      "group": "dun",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "bizar",
+          "-dun"
+        ]
+      },
+      "note": "-dun: que tiene…"
+    },
+    {
+      "id": "errudun",
+      "basque": "errudun",
+      "translations": {
+        "es": [
+          "culpable"
+        ]
+      },
+      "group": "dun",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "erru",
+          "-dun"
+        ]
+      },
+      "note": "-dun: que tiene…"
+    },
+    {
+      "id": "dirudun",
+      "basque": "dirudun",
+      "translations": {
+        "es": [
+          "rico",
+          "adinerado"
+        ]
+      },
+      "group": "dun",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "diru",
+          "-dun"
+        ]
+      },
+      "note": "-dun: que tiene…"
+    },
+    {
+      "id": "betaurrekodun",
+      "basque": "betaurrekodun",
+      "translations": {
+        "es": [
+          "que usa gafas"
+        ]
+      },
+      "group": "dun",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "betaurreko",
+          "-dun"
+        ]
+      },
+      "note": "-dun: que tiene…"
+    },
+    {
+      "id": "txapeldun",
+      "basque": "txapeldun",
+      "translations": {
+        "es": [
+          "campeón"
+        ]
+      },
+      "group": "dun",
+      "formation": {
+        "kind": "derived",
+        "parts": [
+          "txapel",
+          "-dun"
+        ]
+      },
+      "note": "-dun: que tiene…"
+    }
+  ]
+}

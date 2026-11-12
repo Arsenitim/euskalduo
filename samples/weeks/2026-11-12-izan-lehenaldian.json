@@ -1,0 +1,4711 @@
+{
+  "schemaVersion": 2,
+  "kind": "sheet",
+  "title": "IZAN aditza lehenaldian",
+  "receivedOn": "2026-11-12",
+  "description": "Fichas del verbo izan en pasado (lehenaldia) y en presente (orainaldia), para el examen. Frases tal como vienen impresas; las respuestas salen del sujeto y del tiempo de cada frase.",
+  "groups": [
+    {
+      "key": "taula",
+      "title": "Izan lehenaldian · Tabla"
+    },
+    {
+      "key": "lehenaldia",
+      "title": "Lehenaldia · Fitxa 3 eta Pikachu"
+    },
+    {
+      "key": "gramatika",
+      "title": "Gramatika"
+    },
+    {
+      "key": "lehenaldia-2",
+      "title": "Lehenaldian II · NOR"
+    },
+    {
+      "key": "lehenaldia-3",
+      "title": "Hutsuneak bete"
+    },
+    {
+      "key": "lehenaldia-4",
+      "title": "Lehenaldia · Osatu eta lotu"
+    },
+    {
+      "key": "nahasian",
+      "title": "Lehen eta orain · Nahasian"
+    },
+    {
+      "key": "bi-aldiak",
+      "title": "Bete esaldiak (orainaldian eta lehenaldian)"
+    },
+    {
+      "key": "orainaldia",
+      "title": "Izan orain aldian"
+    },
+    {
+      "key": "pertsona",
+      "title": "Zein da pertsona?"
+    },
+    {
+      "key": "esaldiak",
+      "title": "Egin esaldiak"
+    }
+  ],
+  "entries": [
+    {
+      "id": "ni-nintzen",
+      "basque": "Ni nintzen",
+      "translations": {
+        "es": [
+          "yo era / estaba"
+        ]
+      },
+      "group": "taula",
+      "note": "Orainaldia: ni naiz · Lehenaldia: ni nintzen"
+    },
+    {
+      "id": "zu-zinen",
+      "basque": "Zu zinen",
+      "translations": {
+        "es": [
+          "tú eras / estabas"
+        ]
+      },
+      "group": "taula",
+      "note": "Orainaldia: zu zara · Lehenaldia: zu zinen"
+    },
+    {
+      "id": "hura-zen",
+      "basque": "Hura zen",
+      "translations": {
+        "es": [
+          "él / ella era, estaba"
+        ]
+      },
+      "group": "taula",
+      "note": "Orainaldia: hura da · Lehenaldia: hura zen"
+    },
+    {
+      "id": "gu-ginen",
+      "basque": "Gu ginen",
+      "translations": {
+        "es": [
+          "nosotros éramos / estábamos"
+        ]
+      },
+      "group": "taula",
+      "note": "Orainaldia: gu gara · Lehenaldia: gu ginen"
+    },
+    {
+      "id": "zuek-zineten",
+      "basque": "Zuek zineten",
+      "translations": {
+        "es": [
+          "vosotros erais / estabais"
+        ]
+      },
+      "group": "taula",
+      "note": "Orainaldia: zuek zarete · Lehenaldia: zuek zineten"
+    },
+    {
+      "id": "haiek-ziren",
+      "basque": "Haiek ziren",
+      "translations": {
+        "es": [
+          "ellos eran / estaban"
+        ]
+      },
+      "group": "taula",
+      "note": "Orainaldia: haiek dira · Lehenaldia: haiek ziren"
+    },
+    {
+      "id": "lehen-ni-ikaslea-nintzen",
+      "type": "grammar",
+      "basque": "Lehen, ni ikaslea nintzen.",
+      "translations": {
+        "es": [
+          "Antes yo era alumno."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Lehen, ni ikaslea ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "udan-lorea-zimeldu-zen",
+      "type": "grammar",
+      "basque": "Udan, lorea zimeldu zen.",
+      "translations": {
+        "es": [
+          "En verano, la flor se marchitó."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Udan, lorea zimeldu ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "iaz-gu-2-mailakoak-ginen",
+      "type": "grammar",
+      "basque": "Iaz, gu 2. mailakoak ginen.",
+      "translations": {
+        "es": [
+          "El año pasado éramos de 2.º."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Iaz, gu 2. mailakoak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "duela-urte-batzuk-zu-nire-laguna-zin",
+      "type": "grammar",
+      "basque": "Duela urte batzuk, zu nire laguna zinen.",
+      "translations": {
+        "es": [
+          "Hace unos años tú eras mi amigo."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Duela urte batzuk, zu nire laguna ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "lehen-zuek-futbolzaleak-zineten",
+      "type": "grammar",
+      "basque": "Lehen, zuek futbolzaleak zineten.",
+      "translations": {
+        "es": [
+          "Antes vosotros erais aficionados al fútbol."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Lehen, zuek futbolzaleak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "atzo-haiek-oso-hiztunak-ziren",
+      "type": "grammar",
+      "basque": "Atzo, haiek oso hiztunak ziren.",
+      "translations": {
+        "es": [
+          "Ayer ellos estaban muy habladores."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo, haiek oso hiztunak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "ni-eskolara-lagunekin-joan-nintzen-e",
+      "type": "grammar",
+      "basque": "Ni eskolara lagunekin joan nintzen eta nire ama lanera aitarekin joan zen.",
+      "translations": {
+        "es": [
+          "Yo fui a la escuela con mis amigos y mi madre fue al trabajo con mi padre."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Ni eskolara lagunekin joan ___ eta nire ama lanera aitarekin joan zen.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "ni-eskolara-lagunekin-joan-nintze-2",
+      "type": "grammar",
+      "basque": "Ni eskolara lagunekin joan nintzen eta nire ama lanera aitarekin joan zen.",
+      "translations": {
+        "es": [
+          "Yo fui a la escuela con mis amigos y mi madre fue al trabajo con mi padre."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Ni eskolara lagunekin joan nintzen eta nire ama lanera aitarekin joan ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "txakurra-egongelan-geratu-zen-lotan",
+      "type": "grammar",
+      "basque": "Txakurra egongelan geratu zen lotan eta txoriak kaiolan geratu ziren.",
+      "translations": {
+        "es": [
+          "El perro se quedó dormido en el salón y los pájaros se quedaron en la jaula."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Txakurra egongelan geratu ___ lotan eta txoriak kaiolan geratu ziren.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "txakurra-egongelan-geratu-zen-lot-2",
+      "type": "grammar",
+      "basque": "Txakurra egongelan geratu zen lotan eta txoriak kaiolan geratu ziren.",
+      "translations": {
+        "es": [
+          "El perro se quedó dormido en el salón y los pájaros se quedaron en la jaula."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Txakurra egongelan geratu zen lotan eta txoriak kaiolan geratu ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "gu-supermerkatura-joan-ginen-eta-oso",
+      "type": "grammar",
+      "basque": "Gu supermerkatura joan ginen eta oso nekatuta itzuli ginen.",
+      "translations": {
+        "es": [
+          "Fuimos al supermercado y volvimos muy cansados."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Gu supermerkatura joan ___ eta oso nekatuta itzuli ginen.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "lagunak-parkean-aspertu-ziren-eta-gu",
+      "type": "grammar",
+      "basque": "Lagunak parkean aspertu ziren eta gu etxean poz-pozik egon ginen.",
+      "translations": {
+        "es": [
+          "Los amigos se aburrieron en el parque y nosotros estuvimos muy contentos en casa."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Lagunak parkean aspertu ___ eta gu etxean poz-pozik egon ginen.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "lagunak-parkean-aspertu-ziren-eta-2",
+      "type": "grammar",
+      "basque": "Lagunak parkean aspertu ziren eta gu etxean poz-pozik egon ginen.",
+      "translations": {
+        "es": [
+          "Los amigos se aburrieron en el parque y nosotros estuvimos muy contentos en casa."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Lagunak parkean aspertu ziren eta gu etxean poz-pozik egon ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "zu-menditik-ibili-zinen-eta-ni-honda",
+      "type": "grammar",
+      "basque": "Zu menditik ibili zinen eta ni hondartzatik ibili nintzen.",
+      "translations": {
+        "es": [
+          "Tú anduviste por el monte y yo por la playa."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Zu menditik ibili ___ eta ni hondartzatik ibili nintzen.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "zu-menditik-ibili-zinen-eta-ni-ho-2",
+      "type": "grammar",
+      "basque": "Zu menditik ibili zinen eta ni hondartzatik ibili nintzen.",
+      "translations": {
+        "es": [
+          "Tú anduviste por el monte y yo por la playa."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Zu menditik ibili zinen eta ni hondartzatik ibili ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "atzo-xabi-eskolara-joan-zen",
+      "type": "grammar",
+      "basque": "Atzo Xabi eskolara joan zen.",
+      "translations": {
+        "es": [
+          "Ayer Xabi fue a la escuela."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo Xabi eskolara joan ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "pasaden-urtean-zu-frantziara-joan-zi",
+      "type": "grammar",
+      "basque": "Pasaden urtean zu Frantziara joan zinen.",
+      "translations": {
+        "es": [
+          "El año pasado fuiste a Francia."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Pasaden urtean zu Frantziara joan ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "atzo-ni-parkera-etorri-nintzen",
+      "type": "grammar",
+      "basque": "Atzo ni parkera etorri nintzen.",
+      "translations": {
+        "es": [
+          "Ayer vine al parque."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo ni parkera etorri ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "atzo-haiek-zinemara-bueltatu-ziren",
+      "type": "grammar",
+      "basque": "Atzo haiek zinemara bueltatu ziren.",
+      "translations": {
+        "es": [
+          "Ayer ellos volvieron al cine."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo haiek zinemara bueltatu ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "duela-hamar-urte-zuek-irakasleak-zin",
+      "type": "grammar",
+      "basque": "Duela hamar urte zuek irakasleak zineten, orain ez.",
+      "translations": {
+        "es": [
+          "Hace diez años vosotros erais profesores, ahora no."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Duela hamar urte zuek irakasleak ___, orain ez.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "atzo-gu-txakurrarekin-egon-ginen",
+      "type": "grammar",
+      "basque": "Atzo gu txakurrarekin egon ginen.",
+      "translations": {
+        "es": [
+          "Ayer estuvimos con el perro."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo gu txakurrarekin egon ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "pikachu-atzo-etxera-itzuli-zen",
+      "type": "grammar",
+      "basque": "Pikachu atzo etxera itzuli zen.",
+      "translations": {
+        "es": [
+          "Ayer Pikachu volvió a casa."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Pikachu atzo etxera itzuli ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "atzo-gu-ez-ginen-eskolara-etorri",
+      "type": "grammar",
+      "basque": "Atzo gu ez ginen eskolara etorri.",
+      "translations": {
+        "es": [
+          "Ayer no vinimos a la escuela."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo gu ez ___ eskolara etorri.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "pasaden-urtean-irune-eta-ana-gure-ir",
+      "type": "grammar",
+      "basque": "Pasaden urtean Irune eta Ana gure irakasleak izan ziren.",
+      "translations": {
+        "es": [
+          "El año pasado Irune y Ana fueron nuestras profesoras."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Pasaden urtean Irune eta Ana gure irakasleak izan ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "atzo-ni-bederatzietan-ohera-joan-nin",
+      "type": "grammar",
+      "basque": "Atzo ni bederatzietan ohera joan nintzen.",
+      "translations": {
+        "es": [
+          "Ayer me fui a la cama a las nueve."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo ni bederatzietan ohera joan ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "atzo-haiek-ez-ziren-festara-etorri",
+      "type": "grammar",
+      "basque": "Atzo haiek ez ziren festara etorri.",
+      "translations": {
+        "es": [
+          "Ayer ellos no vinieron a la fiesta."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo haiek ez ___ festara etorri.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "pasaden-astean-zuek-mendira-joan-zin",
+      "type": "grammar",
+      "basque": "Pasaden astean zuek mendira joan zineten.",
+      "translations": {
+        "es": [
+          "La semana pasada fuisteis al monte."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Pasaden astean zuek mendira joan ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "atzo-zu-paseo-bat-ematera-atera-zine",
+      "type": "grammar",
+      "basque": "Atzo zu paseo bat ematera atera zinen.",
+      "translations": {
+        "es": [
+          "Ayer saliste a dar un paseo."
+        ]
+      },
+      "group": "lehenaldia",
+      "grammar": {
+        "text": "Atzo zu paseo bat ematera atera ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "gu-txikiak-ginen",
+      "type": "grammar",
+      "basque": "Gu txikiak ginen.",
+      "translations": {
+        "es": [
+          "Nosotros éramos pequeños."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Gu txikiak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "haiek-neskak-ziren",
+      "type": "grammar",
+      "basque": "Haiek neskak ziren.",
+      "translations": {
+        "es": [
+          "Ellas eran chicas."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Haiek neskak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "zuek-lagunak-zineten",
+      "type": "grammar",
+      "basque": "Zuek lagunak zineten.",
+      "translations": {
+        "es": [
+          "Vosotros erais amigos."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Zuek lagunak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "ordenagailua-beltza-zen",
+      "type": "grammar",
+      "basque": "Ordenagailua beltza zen.",
+      "translations": {
+        "es": [
+          "El ordenador era negro."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Ordenagailua beltza ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "txakurrak-marroiak-eta-txuriak-ziren",
+      "type": "grammar",
+      "basque": "Txakurrak marroiak eta txuriak ziren.",
+      "translations": {
+        "es": [
+          "Los perros eran marrones y blancos."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Txakurrak marroiak eta txuriak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "ni-argala-nintzen",
+      "type": "grammar",
+      "basque": "Ni argala nintzen.",
+      "translations": {
+        "es": [
+          "Yo era delgado."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Ni argala ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "zu-lodia-zinen",
+      "type": "grammar",
+      "basque": "Zu lodia zinen.",
+      "translations": {
+        "es": [
+          "Tú eras gordo."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Zu lodia ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "ander-eta-jon-oso-baxuak-ziren",
+      "type": "grammar",
+      "basque": "Ander eta Jon oso baxuak ziren.",
+      "translations": {
+        "es": [
+          "Ander y Jon eran muy bajos."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Ander eta Jon oso baxuak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "nire-ama-gaztea-zen",
+      "type": "grammar",
+      "basque": "Nire ama gaztea zen.",
+      "translations": {
+        "es": [
+          "Mi madre era joven."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Nire ama gaztea ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "zuek-alaiak-zineten",
+      "type": "grammar",
+      "basque": "Zuek alaiak zineten.",
+      "translations": {
+        "es": [
+          "Vosotros erais alegres."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Zuek alaiak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "nire-aita-polita-zen",
+      "type": "grammar",
+      "basque": "Nire aita polita zen.",
+      "translations": {
+        "es": [
+          "Mi padre era guapo."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Nire aita polita ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "gu-oso-handiak-ginen",
+      "type": "grammar",
+      "basque": "Gu oso handiak ginen.",
+      "translations": {
+        "es": [
+          "Nosotros éramos muy grandes."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Gu oso handiak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "ni-oso-txikia-nintzen",
+      "type": "grammar",
+      "basque": "Ni oso txikia nintzen.",
+      "translations": {
+        "es": [
+          "Yo era muy pequeño."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Ni oso txikia ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "haiek-itsusiak-ziren",
+      "type": "grammar",
+      "basque": "Haiek itsusiak ziren.",
+      "translations": {
+        "es": [
+          "Ellos eran feos."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Haiek itsusiak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "zu-nire-laguna-zinen",
+      "type": "grammar",
+      "basque": "Zu nire laguna zinen.",
+      "translations": {
+        "es": [
+          "Tú eras mi amigo."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Zu nire laguna ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "zuek-alferrak-zineten",
+      "type": "grammar",
+      "basque": "Zuek alferrak zineten.",
+      "translations": {
+        "es": [
+          "Vosotros erais vagos."
+        ]
+      },
+      "group": "gramatika",
+      "grammar": {
+        "text": "Zuek alferrak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "ni-etxera-joan-nintzen",
+      "type": "grammar",
+      "basque": "Ni etxera joan nintzen.",
+      "translations": {
+        "es": [
+          "Fui a casa."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Ni etxera joan ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "zu-eskolatik-atera-zinen",
+      "type": "grammar",
+      "basque": "Zu eskolatik atera zinen.",
+      "translations": {
+        "es": [
+          "Saliste de la escuela."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zu eskolatik atera ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "ibon-hemen-bertan-bizi-zen",
+      "type": "grammar",
+      "basque": "Ibon hemen bertan bizi zen.",
+      "translations": {
+        "es": [
+          "Ibon vivía aquí mismo."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Ibon hemen bertan bizi ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "gu-berehala-aspertzen-ginen-horrekin",
+      "type": "grammar",
+      "basque": "Gu berehala aspertzen ginen horrekin.",
+      "translations": {
+        "es": [
+          "Nos aburríamos enseguida con eso."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Gu berehala aspertzen ___ horrekin.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "zuek-eserita-egoten-zineten",
+      "type": "grammar",
+      "basque": "Zuek eserita egoten zineten.",
+      "translations": {
+        "es": [
+          "Vosotros solíais estar sentados."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zuek eserita egoten ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "sagarrak-lurrera-erori-ziren",
+      "type": "grammar",
+      "basque": "Sagarrak lurrera erori ziren.",
+      "translations": {
+        "es": [
+          "Las manzanas cayeron al suelo."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Sagarrak lurrera erori ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "ni-zure-ondoan-jartzen-nintzen-beti",
+      "type": "grammar",
+      "basque": "Ni zure ondoan jartzen nintzen beti.",
+      "translations": {
+        "es": [
+          "Yo siempre me sentaba a tu lado."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Ni zure ondoan jartzen ___ beti.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "zu-nire-izebarekin-etorri-zinen",
+      "type": "grammar",
+      "basque": "Zu nire izebarekin etorri zinen.",
+      "translations": {
+        "es": [
+          "Viniste con mi tía."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zu nire izebarekin etorri ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "bidean-gasolina-bukatu-zen",
+      "type": "grammar",
+      "basque": "Bidean gasolina bukatu zen.",
+      "translations": {
+        "es": [
+          "Se acabó la gasolina en el camino."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Bidean gasolina bukatu ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "zuek-berandu-hasi-zineten-lanean",
+      "type": "grammar",
+      "basque": "Zuek berandu hasi zineten lanean.",
+      "translations": {
+        "es": [
+          "Empezasteis tarde a trabajar."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zuek berandu hasi ___ lanean.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "haurra-basoan-galdu-zen",
+      "type": "grammar",
+      "basque": "Haurra basoan galdu zen.",
+      "translations": {
+        "es": [
+          "El niño se perdió en el bosque."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Haurra basoan galdu ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "zerbait-gertatu-zen-zuen-lantegian",
+      "type": "grammar",
+      "basque": "Zerbait gertatu zen zuen lantegian.",
+      "translations": {
+        "es": [
+          "Pasó algo en vuestro taller."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zerbait gertatu ___ zuen lantegian.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "gu-ezin-ginen-etxetik-atera",
+      "type": "grammar",
+      "basque": "Gu ezin ginen etxetik atera.",
+      "translations": {
+        "es": [
+          "No podíamos salir de casa."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Gu ezin ___ etxetik atera.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "baserritarrak-herriko-plazan-gelditu",
+      "type": "grammar",
+      "basque": "Baserritarrak herriko plazan gelditu ziren.",
+      "translations": {
+        "es": [
+          "Los caseros se quedaron en la plaza del pueblo."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Baserritarrak herriko plazan gelditu ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "ni-gaiztoa-nintzen",
+      "type": "grammar",
+      "basque": "Ni gaiztoa nintzen.",
+      "translations": {
+        "es": [
+          "Yo era malo."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Ni gaiztoa ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "zu-itsusia-zinen",
+      "type": "grammar",
+      "basque": "Zu itsusia zinen.",
+      "translations": {
+        "es": [
+          "Tú eras feo."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zu itsusia ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "mutiko-hau-bihurria-zen",
+      "type": "grammar",
+      "basque": "Mutiko hau bihurria zen.",
+      "translations": {
+        "es": [
+          "Este chico era travieso."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Mutiko hau bihurria ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "gu-oso-alferrak-ginen",
+      "type": "grammar",
+      "basque": "Gu oso alferrak ginen.",
+      "translations": {
+        "es": [
+          "Éramos muy vagos."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Gu oso alferrak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "zuek-neska-atseginak-zineten",
+      "type": "grammar",
+      "basque": "Zuek neska atseginak zineten.",
+      "translations": {
+        "es": [
+          "Vosotras erais chicas simpáticas."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zuek neska atseginak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "etxe-haiek-itsusiak-ziren",
+      "type": "grammar",
+      "basque": "Etxe haiek itsusiak ziren.",
+      "translations": {
+        "es": [
+          "Aquellas casas eran feas."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Etxe haiek itsusiak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "zuek-pilotari-bikainak-zineten",
+      "type": "grammar",
+      "basque": "Zuek pilotari bikainak zineten.",
+      "translations": {
+        "es": [
+          "Erais pelotaris excelentes."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zuek pilotari bikainak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "gizon-haiek-zintzoak-ziren",
+      "type": "grammar",
+      "basque": "Gizon haiek zintzoak ziren.",
+      "translations": {
+        "es": [
+          "Aquellos hombres eran honrados."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Gizon haiek zintzoak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "zu-nahiko-baldarra-zinen",
+      "type": "grammar",
+      "basque": "Zu nahiko baldarra zinen.",
+      "translations": {
+        "es": [
+          "Tú eras bastante torpe."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zu nahiko baldarra ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "gu-lagun-handiak-ginen",
+      "type": "grammar",
+      "basque": "Gu lagun handiak ginen.",
+      "translations": {
+        "es": [
+          "Éramos grandes amigos."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Gu lagun handiak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "ni-honelakoa-nintzen",
+      "type": "grammar",
+      "basque": "Ni honelakoa nintzen.",
+      "translations": {
+        "es": [
+          "Yo era así."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Ni honelakoa ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "nire-anaia-zu-bezalakoa-zen",
+      "type": "grammar",
+      "basque": "Nire anaia zu bezalakoa zen.",
+      "translations": {
+        "es": [
+          "Mi hermano era como tú."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Nire anaia zu bezalakoa ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "bi-ahizpak-berdinak-ziren",
+      "type": "grammar",
+      "basque": "Bi ahizpak berdinak ziren.",
+      "translations": {
+        "es": [
+          "Las dos hermanas eran iguales."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Bi ahizpak berdinak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "liburu-hura-oso-egokia-zen",
+      "type": "grammar",
+      "basque": "Liburu hura oso egokia zen.",
+      "translations": {
+        "es": [
+          "Aquel libro era muy adecuado."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Liburu hura oso egokia ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "emakume-hori-oso-berezia-zen",
+      "type": "grammar",
+      "basque": "Emakume hori oso berezia zen.",
+      "translations": {
+        "es": [
+          "Esa mujer era muy especial."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Emakume hori oso berezia ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "nolakoa-zinen-zu",
+      "type": "grammar",
+      "basque": "Nolakoa zinen zu?",
+      "translations": {
+        "es": [
+          "¿Cómo eras tú?"
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Nolakoa ___ zu?",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "liburu-hori-oso-interesgarria-zen",
+      "type": "grammar",
+      "basque": "Liburu hori oso interesgarria zen.",
+      "translations": {
+        "es": [
+          "Ese libro era muy interesante."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Liburu hori oso interesgarria ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "zure-aiton-amona-maitagarriak-ziren",
+      "type": "grammar",
+      "basque": "Zure aiton-amona maitagarriak ziren.",
+      "translations": {
+        "es": [
+          "Tus abuelos eran encantadores."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zure aiton-amona maitagarriak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "norenak-ziren-eskularruak",
+      "type": "grammar",
+      "basque": "Norenak ziren eskularruak?",
+      "translations": {
+        "es": [
+          "¿De quién eran los guantes?"
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Norenak ___ eskularruak?",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "iaz-nagore-eder-eta-mikel-oso-lagun",
+      "type": "grammar",
+      "basque": "Iaz Nagore, Eder eta Mikel oso lagun onak ziren.",
+      "translations": {
+        "es": [
+          "El año pasado Nagore, Eder y Mikel eran muy buenos amigos."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Iaz Nagore, Eder eta Mikel oso lagun onak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "ni-txikitan-oso-trebea-nintzen",
+      "type": "grammar",
+      "basque": "Ni txikitan oso trebea nintzen.",
+      "translations": {
+        "es": [
+          "De pequeño yo era muy hábil."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Ni txikitan oso trebea ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "nire-lagunak-aurreko-urtean-ez-ziren",
+      "type": "grammar",
+      "basque": "Nire lagunak aurreko urtean ez ziren pertsona gaiztoak.",
+      "translations": {
+        "es": [
+          "El año anterior mis amigos no eran malas personas."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Nire lagunak aurreko urtean ez ___ pertsona gaiztoak.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "zu-gaztetan-nire-laguna-zinen",
+      "type": "grammar",
+      "basque": "Zu gaztetan nire laguna zinen.",
+      "translations": {
+        "es": [
+          "De joven eras mi amigo."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zu gaztetan nire laguna ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "mutiko-hau-oso-marrazkilari-ona-zen",
+      "type": "grammar",
+      "basque": "Mutiko hau oso marrazkilari ona zen.",
+      "translations": {
+        "es": [
+          "Este chico era muy buen dibujante."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Mutiko hau oso marrazkilari ona ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "ni-txikia-nintzenean-bihurria-nintze",
+      "type": "grammar",
+      "basque": "Ni txikia nintzenean bihurria nintzen.",
+      "translations": {
+        "es": [
+          "Cuando era pequeño, era travieso."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Ni txikia nintzenean bihurria ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "gu-iaz-lagunak-ginen",
+      "type": "grammar",
+      "basque": "Gu iaz lagunak ginen.",
+      "translations": {
+        "es": [
+          "El año pasado éramos amigos."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Gu iaz lagunak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "jon-hemen-bertan-bizi-zen",
+      "type": "grammar",
+      "basque": "Jon hemen bertan bizi zen.",
+      "translations": {
+        "es": [
+          "Jon vivía aquí mismo."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Jon hemen bertan bizi ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "pasaden-kurtsoan-gu-hiztunak-ginen",
+      "type": "grammar",
+      "basque": "Pasaden kurtsoan gu hiztunak ginen.",
+      "translations": {
+        "es": [
+          "El curso pasado éramos habladores."
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Pasaden kurtsoan gu hiztunak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "zein-zen-iaz-ikusi-zenuen-azkenengo",
+      "type": "grammar",
+      "basque": "Zein zen iaz ikusi zenuen azkenengo filma?",
+      "translations": {
+        "es": [
+          "¿Cuál fue la última película que viste el año pasado?"
+        ]
+      },
+      "group": "lehenaldia-2",
+      "grammar": {
+        "text": "Zein ___ iaz ikusi zenuen azkenengo filma?",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "lehen-nire-izeko-pili-irakaslea-zen",
+      "type": "grammar",
+      "basque": "Lehen nire izeko Pili irakaslea zen herri txiki batean.",
+      "translations": {
+        "es": [
+          "Antes mi tía Pili era profesora en un pueblo pequeño."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Lehen nire izeko Pili irakaslea ___ herri txiki batean.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "hau-ez-zen-liburua-aldizkaria-zen",
+      "type": "grammar",
+      "basque": "Hau ez zen liburua, aldizkaria zen.",
+      "translations": {
+        "es": [
+          "Esto no era un libro, era una revista."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Hau ez zen liburua, aldizkaria ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "hau-ez-zen-liburua-aldizkaria-zen-2",
+      "type": "grammar",
+      "basque": "Hau ez zen liburua, aldizkaria zen.",
+      "translations": {
+        "es": [
+          "Esto no era un libro, era una revista."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Hau ez ___ liburua, aldizkaria zen.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "amaia-eta-biok-txikitan-ilehoriak-gi",
+      "type": "grammar",
+      "basque": "Amaia eta biok txikitan ilehoriak ginen.",
+      "translations": {
+        "es": [
+          "Amaia y yo de pequeñas éramos rubias."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Amaia eta biok txikitan ilehoriak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "ni-lehen-ez-nintzen-medikua-abokatua",
+      "type": "grammar",
+      "basque": "Ni lehen ez nintzen medikua, abokatua baizik.",
+      "translations": {
+        "es": [
+          "Antes yo no era médico, sino abogado."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Ni lehen ez ___ medikua, abokatua baizik.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "zer-zen-hura",
+      "type": "grammar",
+      "basque": "Zer zen hura?",
+      "translations": {
+        "es": [
+          "¿Qué era aquello?"
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zer ___ hura?",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "iaz-ni-txikia-nintzen-baina-orain-os",
+      "type": "grammar",
+      "basque": "Iaz ni txikia nintzen baina orain oso handia naiz.",
+      "translations": {
+        "es": [
+          "El año pasado era pequeño, pero ahora soy muy grande."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Iaz ni txikia ___ baina orain oso handia naiz.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "aintzinean-bizi-ziren-animaliak-oso",
+      "type": "grammar",
+      "basque": "Aintzinean bizi ziren animaliak oso handiak ziren.",
+      "translations": {
+        "es": [
+          "Los animales que vivían antiguamente eran muy grandes."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Aintzinean bizi ziren animaliak oso handiak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "lehen-zu-eta-zure-lagunak-oso-bihurr",
+      "type": "grammar",
+      "basque": "Lehen, zu eta zure lagunak, oso bihurriak zineten.",
+      "translations": {
+        "es": [
+          "Antes, tú y tus amigos erais muy traviesos."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Lehen, zu eta zure lagunak, oso bihurriak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zu-ez-zinen-ikasle-txarra-txikitan",
+      "type": "grammar",
+      "basque": "Zu ez zinen ikasle txarra txikitan.",
+      "translations": {
+        "es": [
+          "De pequeño no eras mal alumno."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zu ez ___ ikasle txarra txikitan.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "joseba-eta-jon-ez-ziren-anaiak",
+      "type": "grammar",
+      "basque": "Joseba eta Jon ez ziren anaiak.",
+      "translations": {
+        "es": [
+          "Joseba y Jon no eran hermanos."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Joseba eta Jon ez ___ anaiak.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "haiek-ez-ziren-madariak-sagarrak-zir",
+      "type": "grammar",
+      "basque": "Haiek ez ziren madariak, sagarrak ziren.",
+      "translations": {
+        "es": [
+          "No eran peras, eran manzanas."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Haiek ez ziren madariak, sagarrak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "neska-hori-ez-zen-idazkaria-zuzendar",
+      "type": "grammar",
+      "basque": "Neska hori ez zen idazkaria, zuzendaria zen.",
+      "translations": {
+        "es": [
+          "Esa chica no era secretaria, era directora."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Neska hori ez zen idazkaria, zuzendaria ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "hori-ez-zen-zaila",
+      "type": "grammar",
+      "basque": "Hori ez zen zaila.",
+      "translations": {
+        "es": [
+          "Eso no era difícil."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Hori ez ___ zaila.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "nire-laguna-miren-sukaldaria-zen",
+      "type": "grammar",
+      "basque": "Nire laguna Miren sukaldaria zen.",
+      "translations": {
+        "es": [
+          "Mi amiga Miren era cocinera."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Nire laguna Miren sukaldaria ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "nerea-eta-biok-beltzaranak-ginen",
+      "type": "grammar",
+      "basque": "Nerea eta biok beltzaranak ginen.",
+      "translations": {
+        "es": [
+          "Nerea y yo éramos morenas."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Nerea eta biok beltzaranak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "zu-eta-zure-anaia-oso-bihurriak-zine",
+      "type": "grammar",
+      "basque": "Zu eta zure anaia, oso bihurriak zineten.",
+      "translations": {
+        "es": [
+          "Tú y tu hermano erais muy traviesos."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zu eta zure anaia, oso bihurriak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "futbolean-jolasten-genuenean-zu-atez",
+      "type": "grammar",
+      "basque": "Futbolean jolasten genuenean, zu atezaina zinen.",
+      "translations": {
+        "es": [
+          "Cuando jugábamos al fútbol, tú eras el portero."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Futbolean jolasten genuenean, zu atezaina ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "pasa-den-udan-belarra-berde-berdea-z",
+      "type": "grammar",
+      "basque": "Pasa den udan belarra berde berdea zen.",
+      "translations": {
+        "es": [
+          "El verano pasado la hierba estaba verdísima."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Pasa den udan belarra berde berdea ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "ni-txikitan-txikia-nintzen",
+      "type": "grammar",
+      "basque": "Ni txikitan txikia nintzen.",
+      "translations": {
+        "es": [
+          "De pequeño yo era pequeño."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Ni txikitan txikia ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "iaz-mirene-eta-zu-parisen-egon-zinet",
+      "type": "grammar",
+      "basque": "Iaz Mirene eta zu Parisen egon zineten.",
+      "translations": {
+        "es": [
+          "El año pasado Mirene y tú estuvisteis en París."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Iaz Mirene eta zu Parisen egon ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zuek-nire-lagunak-zineten",
+      "type": "grammar",
+      "basque": "Zuek nire lagunak zineten.",
+      "translations": {
+        "es": [
+          "Vosotros erais mis amigos."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zuek nire lagunak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zer-zinen-zu-ni-ikaslea-nintzen",
+      "type": "grammar",
+      "basque": "Zer zinen zu? Ni ikaslea nintzen.",
+      "translations": {
+        "es": [
+          "¿Qué eras tú? Yo era alumno."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zer ___ zu? Ni ikaslea nintzen.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "zer-zinen-zu-ni-ikaslea-nintzen-2",
+      "type": "grammar",
+      "basque": "Zer zinen zu? Ni ikaslea nintzen.",
+      "translations": {
+        "es": [
+          "¿Qué eras tú? Yo era alumno."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zer zinen zu? Ni ikaslea ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "nortzuk-ziren-hauek",
+      "type": "grammar",
+      "basque": "Nortzuk ziren hauek?",
+      "translations": {
+        "es": [
+          "¿Quiénes eran estos?"
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Nortzuk ___ hauek?",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "haiek-idoia-eta-alain-ziren",
+      "type": "grammar",
+      "basque": "Haiek Idoia eta Alain ziren.",
+      "translations": {
+        "es": [
+          "Ellos eran Idoia y Alain."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Haiek Idoia eta Alain ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "gu-euskaldunak-ginen",
+      "type": "grammar",
+      "basque": "Gu euskaldunak ginen.",
+      "translations": {
+        "es": [
+          "Nosotros éramos vascohablantes."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Gu euskaldunak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "zuek-zer-zineten-ikasleak-ala-irakas",
+      "type": "grammar",
+      "basque": "Zuek zer zineten, ikasleak ala irakasleak?",
+      "translations": {
+        "es": [
+          "¿Qué erais vosotros, alumnos o profesores?"
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zuek zer ___, ikasleak ala irakasleak?",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zuek-medikuak-zineten-ezta",
+      "type": "grammar",
+      "basque": "Zuek medikuak zineten, ezta?",
+      "translations": {
+        "es": [
+          "Vosotros erais médicos, ¿verdad?"
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zuek medikuak ___, ezta?",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "ni-ez-nintzen-medikua-abokatua-baizi",
+      "type": "grammar",
+      "basque": "Ni ez nintzen medikua, abokatua baizik.",
+      "translations": {
+        "es": [
+          "Yo no era médico, sino abogado."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Ni ez ___ medikua, abokatua baizik.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "zu-ez-zinen-maider-ezta",
+      "type": "grammar",
+      "basque": "Zu ez zinen Maider, ezta?",
+      "translations": {
+        "es": [
+          "Tú no eras Maider, ¿verdad?"
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Zu ez ___ Maider, ezta?",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "basoan-bizi-ziren-animaliak-basatiak",
+      "type": "grammar",
+      "basque": "Basoan bizi ziren animaliak basatiak ziren.",
+      "translations": {
+        "es": [
+          "Los animales que vivían en el bosque eran salvajes."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Basoan bizi ziren animaliak basatiak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "gu-ez-ginen-futbolari-txarrak",
+      "type": "grammar",
+      "basque": "Gu ez ginen futbolari txarrak.",
+      "translations": {
+        "es": [
+          "No éramos malos futbolistas."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Gu ez ___ futbolari txarrak.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "gu-zinemara-joan-ginen-nemo-ikustera",
+      "type": "grammar",
+      "basque": "Gu zinemara joan ginen \"Nemo\" ikustera.",
+      "translations": {
+        "es": [
+          "Fuimos al cine a ver «Nemo»."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Gu zinemara joan ___ \"Nemo\" ikustera.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "futbolean-jokatzen-genuenean-zu-atez",
+      "type": "grammar",
+      "basque": "Futbolean jokatzen genuenean, zu atezaina zinen.",
+      "translations": {
+        "es": [
+          "Cuando jugábamos al fútbol, tú eras el portero."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Futbolean jokatzen genuenean, zu atezaina ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "nire-lorategiko-belarra-berde-berdea",
+      "type": "grammar",
+      "basque": "Nire lorategiko belarra berde berdea zen.",
+      "translations": {
+        "es": [
+          "La hierba de mi jardín estaba verdísima."
+        ]
+      },
+      "group": "lehenaldia-3",
+      "grammar": {
+        "text": "Nire lorategiko belarra berde berdea ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "iaz-ni-ez-nintzen-oso-altua",
+      "type": "grammar",
+      "basque": "Iaz ni ez nintzen oso altua.",
+      "translations": {
+        "es": [
+          "El año pasado yo no era muy alto."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Iaz ni ez ___ oso altua.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "pasa-den-astean-bera-zen-saskibaloia",
+      "type": "grammar",
+      "basque": "Pasa den astean bera zen saskibaloian onena.",
+      "translations": {
+        "es": [
+          "La semana pasada él fue el mejor en baloncesto."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Pasa den astean bera ___ saskibaloian onena.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "pasa-den-urtean-zu-zinen-euskal-herr",
+      "type": "grammar",
+      "basque": "Pasa den urtean zu zinen Euskal Herriko pilotaririk onena.",
+      "translations": {
+        "es": [
+          "El año pasado fuiste el mejor pelotari de Euskal Herria."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Pasa den urtean zu ___ Euskal Herriko pilotaririk onena.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "aurreko-urtean-leire-eta-olatz-ziren",
+      "type": "grammar",
+      "basque": "Aurreko urtean Leire eta Olatz ziren eskolako azkarrenak.",
+      "translations": {
+        "es": [
+          "El año anterior Leire y Olatz eran las más listas de la escuela."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Aurreko urtean Leire eta Olatz ___ eskolako azkarrenak.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "unai-ez-zen-jatorra-pasa-den-urtean",
+      "type": "grammar",
+      "basque": "Unai ez zen jatorra pasa den urtean.",
+      "translations": {
+        "es": [
+          "Unai no era simpático el año pasado."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Unai ez ___ jatorra pasa den urtean.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "iaz-gu-ez-ginen-lagunak",
+      "type": "grammar",
+      "basque": "Iaz gu ez ginen lagunak.",
+      "translations": {
+        "es": [
+          "El año pasado no éramos amigos."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Iaz gu ez ___ lagunak.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "zu-txikitan-oso-burugogorra-omen-zin",
+      "type": "grammar",
+      "basque": "Zu txikitan oso burugogorra omen zinen.",
+      "translations": {
+        "es": [
+          "Dicen que de pequeño eras muy cabezota."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Zu txikitan oso burugogorra omen ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "ni-joan-den-asteburuan-erori-nintzen",
+      "type": "grammar",
+      "basque": "Ni joan den asteburuan erori nintzen.",
+      "translations": {
+        "es": [
+          "Me caí el fin de semana pasado."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Ni joan den asteburuan erori ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "gure-amona-oso-zorrotza-zen",
+      "type": "grammar",
+      "basque": "Gure amona oso zorrotza zen.",
+      "translations": {
+        "es": [
+          "Nuestra abuela era muy estricta."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Gure amona oso zorrotza ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "gu-ez-ginen-zurekin-oso-atseginak-iz",
+      "type": "grammar",
+      "basque": "Gu ez ginen zurekin oso atseginak izan.",
+      "translations": {
+        "es": [
+          "No fuimos muy amables contigo."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Gu ez ___ zurekin oso atseginak izan.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "joan-den-udan-aimar-eta-biok-lagunak",
+      "type": "grammar",
+      "basque": "Joan den udan, Aimar eta biok lagunak egin ginen.",
+      "translations": {
+        "es": [
+          "El verano pasado, Aimar y yo nos hicimos amigos."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Joan den udan, Aimar eta biok lagunak egin ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "atzo-zuek-oso-goiz-iritsi-zineten",
+      "type": "grammar",
+      "basque": "Atzo zuek oso goiz iritsi zineten.",
+      "translations": {
+        "es": [
+          "Ayer llegasteis muy pronto."
+        ]
+      },
+      "group": "lehenaldia-4",
+      "grammar": {
+        "text": "Atzo zuek oso goiz iritsi ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zu-telebistari-begira-aspertzen-zara",
+      "type": "grammar",
+      "basque": "Zu telebistari begira aspertzen zara.",
+      "translations": {
+        "es": [
+          "Te aburres mirando la tele."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Zu telebistari begira aspertzen ___.",
+        "answers": [
+          "zara"
+        ],
+        "distractors": [
+          "zarete",
+          "da",
+          "zinen"
+        ]
+      }
+    },
+    {
+      "id": "mattin-eta-zu-mendizaleak-zarete",
+      "type": "grammar",
+      "basque": "Mattin eta zu mendizaleak zarete.",
+      "translations": {
+        "es": [
+          "Mattin y tú sois montañeros."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Mattin eta zu mendizaleak ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "aurten-zuek-ez-zarete-klaseko-azkarr",
+      "type": "grammar",
+      "basque": "Aurten zuek ez zarete klaseko azkarrenak.",
+      "translations": {
+        "es": [
+          "Este año no sois los más listos de la clase."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Aurten zuek ez ___ klaseko azkarrenak.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "pasa-den-urtean-iraitz-zen-klaseko-s",
+      "type": "grammar",
+      "basque": "Pasa den urtean Iraitz zen klaseko saskibaloi jokalaririk onena.",
+      "translations": {
+        "es": [
+          "El año pasado Iraitz fue el mejor jugador de baloncesto de la clase."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Pasa den urtean Iraitz ___ klaseko saskibaloi jokalaririk onena.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "iaz-bera-ez-zen-altua-baina-aurten-o",
+      "type": "grammar",
+      "basque": "Iaz bera ez zen altua baina aurten oso altua da.",
+      "translations": {
+        "es": [
+          "El año pasado no era alto, pero este año es muy alto."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Iaz bera ez ___ altua baina aurten oso altua da.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "iaz-bera-ez-zen-altua-baina-aurte-2",
+      "type": "grammar",
+      "basque": "Iaz bera ez zen altua baina aurten oso altua da.",
+      "translations": {
+        "es": [
+          "El año pasado no era alto, pero este año es muy alto."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Iaz bera ez zen altua baina aurten oso altua ___.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "nire-etxean-daukadan-katua-txikia-et",
+      "type": "grammar",
+      "basque": "Nire etxean daukadan katua txikia eta alaia da.",
+      "translations": {
+        "es": [
+          "El gato que tengo en casa es pequeño y alegre."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Nire etxean daukadan katua txikia eta alaia ___.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "txikitan-gu-ez-ginen-lagunak",
+      "type": "grammar",
+      "basque": "Txikitan gu ez ginen lagunak.",
+      "translations": {
+        "es": [
+          "De pequeños no éramos amigos."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Txikitan gu ez ___ lagunak.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "orain-libe-uxue-eta-aiora-lagun-onak",
+      "type": "grammar",
+      "basque": "Orain Libe, Uxue eta Aiora lagun onak dira.",
+      "translations": {
+        "es": [
+          "Ahora Libe, Uxue y Aiora son buenas amigas."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Orain Libe, Uxue eta Aiora lagun onak ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "xabier-da-klasean-negar-gehien-egite",
+      "type": "grammar",
+      "basque": "Xabier da klasean negar gehien egiten duena.",
+      "translations": {
+        "es": [
+          "Xabier es el que más llora en clase."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Xabier ___ klasean negar gehien egiten duena.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "pasa-den-hilabetean-ni-nintzen-klase",
+      "type": "grammar",
+      "basque": "Pasa den hilabetean ni nintzen klaseko delegatua.",
+      "translations": {
+        "es": [
+          "El mes pasado yo era el delegado de la clase."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Pasa den hilabetean ni ___ klaseko delegatua.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "4-mailan-geundenean-zu-zinen-nire-la",
+      "type": "grammar",
+      "basque": "4. mailan geundenean zu zinen nire lagun onena.",
+      "translations": {
+        "es": [
+          "Cuando estábamos en 4.º, tú eras mi mejor amigo."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "4. mailan geundenean zu ___ nire lagun onena.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "pasa-den-urtean-oier-andoni-eta-peio",
+      "type": "grammar",
+      "basque": "Pasa den urtean Oier, Andoni eta Peio haserretu ziren eta oraindik ez dute hitz egiten.",
+      "translations": {
+        "es": [
+          "El año pasado Oier, Andoni y Peio se enfadaron y todavía no se hablan."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Pasa den urtean Oier, Andoni eta Peio haserretu ___ eta oraindik ez dute hitz egiten.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "gu-gara-euskara-hitz-egiten-dugun-ba",
+      "type": "grammar",
+      "basque": "Gu gara euskara hitz egiten dugun bakarrak.",
+      "translations": {
+        "es": [
+          "Somos los únicos que hablamos euskera."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Gu ___ euskara hitz egiten dugun bakarrak.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "ni-txikitan-bihurria-nintzen",
+      "type": "grammar",
+      "basque": "Ni txikitan bihurria nintzen.",
+      "translations": {
+        "es": [
+          "De pequeño yo era travieso."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Ni txikitan bihurria ___.",
+        "answers": [
+          "nintzen"
+        ],
+        "distractors": [
+          "ginen",
+          "zen",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "ni-orain-zintzoa-naiz",
+      "type": "grammar",
+      "basque": "Ni orain zintzoa naiz.",
+      "translations": {
+        "es": [
+          "Ahora yo soy formal."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Ni orain zintzoa ___.",
+        "answers": [
+          "naiz"
+        ],
+        "distractors": [
+          "gara",
+          "da",
+          "nintzen"
+        ]
+      }
+    },
+    {
+      "id": "zu-txikitan-baxua-zinen",
+      "type": "grammar",
+      "basque": "Zu txikitan baxua zinen.",
+      "translations": {
+        "es": [
+          "De pequeño tú eras bajo."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Zu txikitan baxua ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "zu-orain-altua-zara",
+      "type": "grammar",
+      "basque": "Zu orain altua zara.",
+      "translations": {
+        "es": [
+          "Ahora tú eres alto."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Zu orain altua ___.",
+        "answers": [
+          "zara"
+        ],
+        "distractors": [
+          "zarete",
+          "da",
+          "zinen"
+        ]
+      }
+    },
+    {
+      "id": "hura-txikitan-argala-zen",
+      "type": "grammar",
+      "basque": "Hura txikitan argala zen.",
+      "translations": {
+        "es": [
+          "De pequeño él era delgado."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Hura txikitan argala ___.",
+        "answers": [
+          "zen"
+        ],
+        "distractors": [
+          "ziren",
+          "nintzen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "hura-orain-lodia-da",
+      "type": "grammar",
+      "basque": "Hura orain lodia da.",
+      "translations": {
+        "es": [
+          "Ahora él es gordo."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Hura orain lodia ___.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "gu-txikitan-azkarrak-ginen",
+      "type": "grammar",
+      "basque": "Gu txikitan azkarrak ginen.",
+      "translations": {
+        "es": [
+          "De pequeños éramos listos."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Gu txikitan azkarrak ___.",
+        "answers": [
+          "ginen"
+        ],
+        "distractors": [
+          "nintzen",
+          "zineten",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "gu-orain-motelak-gara",
+      "type": "grammar",
+      "basque": "Gu orain motelak gara.",
+      "translations": {
+        "es": [
+          "Ahora somos lentos."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Gu orain motelak ___.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "zuek-txikitan-itsusiak-zineten",
+      "type": "grammar",
+      "basque": "Zuek txikitan itsusiak zineten.",
+      "translations": {
+        "es": [
+          "De pequeños erais feos."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Zuek txikitan itsusiak ___.",
+        "answers": [
+          "zineten"
+        ],
+        "distractors": [
+          "zinen",
+          "ginen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zuek-orain-politak-zarete",
+      "type": "grammar",
+      "basque": "Zuek orain politak zarete.",
+      "translations": {
+        "es": [
+          "Ahora sois guapos."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Zuek orain politak ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "haiek-txikitan-luzeak-ziren",
+      "type": "grammar",
+      "basque": "Haiek txikitan luzeak ziren.",
+      "translations": {
+        "es": [
+          "De pequeños eran altos."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Haiek txikitan luzeak ___.",
+        "answers": [
+          "ziren"
+        ],
+        "distractors": [
+          "zen",
+          "zineten",
+          "dira"
+        ]
+      }
+    },
+    {
+      "id": "haiek-orain-laburrak-dira",
+      "type": "grammar",
+      "basque": "Haiek orain laburrak dira.",
+      "translations": {
+        "es": [
+          "Ahora son bajos."
+        ]
+      },
+      "group": "nahasian",
+      "grammar": {
+        "text": "Haiek orain laburrak ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "haiek-oso-lagun-onak-dira",
+      "type": "grammar",
+      "basque": "Haiek oso lagun onak dira.",
+      "translations": {
+        "es": [
+          "Ellos son (eran) muy buenos amigos."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Haiek oso lagun onak ___.",
+        "answers": [
+          "dira",
+          "ziren"
+        ],
+        "distractors": [
+          "da",
+          "zen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zuek-altuak-zarete",
+      "type": "grammar",
+      "basque": "Zuek altuak zarete.",
+      "translations": {
+        "es": [
+          "Vosotros sois (erais) altos."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Zuek altuak ___.",
+        "answers": [
+          "zarete",
+          "zineten"
+        ],
+        "distractors": [
+          "zara",
+          "zinen",
+          "gara"
+        ]
+      }
+    },
+    {
+      "id": "ni-gasteizen-bizi-naiz",
+      "type": "grammar",
+      "basque": "Ni Gasteizen bizi naiz.",
+      "translations": {
+        "es": [
+          "Yo vivo (vivía) en Vitoria-Gasteiz."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Ni Gasteizen bizi ___.",
+        "answers": [
+          "naiz",
+          "nintzen"
+        ],
+        "distractors": [
+          "gara",
+          "ginen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "gu-lehengusinak-gara",
+      "type": "grammar",
+      "basque": "Gu lehengusinak gara.",
+      "translations": {
+        "es": [
+          "Nosotras somos (éramos) primas."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Gu lehengusinak ___.",
+        "answers": [
+          "gara",
+          "ginen"
+        ],
+        "distractors": [
+          "naiz",
+          "nintzen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zu-ez-zara-lodia-argala-zara",
+      "type": "grammar",
+      "basque": "Zu ez zara lodia, argala zara.",
+      "translations": {
+        "es": [
+          "Tú no eres gordo, eres delgado."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Zu ez ___ lodia, argala zara.",
+        "answers": [
+          "zara",
+          "zinen"
+        ],
+        "distractors": [
+          "zarete",
+          "zineten",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "hura-bere-amona-da",
+      "type": "grammar",
+      "basque": "Hura bere amona da.",
+      "translations": {
+        "es": [
+          "Ella es (era) su abuela."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Hura bere amona ___.",
+        "answers": [
+          "da",
+          "zen"
+        ],
+        "distractors": [
+          "dira",
+          "ziren",
+          "naiz"
+        ]
+      }
+    },
+    {
+      "id": "ni-ez-naiz-zu-bezain-motela",
+      "type": "grammar",
+      "basque": "Ni ez naiz zu bezain motela.",
+      "translations": {
+        "es": [
+          "Yo no soy (era) tan lento como tú."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Ni ez ___ zu bezain motela.",
+        "answers": [
+          "naiz",
+          "nintzen"
+        ],
+        "distractors": [
+          "gara",
+          "ginen",
+          "da"
+        ]
+      }
+    },
+    {
+      "id": "haiek-pertsona-onak-dira",
+      "type": "grammar",
+      "basque": "Haiek pertsona onak dira.",
+      "translations": {
+        "es": [
+          "Ellos son (eran) buenas personas."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Haiek pertsona onak ___.",
+        "answers": [
+          "dira",
+          "ziren"
+        ],
+        "distractors": [
+          "da",
+          "zen",
+          "zarete"
+        ]
+      }
+    },
+    {
+      "id": "zu-ez-zinen-lodia-argala-zinen",
+      "type": "grammar",
+      "basque": "Zu ez zinen lodia, argala zinen.",
+      "translations": {
+        "es": [
+          "Tú no eras gordo, eras delgado."
+        ]
+      },
+      "group": "bi-aldiak",
+      "grammar": {
+        "text": "Zu ez zinen lodia, argala ___.",
+        "answers": [
+          "zinen"
+        ],
+        "distractors": [
+          "zineten",
+          "zen",
+          "zara"
+        ]
+      }
+    },
+    {
+      "id": "zu-medikua-zara",
+      "type": "grammar",
+      "basque": "Zu medikua zara.",
+      "translations": {
+        "es": [
+          "Tú eres médico."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Zu medikua ___.",
+        "answers": [
+          "zara"
+        ],
+        "distractors": [
+          "zarete",
+          "da",
+          "zinen"
+        ]
+      }
+    },
+    {
+      "id": "gu-altuak-gara",
+      "type": "grammar",
+      "basque": "Gu altuak gara.",
+      "translations": {
+        "es": [
+          "Nosotros somos altos."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Gu altuak ___.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "gure-katuak-beltzak-dira",
+      "type": "grammar",
+      "basque": "Gure katuak beltzak dira.",
+      "translations": {
+        "es": [
+          "Nuestros gatos son negros."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Gure katuak beltzak ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "ni-orain-oso-argala-naiz",
+      "type": "grammar",
+      "basque": "Ni orain oso argala naiz.",
+      "translations": {
+        "es": [
+          "Ahora estoy muy delgado."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Ni orain oso argala ___.",
+        "answers": [
+          "naiz"
+        ],
+        "distractors": [
+          "gara",
+          "da",
+          "nintzen"
+        ]
+      }
+    },
+    {
+      "id": "zuek-ikasleak-zarete",
+      "type": "grammar",
+      "basque": "Zuek ikasleak zarete.",
+      "translations": {
+        "es": [
+          "Vosotros sois alumnos."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Zuek ikasleak ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "klase-hori-handia-da",
+      "type": "grammar",
+      "basque": "Klase hori handia da.",
+      "translations": {
+        "es": [
+          "Esa clase es grande."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Klase hori handia ___.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "gizon-hura-ez-da-lodia",
+      "type": "grammar",
+      "basque": "Gizon hura ez da lodia.",
+      "translations": {
+        "es": [
+          "Aquel hombre no es gordo."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Gizon hura ez ___ lodia.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "etxe-horiek-oso-zaharrak-dira",
+      "type": "grammar",
+      "basque": "Etxe horiek oso zaharrak dira.",
+      "translations": {
+        "es": [
+          "Esas casas son muy viejas."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Etxe horiek oso zaharrak ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "zuek-ertzainak-zarete",
+      "type": "grammar",
+      "basque": "Zuek ertzainak zarete.",
+      "translations": {
+        "es": [
+          "Vosotros sois ertzainas."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Zuek ertzainak ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "ni-ikasle-ona-naiz",
+      "type": "grammar",
+      "basque": "Ni ikasle ona naiz.",
+      "translations": {
+        "es": [
+          "Yo soy buen alumno."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Ni ikasle ona ___.",
+        "answers": [
+          "naiz"
+        ],
+        "distractors": [
+          "gara",
+          "da",
+          "nintzen"
+        ]
+      }
+    },
+    {
+      "id": "itziar-eta-zu-lehengusinak-zarete",
+      "type": "grammar",
+      "basque": "Itziar eta zu lehengusinak zarete.",
+      "translations": {
+        "es": [
+          "Itziar y tú sois primas."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Itziar eta zu lehengusinak ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "maite-eta-ni-dendara-joan-gara",
+      "type": "grammar",
+      "basque": "Maite eta ni dendara joan gara.",
+      "translations": {
+        "es": [
+          "Maite y yo hemos ido a la tienda."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Maite eta ni dendara joan ___.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "maider-eta-gorka-etxean-geratu-dira",
+      "type": "grammar",
+      "basque": "Maider eta Gorka etxean geratu dira.",
+      "translations": {
+        "es": [
+          "Maider y Gorka se han quedado en casa."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Maider eta Gorka etxean geratu ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "ikaslea-eta-zu-donostiako-baso-batea",
+      "type": "grammar",
+      "basque": "Ikaslea eta zu Donostiako baso batean galdu zarete.",
+      "translations": {
+        "es": [
+          "El alumno y tú os habéis perdido en un bosque de Donostia."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Ikaslea eta zu Donostiako baso batean galdu ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "mutil-guztiok-zutitu-gara",
+      "type": "grammar",
+      "basque": "Mutil guztiok zutitu gara.",
+      "translations": {
+        "es": [
+          "Todos los chicos (nosotros) nos hemos puesto de pie."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Mutil guztiok zutitu ___.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "zu-eta-nire-laguna-klasera-joan-zare",
+      "type": "grammar",
+      "basque": "Zu eta nire laguna klasera joan zarete.",
+      "translations": {
+        "es": [
+          "Tú y mi amigo habéis ido a clase."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Zu eta nire laguna klasera joan ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "ni-nire-lagunarekin-ispilu-aurrean-o",
+      "type": "grammar",
+      "basque": "Ni nire lagunarekin ispilu aurrean orraztu naiz.",
+      "translations": {
+        "es": [
+          "Me he peinado con mi amigo delante del espejo."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Ni nire lagunarekin ispilu aurrean orraztu ___.",
+        "answers": [
+          "naiz"
+        ],
+        "distractors": [
+          "gara",
+          "da",
+          "nintzen"
+        ]
+      }
+    },
+    {
+      "id": "mirenen-adiskideak-pilota-partiduan",
+      "type": "grammar",
+      "basque": "Mirenen adiskideak pilota partiduan aspertu dira.",
+      "translations": {
+        "es": [
+          "Los amigos de Miren se han aburrido en el partido de pelota."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Mirenen adiskideak pilota partiduan aspertu ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "aita-ama-eta-ni-larunbatean-mendira",
+      "type": "grammar",
+      "basque": "Aita, ama eta ni larunbatean mendira joango gara.",
+      "translations": {
+        "es": [
+          "Papá, mamá y yo iremos al monte el sábado."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Aita, ama eta ni larunbatean mendira joango ___.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "sofia-marta-eta-zu-areetan-bizi-zare",
+      "type": "grammar",
+      "basque": "Sofia, Marta eta zu Areetan bizi zarete.",
+      "translations": {
+        "es": [
+          "Sofía, Marta y tú vivís en Areeta."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Sofia, Marta eta zu Areetan bizi ___.",
+        "answers": [
+          "zarete"
+        ],
+        "distractors": [
+          "zara",
+          "gara",
+          "zineten"
+        ]
+      }
+    },
+    {
+      "id": "aulkiak-arratsaldero-altxatzen-dira",
+      "type": "grammar",
+      "basque": "Aulkiak arratsaldero altxatzen dira mahai gainean jartzeko.",
+      "translations": {
+        "es": [
+          "Las sillas se suben cada tarde encima de la mesa."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Aulkiak arratsaldero altxatzen ___ mahai gainean jartzeko.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "zure-fitxak-nire-euskerako-karpetan",
+      "type": "grammar",
+      "basque": "Zure fitxak nire euskerako karpetan agertu dira.",
+      "translations": {
+        "es": [
+          "Tus fichas han aparecido en mi carpeta de euskera."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Zure fitxak nire euskerako karpetan agertu ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "gaur-arratsaldean-nire-lehengusin-tx",
+      "type": "grammar",
+      "basque": "Gaur arratsaldean nire lehengusin txikia jaio da.",
+      "translations": {
+        "es": [
+          "Esta tarde ha nacido mi prima pequeña."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Gaur arratsaldean nire lehengusin txikia jaio ___.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "nire-ahizpa-eta-ni-zure-festara-joat",
+      "type": "grammar",
+      "basque": "Nire ahizpa eta ni zure festara joaten saiatuko gara.",
+      "translations": {
+        "es": [
+          "Mi hermana y yo intentaremos ir a tu fiesta."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Nire ahizpa eta ni zure festara joaten saiatuko ___.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "3-mailako-neskak-jantokitik-patiora",
+      "type": "grammar",
+      "basque": "3. mailako neskak jantokitik patiora irten dira.",
+      "translations": {
+        "es": [
+          "Las chicas de 3.º han salido del comedor al patio."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "3. mailako neskak jantokitik patiora irten ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "ni-oso-altua-naiz",
+      "type": "grammar",
+      "basque": "Ni oso altua naiz.",
+      "translations": {
+        "es": [
+          "Yo soy muy alto."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Ni oso altua ___.",
+        "answers": [
+          "naiz"
+        ],
+        "distractors": [
+          "gara",
+          "da",
+          "nintzen"
+        ]
+      }
+    },
+    {
+      "id": "bera-klaseko-azkarrena-da",
+      "type": "grammar",
+      "basque": "Bera klaseko azkarrena da.",
+      "translations": {
+        "es": [
+          "Él es el más listo de la clase."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Bera klaseko azkarrena ___.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "haiek-txapeldun-batzuk-dira",
+      "type": "grammar",
+      "basque": "Haiek txapeldun batzuk dira.",
+      "translations": {
+        "es": [
+          "Ellos son unos campeones."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Haiek txapeldun batzuk ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "gu-ez-gara-taldeko-alaienak",
+      "type": "grammar",
+      "basque": "Gu ez gara taldeko alaienak.",
+      "translations": {
+        "es": [
+          "No somos los más alegres del equipo."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Gu ez ___ taldeko alaienak.",
+        "answers": [
+          "gara"
+        ],
+        "distractors": [
+          "naiz",
+          "zarete",
+          "ginen"
+        ]
+      }
+    },
+    {
+      "id": "alazne-ez-da-oso-motela",
+      "type": "grammar",
+      "basque": "Alazne ez da oso motela.",
+      "translations": {
+        "es": [
+          "Alazne no es muy lenta."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Alazne ez ___ oso motela.",
+        "answers": [
+          "da"
+        ],
+        "distractors": [
+          "dira",
+          "naiz",
+          "zen"
+        ]
+      }
+    },
+    {
+      "id": "iria-eta-ane-klaseko-azkarrenak-dira",
+      "type": "grammar",
+      "basque": "Iria eta Ane klaseko azkarrenak dira.",
+      "translations": {
+        "es": [
+          "Iria y Ane son las más listas de la clase."
+        ]
+      },
+      "group": "orainaldia",
+      "grammar": {
+        "text": "Iria eta Ane klaseko azkarrenak ___.",
+        "answers": [
+          "dira"
+        ],
+        "distractors": [
+          "da",
+          "zarete",
+          "ziren"
+        ]
+      }
+    },
+    {
+      "id": "laguna-eta-ni-parkera-joango-gara",
+      "type": "grammar",
+      "basque": "Laguna eta ni parkera joango gara.",
+      "translations": {
+        "es": [
+          "Mi amigo y yo iremos al parque."
+        ]
+      },
+      "group": "pertsona",
+      "grammar": {
+        "text": "___ parkera joango gara.",
+        "answers": [
+          "Laguna eta ni"
+        ],
+        "distractors": [
+          "Alaitz eta Maider",
+          "Aita eta zu"
+        ]
+      },
+      "note": "gara → gu"
+    },
+    {
+      "id": "izeko-eta-zu-telebista-ikusten-egon",
+      "type": "grammar",
+      "basque": "Izeko eta zu telebista ikusten egon zarete.",
+      "translations": {
+        "es": [
+          "La tía y tú habéis estado viendo la tele."
+        ]
+      },
+      "group": "pertsona",
+      "grammar": {
+        "text": "___ telebista ikusten egon zarete.",
+        "answers": [
+          "Izeko eta zu"
+        ],
+        "distractors": [
+          "Nire ahizpa eta ni",
+          "Andrea"
+        ]
+      },
+      "note": "zarete → zuek"
+    },
+    {
+      "id": "neba-arrebak-nagusiak-ordenagailuare",
+      "type": "grammar",
+      "basque": "Neba-arrebak nagusiak ordenagailuarekin ikasten ari dira.",
+      "translations": {
+        "es": [
+          "Los hermanos mayores están estudiando con el ordenador."
+        ]
+      },
+      "group": "pertsona",
+      "grammar": {
+        "text": "___ ordenagailuarekin ikasten ari dira.",
+        "answers": [
+          "Neba-arrebak nagusiak"
+        ],
+        "distractors": [
+          "Ama eta zu",
+          "Ni"
+        ]
+      },
+      "note": "dira → haiek"
+    },
+    {
+      "id": "amona-gaur-goizean-berandu-esnatu-da",
+      "type": "grammar",
+      "basque": "Amona gaur goizean berandu esnatu da.",
+      "translations": {
+        "es": [
+          "La abuela se ha despertado tarde esta mañana."
+        ]
+      },
+      "group": "pertsona",
+      "grammar": {
+        "text": "___ gaur goizean berandu esnatu da.",
+        "answers": [
+          "Amona"
+        ],
+        "distractors": [
+          "Gurasoak",
+          "Markel eta ni"
+        ]
+      },
+      "note": "da → hura"
+    },
+    {
+      "id": "atzo-ni-amarekin-dendara-joan-nintze",
+      "type": "sentence",
+      "basque": "Atzo ni amarekin dendara joan nintzen.",
+      "group": "esaldiak",
+      "translations": {
+        "es": [
+          "Ayer fui a la tienda con mi madre."
+        ]
+      },
+      "sentence": {
+        "tiles": [
+          "atzo",
+          "ni",
+          "amarekin",
+          "dendara",
+          "joan",
+          "nintzen",
+          "."
+        ],
+        "alternatives": [
+          [
+            "ni",
+            "atzo",
+            "amarekin",
+            "dendara",
+            "joan",
+            "nintzen",
+            "."
+          ],
+          [
+            "atzo",
+            "ni",
+            "dendara",
+            "amarekin",
+            "joan",
+            "nintzen",
+            "."
+          ],
+          [
+            "ni",
+            "atzo",
+            "dendara",
+            "amarekin",
+            "joan",
+            "nintzen",
+            "."
+          ],
+          [
+            "atzo",
+            "amarekin",
+            "dendara",
+            "joan",
+            "nintzen",
+            "ni",
+            "."
+          ],
+          [
+            "ni",
+            "amarekin",
+            "dendara",
+            "joan",
+            "nintzen",
+            "atzo",
+            "."
+          ]
+        ],
+        "distractors": [
+          "naiz"
+        ]
+      }
+    }
+  ]
+}

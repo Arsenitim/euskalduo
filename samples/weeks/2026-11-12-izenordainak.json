@@ -1,0 +1,923 @@
+{
+  "schemaVersion": 2,
+  "kind": "sheet",
+  "title": "IZENORDAINAK",
+  "receivedOn": "2026-11-12",
+  "description": "Cambiar un nombre por su pronombre: -a → hura, -ak → haiek, … eta ni → gu, … eta zu → zuek.",
+  "groups": [
+    {
+      "key": "arauak",
+      "title": "Izenordainak"
+    },
+    {
+      "key": "adibideak",
+      "title": "Adibideak"
+    },
+    {
+      "key": "ariketak",
+      "title": "Idatzi izenordainak"
+    }
+  ],
+  "entries": [
+    {
+      "id": "ni",
+      "basque": "ni",
+      "translations": {
+        "es": [
+          "yo"
+        ]
+      },
+      "group": "arauak"
+    },
+    {
+      "id": "zu",
+      "basque": "zu",
+      "translations": {
+        "es": [
+          "tú"
+        ]
+      },
+      "group": "arauak"
+    },
+    {
+      "id": "hura",
+      "basque": "hura",
+      "translations": {
+        "es": [
+          "él / ella"
+        ]
+      },
+      "group": "arauak",
+      "note": "También: bera. Un nombre en singular (-a): neskA, etxeA → hura."
+    },
+    {
+      "id": "gu",
+      "basque": "gu",
+      "translations": {
+        "es": [
+          "nosotros"
+        ]
+      },
+      "group": "arauak",
+      "note": "-ok (lagunOK, ikasleOK) o … eta ni → gu."
+    },
+    {
+      "id": "zuek",
+      "basque": "zuek",
+      "translations": {
+        "es": [
+          "vosotros"
+        ]
+      },
+      "group": "arauak",
+      "note": "… eta zu → zuek."
+    },
+    {
+      "id": "haiek",
+      "basque": "haiek",
+      "translations": {
+        "es": [
+          "ellos / ellas"
+        ]
+      },
+      "group": "arauak",
+      "note": "Varios nombres o plural (-ak): nesAK, etxeAK → haiek."
+    },
+    {
+      "id": "nire-laguna-hura",
+      "type": "grammar",
+      "basque": "NIRE LAGUNA: HURA",
+      "translations": {
+        "es": [
+          "mi amigo"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "NIRE LAGUNA: ___",
+        "answers": [
+          "HURA"
+        ],
+        "distractors": [
+          "HAIEK",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "nire-lagunak-haiek",
+      "type": "grammar",
+      "basque": "NIRE LAGUNAK: HAIEK",
+      "translations": {
+        "es": [
+          "mis amigos"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "NIRE LAGUNAK: ___",
+        "answers": [
+          "HAIEK"
+        ],
+        "distractors": [
+          "HURA",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "maria-hura",
+      "type": "grammar",
+      "basque": "MARIA: HURA",
+      "translations": {
+        "es": [
+          "María"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "MARIA: ___",
+        "answers": [
+          "HURA"
+        ],
+        "distractors": [
+          "HAIEK",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "maria-eta-mikel-haiek",
+      "type": "grammar",
+      "basque": "MARIA ETA MIKEL: HAIEK",
+      "translations": {
+        "es": [
+          "María y Mikel"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "MARIA ETA MIKEL: ___",
+        "answers": [
+          "HAIEK"
+        ],
+        "distractors": [
+          "HURA",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "lorea-hura",
+      "type": "grammar",
+      "basque": "LOREA: HURA",
+      "translations": {
+        "es": [
+          "la flor"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "LOREA: ___",
+        "answers": [
+          "HURA"
+        ],
+        "distractors": [
+          "HAIEK",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "loreak-haiek",
+      "type": "grammar",
+      "basque": "LOREAK: HAIEK",
+      "translations": {
+        "es": [
+          "las flores"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "LOREAK: ___",
+        "answers": [
+          "HAIEK"
+        ],
+        "distractors": [
+          "HURA",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "ahizpa-hura",
+      "type": "grammar",
+      "basque": "AHIZPA: HURA",
+      "translations": {
+        "es": [
+          "la hermana"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "AHIZPA: ___",
+        "answers": [
+          "HURA"
+        ],
+        "distractors": [
+          "HAIEK",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "ahizpak-haiek",
+      "type": "grammar",
+      "basque": "AHIZPAK: HAIEK",
+      "translations": {
+        "es": [
+          "las hermanas"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "AHIZPAK: ___",
+        "answers": [
+          "HAIEK"
+        ],
+        "distractors": [
+          "HURA",
+          "GU",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "nire-ama-eta-ni-gu",
+      "type": "grammar",
+      "basque": "NIRE AMA ETA NI: GU",
+      "translations": {
+        "es": [
+          "mi madre y yo"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "NIRE AMA ETA NI: ___",
+        "answers": [
+          "GU"
+        ],
+        "distractors": [
+          "HURA",
+          "HAIEK",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "leire-eta-ni-gu",
+      "type": "grammar",
+      "basque": "LEIRE ETA NI: GU",
+      "translations": {
+        "es": [
+          "Leire y yo"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "LEIRE ETA NI: ___",
+        "answers": [
+          "GU"
+        ],
+        "distractors": [
+          "HURA",
+          "HAIEK",
+          "ZUEK"
+        ]
+      }
+    },
+    {
+      "id": "nire-ama-eta-zu-zuek",
+      "type": "grammar",
+      "basque": "NIRE AMA ETA ZU: ZUEK",
+      "translations": {
+        "es": [
+          "mi madre y tú"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "NIRE AMA ETA ZU: ___",
+        "answers": [
+          "ZUEK"
+        ],
+        "distractors": [
+          "HURA",
+          "HAIEK",
+          "GU"
+        ]
+      }
+    },
+    {
+      "id": "leire-eta-zu-zuek",
+      "type": "grammar",
+      "basque": "LEIRE ETA ZU: ZUEK",
+      "translations": {
+        "es": [
+          "Leire y tú"
+        ]
+      },
+      "group": "adibideak",
+      "grammar": {
+        "text": "LEIRE ETA ZU: ___",
+        "answers": [
+          "ZUEK"
+        ],
+        "distractors": [
+          "HURA",
+          "HAIEK",
+          "GU"
+        ]
+      }
+    },
+    {
+      "id": "mahaia-hura",
+      "type": "grammar",
+      "basque": "Mahaia: hura",
+      "translations": {
+        "es": [
+          "la mesa"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Mahaia: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "liburuak-haiek",
+      "type": "grammar",
+      "basque": "Liburuak: haiek",
+      "translations": {
+        "es": [
+          "los libros"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Liburuak: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "ainhoa-hura",
+      "type": "grammar",
+      "basque": "Ainhoa: hura",
+      "translations": {
+        "es": [
+          "Ainhoa"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Ainhoa: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "ainhoa-eta-markel-haiek",
+      "type": "grammar",
+      "basque": "Ainhoa eta Markel: haiek",
+      "translations": {
+        "es": [
+          "Ainhoa y Markel"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Ainhoa eta Markel: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "neskak-haiek",
+      "type": "grammar",
+      "basque": "Neskak: haiek",
+      "translations": {
+        "es": [
+          "las chicas"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Neskak: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "gure-anderenoa-hura",
+      "type": "grammar",
+      "basque": "Gure andereñoa: hura",
+      "translations": {
+        "es": [
+          "nuestra profesora"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Gure andereñoa: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "aita-eta-zu-zuek",
+      "type": "grammar",
+      "basque": "Aita eta zu: zuek",
+      "translations": {
+        "es": [
+          "papá y tú"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Aita eta zu: ___",
+        "answers": [
+          "zuek"
+        ],
+        "distractors": [
+          "hura",
+          "haiek",
+          "gu"
+        ]
+      }
+    },
+    {
+      "id": "ama-hura",
+      "type": "grammar",
+      "basque": "Ama: hura",
+      "translations": {
+        "es": [
+          "mamá"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Ama: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "ama-eta-aita-haiek",
+      "type": "grammar",
+      "basque": "Ama eta aita: haiek",
+      "translations": {
+        "es": [
+          "mamá y papá"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Ama eta aita: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "ane-leire-iker-eta-imanol-haiek",
+      "type": "grammar",
+      "basque": "Ane, Leire, Iker eta Imanol: haiek",
+      "translations": {
+        "es": [
+          "Ane, Leire, Iker e Imanol"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Ane, Leire, Iker eta Imanol: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "leire-hura",
+      "type": "grammar",
+      "basque": "Leire: hura",
+      "translations": {
+        "es": [
+          "Leire"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Leire: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "liburua-hura",
+      "type": "grammar",
+      "basque": "Liburua: hura",
+      "translations": {
+        "es": [
+          "el libro"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Liburua: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "maite-eta-zu-zuek",
+      "type": "grammar",
+      "basque": "Maite eta zu: zuek",
+      "translations": {
+        "es": [
+          "Maite y tú"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Maite eta zu: ___",
+        "answers": [
+          "zuek"
+        ],
+        "distractors": [
+          "hura",
+          "haiek",
+          "gu"
+        ]
+      }
+    },
+    {
+      "id": "ainara-eta-ni-gu",
+      "type": "grammar",
+      "basque": "Ainara eta ni: gu",
+      "translations": {
+        "es": [
+          "Ainara y yo"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Ainara eta ni: ___",
+        "answers": [
+          "gu"
+        ],
+        "distractors": [
+          "hura",
+          "haiek",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "estutxeak-haiek",
+      "type": "grammar",
+      "basque": "Estutxeak: haiek",
+      "translations": {
+        "es": [
+          "los estuches"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Estutxeak: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "aitona-amona-eta-zu-zuek",
+      "type": "grammar",
+      "basque": "Aitona, amona eta zu: zuek",
+      "translations": {
+        "es": [
+          "el abuelo, la abuela y tú"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Aitona, amona eta zu: ___",
+        "answers": [
+          "zuek"
+        ],
+        "distractors": [
+          "hura",
+          "haiek",
+          "gu"
+        ]
+      }
+    },
+    {
+      "id": "arkatza-hura",
+      "type": "grammar",
+      "basque": "Arkatza: hura",
+      "translations": {
+        "es": [
+          "el lápiz"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Arkatza: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "gure-arkatzak-haiek",
+      "type": "grammar",
+      "basque": "Gure arkatzak: haiek",
+      "translations": {
+        "es": [
+          "nuestros lápices"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Gure arkatzak: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "gure-eskolako-laguna-hura",
+      "type": "grammar",
+      "basque": "Gure eskolako laguna: hura",
+      "translations": {
+        "es": [
+          "nuestro amigo de la escuela"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Gure eskolako laguna: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "nire-betaurrekoak-haiek",
+      "type": "grammar",
+      "basque": "Nire betaurrekoak: haiek",
+      "translations": {
+        "es": [
+          "mis gafas"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Nire betaurrekoak: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "zuen-etxea-hura",
+      "type": "grammar",
+      "basque": "Zuen etxea: hura",
+      "translations": {
+        "es": [
+          "vuestra casa"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Zuen etxea: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "nire-ama-hura",
+      "type": "grammar",
+      "basque": "Nire ama: hura",
+      "translations": {
+        "es": [
+          "mi madre"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Nire ama: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "txakurrak-haiek",
+      "type": "grammar",
+      "basque": "Txakurrak: haiek",
+      "translations": {
+        "es": [
+          "los perros"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Txakurrak: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "elefantea-hura",
+      "type": "grammar",
+      "basque": "Elefantea: hura",
+      "translations": {
+        "es": [
+          "el elefante"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Elefantea: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "ane-hura",
+      "type": "grammar",
+      "basque": "Ane: hura",
+      "translations": {
+        "es": [
+          "Ane"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "Ane: ___",
+        "answers": [
+          "hura"
+        ],
+        "distractors": [
+          "haiek",
+          "gu",
+          "zuek"
+        ]
+      }
+    },
+    {
+      "id": "june-eta-unai-haiek",
+      "type": "grammar",
+      "basque": "June eta Unai: haiek",
+      "translations": {
+        "es": [
+          "June y Unai"
+        ]
+      },
+      "group": "ariketak",
+      "grammar": {
+        "text": "June eta Unai: ___",
+        "answers": [
+          "haiek"
+        ],
+        "distractors": [
+          "hura",
+          "gu",
+          "zuek"
+        ]
+      }
+    }
+  ]
+}
