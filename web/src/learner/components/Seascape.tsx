@@ -29,20 +29,27 @@ export function SeaProgress({ value, max, label }: { value: number; max: number;
 
 /** How long the sheep's trip overboard lasts; matches `sheep-overboard` in styles.css. */
 const OVERBOARD_MS = 2600;
-/** Taps closer together than this count as one series (1, 2, 3). */
-const TAP_GAP_MS = 1200;
+/** Taps closer together than this count as one series (1, 2, 3); without another
+    tap in this time the boat zooms back out. */
+const TAP_GAP_MS = 3000;
 
 /**
- * The boat, with a small secret: tap it and it rocks, tap twice and it rocks
- * harder, tap three times and Txapi falls overboard shouting "Lagundu!"
- * ("help!") until the crew pulls the sheep back in. Decoration only, so it
- * stays hidden from assistive tech.
+ * The boat, with a small secret: tap it and it zooms in (styles.css,
+ * `.sea-boat[data-zoom]`) and rocks; tap again and it rocks harder; tap three times
+ * and Txapi falls overboard shouting "Lagundu!" ("help!") until the crew
+ * pulls the sheep back in, then the boat zooms back out. Decoration only, so
+ * it stays hidden from assistive tech.
  */
 function Boat({ left, nearHarbour }: { left: string; nearHarbour: boolean }) {
   const [shake, setShake] = useState({ level: 0, id: 0 });
   const series = useRef({ count: 0, last: 0 });
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+
+  const settle = (after: number) => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setShake((s) => ({ level: 0, id: s.id + 1 })), after);
+  };
 
   const tap = () => {
     if (shake.level === 3) return; // the sheep is still in the water
@@ -52,15 +59,34 @@ function Boat({ left, nearHarbour }: { left: string; nearHarbour: boolean }) {
     setShake((s) => ({ level: Math.min(count, 3), id: s.id + 1 }));
     if (count >= 3) {
       playClip(lagundu);
-      timer.current = setTimeout(() => setShake((s) => ({ level: 0, id: s.id + 1 })), OVERBOARD_MS);
-    }
+      settle(OVERBOARD_MS);
+    } else settle(TAP_GAP_MS);
   };
 
+  const zoomed = shake.level >= 1;
   return (
-    <span className="sea-boat" aria-hidden="true" style={{ left }} onClick={tap} data-shake={shake.level || undefined}>
-      <Trainera key={shake.id} />
-      {shake.level === 3 && <span className={nearHarbour ? 'boat-shout boat-shout-left' : 'boat-shout'}>Lagundu!</span>}
-    </span>
+    <>
+      <span
+        className="sea-boat"
+        aria-hidden="true"
+        style={{ left }}
+        onClick={tap}
+        data-shake={shake.level || undefined}
+        data-zoom={zoomed ? (nearHarbour ? 'right' : 'left') : undefined}
+      >
+        <Trainera key={shake.id} />
+      </span>
+      {/* Outside the zoomed boat, so the bubble keeps its size. */}
+      {shake.level === 3 && (
+        <span
+          className={nearHarbour ? 'boat-shout boat-shout-left' : 'boat-shout'}
+          aria-hidden="true"
+          style={nearHarbour ? { right: `calc(100% - ${left} - 30px)` } : { left: `calc(${left} + 88px)` }}
+        >
+          Lagundu!
+        </span>
+      )}
+    </>
   );
 }
 

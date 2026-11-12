@@ -2362,6 +2362,24 @@ fieldset legend {
   inset: -12px -6px;
 }
 
+/* Tapped, the boat zooms in (2.35×) so the rocking and the fall can be
+   seen on a phone. It grows from its outer side: from the left edge in the
+   first half of the route, from the right edge near the harbour, so the
+   zoomed boat (about 150 px) always stays on screen. */
+.sea-boat {
+  transform-origin: 0 60%;
+  transition: left 0.6s ease, transform 0.45s ease;
+}
+
+.sea-boat[data-zoom] {
+  z-index: 2;
+  transform: scale(2.35);
+}
+
+.sea-boat[data-zoom='right'] {
+  transform-origin: 100% 60%;
+}
+
 .trainera-shake {
   transform-box: fill-box;
   transform-origin: 50% 80%;
@@ -2445,12 +2463,12 @@ fieldset legend {
   45%, 100% { opacity: 0; transform: translateY(-3px); }
 }
 
-/* A comic-book shout above the boat. */
+/* A comic-book shout above the zoomed boat; a sibling of the boat (not
+   scaled), placed by Seascape.tsx next to Txapi's seat. */
 .boat-shout {
   position: absolute;
-  left: 52%;
-  bottom: calc(100% + 6px);
-  z-index: 2;
+  bottom: calc(100% + 12px);
+  z-index: 3;
   padding: 2px 9px 3px;
   border: 2px solid var(--k-ink, #13293d);
   border-radius: 14px;
@@ -2478,11 +2496,6 @@ fieldset legend {
 }
 
 /* Near the harbour the shout opens to the left, so it stays on screen. */
-.boat-shout-left {
-  left: auto;
-  right: 30%;
-}
-
 .boat-shout-left::after {
   left: auto;
   right: 12px;
@@ -2498,6 +2511,10 @@ fieldset legend {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sea-boat {
+    transition: none;
+  }
+
   .sea-boat[data-shake] .trainera-shake,
   .sea-boat[data-shake='3'] .boat-sheep {
     animation: none;
