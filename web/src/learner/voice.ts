@@ -22,6 +22,19 @@ export function stopVoice(): void {
   }
 }
 
+let clip: HTMLAudioElement | null = null;
+
+/**
+ * A short clip bundled with the app (a hashed asset on our origin, cached
+ * offline), such as the sheep's shout in the boat. Follows the sound setting.
+ */
+export function playClip(src: string): void {
+  if (!enabled || typeof Audio === 'undefined') return;
+  clip?.pause();
+  clip = new Audio(src);
+  void clip.play().catch(() => {});
+}
+
 export function setVoiceEnabled(value: boolean): void {
   enabled = value;
   if (!value) stopVoice();

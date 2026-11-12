@@ -2348,6 +2348,162 @@ fieldset legend {
   }
 }
 
+/* The boat's secret (Seascape.tsx): tap once, twice, three times. A larger
+   invisible target makes the small boat easy to hit with a finger. */
+.sea-boat {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sea-boat::before {
+  content: '';
+  position: absolute;
+  inset: -12px -6px;
+}
+
+.trainera-shake {
+  transform-box: fill-box;
+  transform-origin: 50% 80%;
+}
+
+.sea-boat[data-shake='1'] .trainera-shake {
+  animation: boat-rock 0.45s ease-in-out;
+}
+
+.sea-boat[data-shake='2'] .trainera-shake {
+  animation: boat-rock-hard 0.6s ease-in-out;
+}
+
+.sea-boat[data-shake='3'] .trainera-shake {
+  animation: boat-rock-wild 0.8s ease-in-out;
+}
+
+@keyframes boat-rock {
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(4deg); }
+}
+
+@keyframes boat-rock-hard {
+  15% { transform: translateY(-2px) rotate(-10deg); }
+  40% { transform: translateY(1px) rotate(9deg); }
+  65% { transform: rotate(-6deg); }
+  85% { transform: rotate(3deg); }
+}
+
+@keyframes boat-rock-wild {
+  10% { transform: translateY(-4px) rotate(-16deg); }
+  28% { transform: translateY(2px) rotate(17deg); }
+  46% { transform: translateY(-2px) rotate(-13deg); }
+  64% { transform: rotate(9deg); }
+  82% { transform: rotate(-4deg); }
+}
+
+.boat-sheep {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.boat-ring,
+.boat-splash {
+  opacity: 0;
+}
+
+/* Lengths inside SVG transforms are user units of the boat's viewBox. */
+.sea-boat[data-shake='3'] .boat-sheep {
+  animation: sheep-overboard 2.6s ease-in-out both;
+}
+
+.sea-boat[data-shake='3'] .boat-ring {
+  animation: ring-thrown 2.6s ease-in-out both;
+}
+
+.sea-boat[data-shake='3'] .boat-splash {
+  animation: splash 2.6s ease-out both;
+}
+
+@keyframes sheep-overboard {
+  10% { transform: translate(8px, -12px) rotate(120deg); }
+  24% { transform: translate(19px, 17px) rotate(320deg); }
+  32% { transform: translate(19px, 15.5px) rotate(350deg); }
+  42% { transform: translate(19px, 17px) rotate(370deg); }
+  52% { transform: translate(19px, 16px) rotate(355deg); }
+  62% { transform: translate(19px, 17px) rotate(360deg); }
+  80% { transform: translate(9px, -9px) rotate(360deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes ring-thrown {
+  0%, 38% { opacity: 0; }
+  46%, 88% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes splash {
+  0%, 22% { opacity: 0; transform: translateY(2px); }
+  28% { opacity: 1; transform: translateY(-1px); }
+  45%, 100% { opacity: 0; transform: translateY(-3px); }
+}
+
+/* A comic-book shout above the boat. */
+.boat-shout {
+  position: absolute;
+  left: 52%;
+  bottom: calc(100% + 6px);
+  z-index: 2;
+  padding: 2px 9px 3px;
+  border: 2px solid var(--k-ink, #13293d);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--k-ink, #13293d);
+  font-family: var(--font-sign, inherit);
+  font-size: 1.05rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 2px 2px 0 var(--k-ink, #13293d);
+  animation: shout 2.2s ease-out both;
+}
+
+.boat-shout::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 100%;
+  border: 6px solid transparent;
+  border-top-color: var(--k-ink, #13293d);
+  border-left-color: var(--k-ink, #13293d);
+}
+
+/* Near the harbour the shout opens to the left, so it stays on screen. */
+.boat-shout-left {
+  left: auto;
+  right: 30%;
+}
+
+.boat-shout-left::after {
+  left: auto;
+  right: 12px;
+  border-left-color: transparent;
+  border-right-color: var(--k-ink, #13293d);
+}
+
+@keyframes shout {
+  0%, 6% { opacity: 0; transform: scale(0.4) rotate(-14deg); }
+  14% { opacity: 1; transform: scale(1.15) rotate(-6deg); }
+  20%, 70% { opacity: 1; transform: scale(1) rotate(-4deg); }
+  100% { opacity: 0; transform: scale(0.9) rotate(-4deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sea-boat[data-shake] .trainera-shake,
+  .sea-boat[data-shake='3'] .boat-sheep {
+    animation: none;
+  }
+}
+
 .sea-dots {
   position: absolute;
   left: 16px;
